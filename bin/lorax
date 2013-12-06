@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+/*
+ * Lorax
+ * https://github.com/adrianlee44/lorax
+ *
+ * Copyright (c) 2013 Adrian Lee
+ * Licensed under the MIT license.
+ */
+
+var path = require('path'),
+    fs   = require('fs'),
+    dir  = path.join(path.dirname(fs.realpathSync(__filename)), '../'),
+    pkg  = require(dir + 'package.json'),
+    commander = require('commander');
+
+commander
+  .version(pkg.version)
+  .usage("[options] [TAG]")
+  .parse(process.argv);
+
+if (commander.args.length) {
+  require(dir + 'index.js');
+} else {
+  console.log(commander.helpInformation());
+}

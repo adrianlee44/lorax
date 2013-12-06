@@ -1,0 +1,43 @@
+{
+  "name": "lorax",
+  "version": "0.1.0",
+  "description": "A node module which reads the git log and create a human readable changelog",
+  "main": "index.js",
+  "bin": "bin/lorax",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:adrianlee44/lorax.git"
+  },
+  "keywords": [
+    "log",
+    "changelog",
+    "generator",
+    "git",
+    "markdown"
+  ],
+  "author": {
+    "name": "Adrian Lee",
+    "email": "adrian@adrianlee.me",
+    "url": "http://www.adrianlee.me"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adrianlee44/lorax/issues"
+  },
+  "homepage": "https://github.com/adrianlee44/lorax",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-nodeunit": "~0.2.1",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-coffeelint": "0.0.7",
+    "matchdep": "~0.1.2",
+    "q": "~0.9.7"
+  },
+  "dependencies": {
+    "commander": "~1.1.1"
+  }
+}
