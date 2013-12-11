@@ -1,8 +1,10 @@
 Q     = require "q"
 child = require "child_process"
+util  = require "util"
 
-GIT_LOG  = "git log --grep='%s' -E --format=%s %s..HEAD"
-GIT_TAG  = "git describe --tags --abbrev=0"
+GIT_LOG     = "git log --grep='%s' -E --format=%s %s..HEAD"
+GIT_LOG_ALL = "git log --grep='%s' -E --format=%s"
+GIT_TAG     = "git describe --tags --abbrev=0"
 
 ###
 @name getLastTag
@@ -32,7 +34,12 @@ Read all commits watching match pattern since a certain tag
 getLog = (match, tag) ->
   deferred = Q.defer()
 
-  cmd = util.format(GIT_LOG, match, "%H%n%s%n%b%n==END==", tag)
+  cmd =
+    if tag
+      util.format(GIT_LOG, match, "%H%n%s%n%b%n==END==", tag)
+    else
+      util.format GIT_LOG_ALL, match, "%H%n%s%n%b%n==END=="
+
   child.exec cmd, (error, stdout = "", stderr) ->
     if error?
       deferred.reject error
