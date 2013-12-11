@@ -16,11 +16,11 @@ var path = require('path'),
 
 commander
   .version(pkg.version)
-  .usage("[options] [TAG]")
+  .usage("[options] [TAG] [FILE]")
   .parse(process.argv);
 
-if (commander.args.length) {
-  require(dir + 'index.js');
+if (commander.args.length >= 2) {
+  require(dir + 'index.js').generate(commander.args[0], commander.args[1]);
 } else {
   console.log(commander.helpInformation());
 }
