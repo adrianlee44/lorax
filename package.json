@@ -34,10 +34,10 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-coffee": "~0.7.0",
     "grunt-coffeelint": "0.0.7",
-    "matchdep": "~0.1.2",
-    "q": "~0.9.7"
+    "matchdep": "~0.1.2"
   },
   "dependencies": {
+    "q": "~0.9.7",
     "commander": "~1.1.1"
   }
 }
