@@ -12,13 +12,13 @@ class Config
       breaking: "Breaking Changes"
       refactor: "Optimizations"
 
-  constructor: ->
-    if @custom = fs.existsSync "lorax.json"
-      rawData  = fs.readFileSync "lorax.json", encoding: "utf-8"
+  constructor: (@path = "lorax.json") ->
+    if @custom = fs.existsSync @path
+      rawData  = fs.readFileSync @path, encoding: "utf-8"
       try
         jsonData = JSON.parse rawData
       catch e
-        return console.log "Invalid lorax.json"
+        return console.log "Invalid #{path}"
       @config  = util.extend {}, @default, jsonData
     else
       @config = util.extend {}, @default
