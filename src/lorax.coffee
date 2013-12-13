@@ -21,6 +21,7 @@ Config     = new config()
 url        = Config.get "url"
 issueTmpl  = Config.get "issue"
 commitTmpl = Config.get "commit"
+closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i
 
 ###
 @function
@@ -73,7 +74,7 @@ parseCommit = (commit) ->
     issues:    []
     title:     lines.shift()
 
-  for line, i in lines when match = line.match /(?:Closes|Fixes)\s#(\d+)/
+  for line, i in lines when match = line.match closeRegex
     commitObj.issues.push parseInt(match[1])
     lines.splice i, 1
 
