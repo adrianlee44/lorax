@@ -1,4 +1,4 @@
-Lorax
+Lorax [![Build Status](https://travis-ci.org/adrianlee44/lorax.png?branch=master)](https://travis-ci.org/adrianlee44/lorax)
 ===
 Lorax is a simple node package to generate changelog by parsing formatted git commits
 
@@ -36,7 +36,7 @@ Lorax will generate a changelog
 ```
 
 ## Installation
-```
+```bash
 $ npm install -g lorax
 ```
 
@@ -52,7 +52,7 @@ Options:
 ```
 
 To generate the changelog
-```
+```bash
 $ lorax v0.1.0 changelog.md
 ```
 
