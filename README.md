@@ -1,6 +1,14 @@
-Lorax [![Build Status](https://travis-ci.org/adrianlee44/lorax.png?branch=master)](https://travis-ci.org/adrianlee44/lorax)
+Lorax
 ===
-Lorax is a simple node package to generate changelog by parsing formatted git commits
+[![Build Status](https://travis-ci.org/adrianlee44/lorax.png?branch=master)](https://travis-ci.org/adrianlee44/lorax)
+
+<img align="right" height="200" src="http://4.bp.blogspot.com/-nIhDGmiP2Vc/T1MD0BbiWxI/AAAAAAAABeQ/3DMn5DYC3YY/s1600/lorax1.png">
+
+Lorax is a simple node package to generate changelog by parsing formatted git commits. One of the problems people run into when working with an open-sourced project is having trouble knowing what have been fixed, updated or created. Some people solve this problem by reading through the git log while other might ask on Github issue or Stackoverflow.
+
+Lorax tries to solve this problem by automating the changelog generation process. Lorax will read through all the commits between tags and gerate a beautiful and easy to read markdown changelog.
+
+[View Lorax's changelog as an example](https://github.com/adrianlee44/lorax/blob/master/changelog.md)
 
 ## Example
 Using Lorax git commit log as an example
@@ -54,6 +62,24 @@ Options:
 To generate the changelog
 ```bash
 $ lorax v0.1.0 changelog.md
+```
+
+## Git commit format
+```
+type(component): commit message
+detailed message
+
+BREAKING CHANGES
+- Nothing really
+
+Fixes #123
+```
+
+Example
+```
+feature(lorax): Hello World
+
+Close #321
 ```
 
 ## Configurations
