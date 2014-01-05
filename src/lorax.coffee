@@ -80,7 +80,7 @@ parseCommit = (commit) ->
     lines.splice i, 1
 
   message = lines.join " "
-  if match = commitObj.title.match /^([^\(]+)\(([\w\.]+)\):\s+(.+)/
+  if match = commitObj.title.match /^([^\(]+)\(([^\)]+)\):\s+(.+)/
     commitObj.type      = match[1]
     commitObj.component = match[2]
     commitObj.message   = match[3]
