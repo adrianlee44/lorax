@@ -75,9 +75,13 @@ parseCommit = (commit) ->
     issues:    []
     title:     lines.shift()
 
-  for line, i in lines when match = line.match closeRegex
-    commitObj.issues.push parseInt(match[1])
-    lines.splice i, 1
+  newLines = []
+  for line, i in lines
+    if match = line.match closeRegex
+      commitObj.issues.push parseInt(match[1])
+    else
+      newLines.push line
+  lines = newLines
 
   message = lines.join " "
   if match = commitObj.title.match /^([^\(]+)\(([^\)]+)\):\s+(.+)/
