@@ -192,16 +192,13 @@ write = function(commits, version) {
 @description
 Get all commits or commits since last tag
 @param {String} grep  String regex to match
-@param {Function} log Function to output log messages
+@param {String} tag   Tag to read commits from
 @returns {Promise} Promise with an array of commits
 */
 
 
-get = function(grep, log) {
+get = function(grep, tag) {
   var deferred, getLog;
-  if (log == null) {
-    log = console.log;
-  }
   deferred = Q.defer();
   getLog = function(tag) {
     var msg;
@@ -209,12 +206,16 @@ get = function(grep, log) {
     if (tag) {
       msg += " since " + tag;
     }
-    log(msg);
+    console.log(msg);
     return git.getLog(grep, tag).then(deferred.resolve, deferred.reject);
   };
-  git.getLastTag().then(getLog, function() {
-    return getLog();
-  });
+  if (tag != null) {
+    getLog(tag);
+  } else {
+    git.getLastTag().then(getLog, function() {
+      return getLog();
+    });
+  }
   return deferred.promise;
 };
 
