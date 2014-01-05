@@ -12,11 +12,13 @@ A node module which reads the git log and create a human readable changelog
 - commander
 */
 
-var Config, closeRegex, commitTmpl, config, fs, generate, git, issueTmpl, linkToCommit, linkToIssue, lorax, parseCommit, url, util, write;
+var Config, Q, closeRegex, commitTmpl, config, fs, generate, get, git, issueTmpl, linkToCommit, linkToIssue, lorax, parseCommit, url, util, write;
 
 util = require("util");
 
 fs = require("fs");
+
+Q = require("q");
 
 config = require("./lib/config");
 
@@ -186,18 +188,50 @@ write = function(commits, version) {
 
 /*
 @function
+@name get
+@description
+Get all commits or commits since last tag
+@param {String} grep  String regex to match
+@param {Function} log Function to output log messages
+@returns {Promise} Promise with an array of commits
+*/
+
+
+get = function(grep, log) {
+  var deferred, getLog;
+  if (log == null) {
+    log = console.log;
+  }
+  deferred = Q.defer();
+  getLog = function(tag) {
+    var msg;
+    msg = "Reading commits";
+    if (tag) {
+      msg += " since " + tag;
+    }
+    log(msg);
+    return git.getLog(grep, tag).then(deferred.resolve, deferred.reject);
+  };
+  git.getLastTag().then(getLog, function() {
+    return getLog();
+  });
+  return deferred.promise;
+};
+
+/*
+@function
 @name generate
 @description
 A shortcut function to get the latest tag, parse all the commits and generate the changelog
 @param {String} toTag The latest tag
 @param {String} file Filename to write to
-@param {String} fromTag A specific tag to start from
 */
 
 
-generate = function(toTag, file, fromTag) {
-  var parseAndWrite, parseFromLastTag;
-  parseAndWrite = function(commits) {
+generate = function(toTag, file) {
+  var grep;
+  grep = Config.get("type").join("|");
+  return get(grep).then(function(commits) {
     var commit, parsedCommits, result;
     parsedCommits = (function() {
       var _i, _len, _results;
@@ -216,24 +250,11 @@ generate = function(toTag, file, fromTag) {
       encoding: "utf-8"
     });
     return console.log("Generated changelog to " + file + " (" + toTag + ")");
-  };
-  parseFromLastTag = function(lastTag) {
-    var grep, tag;
-    tag = fromTag || lastTag;
-    if (tag) {
-      console.log("Reading commits since " + tag);
-    } else {
-      console.log("Reading all commits");
-    }
-    grep = Config.get("type").join("|");
-    return git.getLog(grep, tag).then(parseAndWrite);
-  };
-  return git.getLastTag().then(parseFromLastTag, function() {
-    return parseFromLastTag();
   });
 };
 
 lorax = module.exports = {
+  get: get,
   parseCommit: parseCommit,
   write: write,
   generate: generate
