@@ -19,9 +19,6 @@ config = require "./lib/config"
 git    = require "./lib/git"
 
 Config     = new config()
-url        = Config.get "url"
-issueTmpl  = Config.get "issue"
-commitTmpl = Config.get "commit"
 closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i
 
 ###
@@ -33,6 +30,8 @@ Create a markdown link to issue page with issue number as text
 @returns {String} markdown text
 ###
 linkToIssue  = (issue) ->
+  url       = Config.get "url"
+  issueTmpl = Config.get "issue"
   if url and issueTmpl
     issueLink = "[#%s](#{url}#{issueTmpl})"
     util.format issueLink, issue, issue
@@ -48,6 +47,8 @@ Create a markdown link to commit page with commit hash as text
 @returns {String} markdown text
 ###
 linkToCommit = (hash) ->
+  url        = Config.get "url"
+  commitTmpl = Config.get "commit"
   if url and commitTmpl
     commitLink = "[%s](#{url}#{commitTmpl})"
     util.format commitLink, hash.substr(0, 8), hash
@@ -193,6 +194,8 @@ generate = (toTag, file) ->
     console.log "Generated changelog to #{file} (#{toTag})"
 
 lorax = module.exports = {
+  config: Config
+  git
   get
   parseCommit
   write
