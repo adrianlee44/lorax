@@ -14,6 +14,7 @@ A node module which reads the git log and create a human readable changelog
 
 util   = require "util"
 fs     = require "fs"
+Q      = require "q"
 config = require "./lib/config"
 git    = require "./lib/git"
 
@@ -145,15 +146,39 @@ write = (commits, version) ->
 
 ###
 @function
+@name get
+@description
+Get all commits or commits since last tag
+@param {String} grep  String regex to match
+@param {Function} log Function to output log messages
+@returns {Promise} Promise with an array of commits
+###
+get = (grep, log = console.log) ->
+  deferred = Q.defer()
+
+  getLog = (tag) ->
+    msg = "Reading commits"
+    msg += " since #{tag}" if tag
+    log msg
+
+    git.getLog(grep, tag).then deferred.resolve, deferred.reject
+
+  git.getLastTag().then getLog, -> getLog()
+
+  return deferred.promise
+
+###
+@function
 @name generate
 @description
 A shortcut function to get the latest tag, parse all the commits and generate the changelog
 @param {String} toTag The latest tag
 @param {String} file Filename to write to
-@param {String} fromTag A specific tag to start from
 ###
-generate = (toTag, file, fromTag) ->
-  parseAndWrite = (commits) ->
+generate = (toTag, file) ->
+  grep = Config.get("type").join "|"
+
+  get(grep).then (commits) ->
     parsedCommits = (parseCommit commit for commit in commits when commit)
 
     console.log "Parsed #{parsedCommits.length} commit(s)"
@@ -163,19 +188,8 @@ generate = (toTag, file, fromTag) ->
 
     console.log "Generated changelog to #{file} (#{toTag})"
 
-  parseFromLastTag = (lastTag) ->
-    tag = fromTag or lastTag
-    if tag
-      console.log "Reading commits since #{tag}"
-    else
-      console.log "Reading all commits"
-
-    grep = Config.get("type").join "|"
-    git.getLog(grep, tag).then parseAndWrite
-
-  git.getLastTag().then parseFromLastTag, -> parseFromLastTag()
-
 lorax = module.exports = {
+  get
   parseCommit
   write
   generate
