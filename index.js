@@ -12,7 +12,7 @@ A node module which reads the git log and create a human readable changelog
 - commander
 */
 
-var Config, Q, closeRegex, commitTmpl, config, fs, generate, get, git, issueTmpl, linkToCommit, linkToIssue, lorax, parseCommit, url, util, write;
+var Config, Q, closeRegex, config, fs, generate, get, git, linkToCommit, linkToIssue, lorax, parseCommit, util, write;
 
 util = require("util");
 
@@ -25,12 +25,6 @@ config = require("./lib/config");
 git = require("./lib/git");
 
 Config = new config();
-
-url = Config.get("url");
-
-issueTmpl = Config.get("issue");
-
-commitTmpl = Config.get("commit");
 
 closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
 
@@ -45,7 +39,9 @@ Create a markdown link to issue page with issue number as text
 
 
 linkToIssue = function(issue) {
-  var issueLink;
+  var issueLink, issueTmpl, url;
+  url = Config.get("url");
+  issueTmpl = Config.get("issue");
   if (url && issueTmpl) {
     issueLink = "[#%s](" + url + issueTmpl + ")";
     return util.format(issueLink, issue, issue);
@@ -65,7 +61,9 @@ Create a markdown link to commit page with commit hash as text
 
 
 linkToCommit = function(hash) {
-  var commitLink;
+  var commitLink, commitTmpl, url;
+  url = Config.get("url");
+  commitTmpl = Config.get("commit");
   if (url && commitTmpl) {
     commitLink = "[%s](" + url + commitTmpl + ")";
     return util.format(commitLink, hash.substr(0, 8), hash);
@@ -86,7 +84,7 @@ commit objects with information
 
 
 parseCommit = function(commit) {
-  var commitObj, i, line, lines, match, message, _i, _len;
+  var commitObj, i, line, lines, match, message, newLines, _i, _len;
   if (!((commit != null) && commit)) {
     return;
   }
@@ -99,16 +97,18 @@ parseCommit = function(commit) {
     issues: [],
     title: lines.shift()
   };
+  newLines = [];
   for (i = _i = 0, _len = lines.length; _i < _len; i = ++_i) {
     line = lines[i];
-    if (!(match = line.match(closeRegex))) {
-      continue;
+    if (match = line.match(closeRegex)) {
+      commitObj.issues.push(parseInt(match[1]));
+    } else {
+      newLines.push(line);
     }
-    commitObj.issues.push(parseInt(match[1]));
-    lines.splice(i, 1);
   }
+  lines = newLines;
   message = lines.join(" ");
-  if (match = commitObj.title.match(/^([^\(]+)\(([\w\.]+)\):\s+(.+)/)) {
+  if (match = commitObj.title.match(/^([^\(]+)\(([^\)]+)\):\s+(.+)/)) {
     commitObj.type = match[1];
     commitObj.component = match[2];
     commitObj.message = match[3];
@@ -254,6 +254,8 @@ generate = function(toTag, file) {
 };
 
 lorax = module.exports = {
+  config: Config,
+  git: git,
   get: get,
   parseCommit: parseCommit,
   write: write,
