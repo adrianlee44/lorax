@@ -1,3 +1,8 @@
+# v0.1.1 (2014/1/5)
+## Optimizations
+- **lorax:** Refactored lorax to make API easier to use
+  ([070c798d](https://github.com/adrianlee44/lorax/commit/070c798dc663bee0b0e44cef6893e21daf24fe4a))
+
 # v0.1.0 (2013/12/13)
 ## Features
 - **all:** Initial commit
