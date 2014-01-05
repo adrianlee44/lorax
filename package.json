@@ -5,7 +5,7 @@
   "main": "index.js",
   "bin": "bin/lorax",
   "scripts": {
-    "test": "grunt nodeunit"
+    "test": "grunt default"
   },
   "repository": {
     "type": "git",
