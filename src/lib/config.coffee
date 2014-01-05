@@ -25,7 +25,13 @@ class Config
 
   get: (key) -> @config[key]
 
-  set: (key, value) -> @config[key] = value
+  set: (key, value) ->
+    if typeof key is "object"
+      for hashKey, hashValue of key when @config[hashKey]?
+        @config[hashKey] = hashValue
+    else
+      @config[key] = value
+    return
 
   write: (force = false) ->
     if @custom or force
