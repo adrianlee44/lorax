@@ -155,20 +155,23 @@ write = (commits, version) ->
 @description
 Get all commits or commits since last tag
 @param {String} grep  String regex to match
-@param {Function} log Function to output log messages
+@param {String} tag   Tag to read commits from
 @returns {Promise} Promise with an array of commits
 ###
-get = (grep, log = console.log) ->
+get = (grep, tag) ->
   deferred = Q.defer()
 
   getLog = (tag) ->
     msg = "Reading commits"
     msg += " since #{tag}" if tag
-    log msg
+    console.log msg
 
     git.getLog(grep, tag).then deferred.resolve, deferred.reject
 
-  git.getLastTag().then getLog, -> getLog()
+  if tag?
+    getLog tag
+  else
+    git.getLastTag().then getLog, -> getLog()
 
   return deferred.promise
 
