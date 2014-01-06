@@ -1,3 +1,26 @@
+# v0.1.3 (2014/1/5)
+## Features
+- **lorax:** Allow specifying tag when reading log
+  ([0dff7d0d](https://github.com/adrianlee44/lorax/commit/0dff7d0d635ca5b920864cb73d0f4075227cf162))
+
+# v0.1.2 (2014/1/5)
+## Bug Fixes
+- **lorax:**
+  - Fixed not able to parse multiple issues
+  ([0d3a6e5c](https://github.com/adrianlee44/lorax/commit/0d3a6e5cb07fcc117fe8bb4ce348a5818ca687b8))
+  - Fixed not parsing special characters in component name
+  ([8911a1cf](https://github.com/adrianlee44/lorax/commit/8911a1cfd8d43dfb5d78774697a51ee46c52bcbb))
+
+## Features
+- **config:** Allow setting with an object
+  ([84ae8ae7](https://github.com/adrianlee44/lorax/commit/84ae8ae702ba831c59daf60fdb9874d012e20667))
+- **lorax:** Updated API to include git and Config module
+  ([72e47af9](https://github.com/adrianlee44/lorax/commit/72e47af9a37cf29baf807da53fde54f9e888ee47))
+
+## Optimizations
+- **lorax:** Refactored lorax to make API easier to use
+  ([070c798d](https://github.com/adrianlee44/lorax/commit/070c798dc663bee0b0e44cef6893e21daf24fe4a))
+
 # v0.1.1 (2014/1/5)
 ## Optimizations
 - **lorax:** Refactored lorax to make API easier to use
