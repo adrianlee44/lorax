@@ -1,6 +1,8 @@
 Lorax
 ===
-[![Build Status](https://travis-ci.org/adrianlee44/lorax.png?branch=master)](https://travis-ci.org/adrianlee44/lorax)
+[![Build Status](https://img.shields.io/travis/adrianlee44/lorax/master.svg?style=flat-square)](https://travis-ci.org/adrianlee44/lorax)
+[![License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](https://github.com/adrianlee44/lorax/blob/master/LICENSE-MIT)
+[![NPM](https://img.shields.io/npm/v/lorax.svg?style=flat-square)](https://www.npmjs.org/package/lorax)
 
 <img align="right" height="200" src="http://4.bp.blogspot.com/-nIhDGmiP2Vc/T1MD0BbiWxI/AAAAAAAABeQ/3DMn5DYC3YY/s1600/lorax1.png">
 
