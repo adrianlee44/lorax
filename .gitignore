@@ -1,1 +1,4 @@
 node_modules/
+
+# Editor folder
+.c9
