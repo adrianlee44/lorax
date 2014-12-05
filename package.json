@@ -30,14 +30,14 @@
   "homepage": "https://github.com/adrianlee44/lorax",
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-contrib-nodeunit": "~0.2.1",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-contrib-coffee": "~0.7.0",
-    "grunt-coffeelint": "0.0.7",
-    "matchdep": "~0.1.2"
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-contrib-coffee": "~0.12.0",
+    "grunt-coffeelint": "0.0.13",
+    "matchdep": "~0.3.0"
   },
   "dependencies": {
-    "q": "~0.9.7",
-    "commander": "~1.1.1"
+    "q": "~1.1.2",
+    "commander": "~2.5.0"
   }
 }
