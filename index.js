@@ -11,7 +11,7 @@
  * @dependencies
  * - commander
  *  */
-var Config, Q, closeRegex, config, fs, generate, get, git, linkToCommit, linkToIssue, lorax, parseCommit, util, write;
+var _getLog, Config, Q, closeRegex, config, fs, generate, get, git, linkToCommit, linkToIssue, lorax, parseCommit, util, write;
 
 util = require("util");
 fs = require("fs");
@@ -135,7 +135,7 @@ parseCommit = function(commit) {
  */
 
 write = function(commits, version) {
-  var commit, componentName, components, display, item, key, list, name, output, prefix, section, sectionType, sections, today, _i, _j, _k, _len, _len1, _len2, _name, _ref;
+  var commit, componentName, components, display, item, key, list, output, prefix, section, sectionType, sections, today, _i, _j, _k, _len, _len1, _len2, _name, _ref;
   output = "";
   sections = {};
   display = Config.get("display");
@@ -188,6 +188,28 @@ write = function(commits, version) {
 };
 
 
+
+/**
+ * @function
+ * @private
+ * @name _getLog
+ * @description
+ * Print message and retrieve get log
+ * @param {String} grep String regex to match
+ * @param {String} tag  Tag to read commits from
+ * @returns {Promise}   Promise with an array of commits
+ */
+
+_getLog = function(grep, tag) {
+  var msg = "Reading commits";
+  if (tag) {
+    msg += " since " + tag;
+  }
+  console.log(msg);
+  return git.getLog(grep, tag);
+};
+
+
 /**
  * @function
  * @name get
@@ -199,25 +221,13 @@ write = function(commits, version) {
  */
 
 get = function(grep, tag) {
-  var deferred, getLog;
-  deferred = Q.defer();
-  getLog = function(tag) {
-    var msg;
-    msg = "Reading commits";
-    if (tag) {
-      msg += " since " + tag;
-    }
-    console.log(msg);
-    return git.getLog(grep, tag).then(deferred.resolve, deferred.reject);
-  };
   if (tag !== undefined) {
-    getLog(tag);
+    return _getLog(grep, tag);
   } else {
-    git.getLastTag().then(getLog, function() {
-      return getLog();
+    return git.getLastTag().then(function(lastTag) {
+      return _getLog(grep, lastTag);
     });
   }
-  return deferred.promise;
 };
 
 
