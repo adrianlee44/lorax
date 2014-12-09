@@ -10,7 +10,7 @@
  *
  * @dependencies
  * - commander
- *  */
+ */
 var _getLog, Config, Q, closeRegex, config, fs, generate, get, git, linkToCommit, linkToIssue, lorax, parseCommit, util, write;
 
 util = require("util");
@@ -77,7 +77,7 @@ linkToCommit = function(hash) {
  */
 
 parseCommit = function(commit) {
-  var commitObj, i, line, lines, match, message, newLines, _i, _len;
+  var commitObj, i, line, lines, match, message, newLines, _len;
   if (!((commit !== undefined) && commit)) {
     return;
   }
@@ -90,8 +90,9 @@ parseCommit = function(commit) {
     issues: [],
     title: lines.shift()
   };
+  // Get all related commits
   newLines = [];
-  for (i = _i = 0, _len = lines.length; _i < _len; i = ++_i) {
+  for (i = 0, _len = lines.length; i < _len; i++) {
     line = lines[i];
     match = line.match(closeRegex);
     if (match) {
@@ -101,7 +102,9 @@ parseCommit = function(commit) {
     }
   }
   lines = newLines;
-  message = lines.join(" ");
+  
+  // Rejoin the rest of the lines after stripping out certain information
+  message = lines.join("\n");
 
   match = commitObj.title.match(/^([^\(]+)\(([^\)]+)\):\s+(.+)/);
   if (match) {
@@ -112,7 +115,9 @@ parseCommit = function(commit) {
       commitObj.message += "\n" + message;
     }
   }
-
+  
+  // Check for breaking change commit
+  // Replace commit description with breaking changes
   match = message.match(/BREAKING CHANGE[S]?:?([\s\S]*)/);
   if (match) {
     commitObj.type = "breaking";

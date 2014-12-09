@@ -65,5 +65,35 @@ exports.parseCommitTest = {
     test.equal(obj.type, "breaking");
     test.equal(obj.message, " Testing");
     test.done();
+  },
+  "long message parse": function(test) {
+    var longMessage, obj;
+    longMessage = "7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n";
+    longMessage += "Additional features:\n";
+    longMessage += "-foo\n";
+    longMessage += "-bar";
+    test.expect(1);
+    
+    obj = lorax.parseCommit(longMessage);
+    test.equal(obj.message, "Basic testing\nAdditional features:\n-foo\n-bar");
+    
+    test.done();
+  },
+  "code example in commit parse": function(test) {
+    var codeMessage, obj;
+    
+    codeMessage = "7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n";
+    codeMessage += "Example:\n";
+    codeMessage += "```\n";
+    codeMessage += "var test='hello';\n";
+    codeMessage += "test = test.replace('ll', 'r');\n";
+    codeMessage += "console.log(test);\n";
+    codeMessage += "```\n";
+    test.expect(1);
+    
+    obj = lorax.parseCommit(codeMessage);
+    test.equal(obj.message, "Basic testing\nExample:\n```\nvar test='hello';\ntest = test.replace('ll', 'r');\nconsole.log(test);\n```\n");
+    
+    test.done();
   }
 };
