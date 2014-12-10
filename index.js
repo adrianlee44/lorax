@@ -33,6 +33,11 @@ closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
 
 linkToIssue = function(issue) {
   var issueLink, issueTmpl, url;
+  
+  if (!issue) {
+    return '';
+  }
+  
   url = Config.get("url");
   issueTmpl = Config.get("issue");
   if (url && issueTmpl) {
@@ -272,6 +277,8 @@ generate = function(toTag, file) {
 };
 
 lorax = module.exports = {
+  linkToIssue: linkToIssue,
+  linkToCommit: linkToCommit,
   config: Config,
   git: git,
   get: get,
