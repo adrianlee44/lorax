@@ -2,6 +2,10 @@ var lorax = require('../index');
 var linkToIssue = lorax.linkToIssue;
 
 exports.linkToIssueTest = {
+  tearDown: function(callback) {
+    lorax.config.reset();
+    callback();
+  },
   basicTest: function(test) {
     var output = linkToIssue('123');
     
