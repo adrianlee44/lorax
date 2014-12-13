@@ -60,6 +60,11 @@ linkToIssue = function(issue) {
 
 linkToCommit = function(hash) {
   var commitLink, commitTmpl, url;
+  
+  if (!hash) {
+    return '';
+  }
+  
   url = Config.get("url");
   commitTmpl = Config.get("commit");
   if (url && commitTmpl) {
