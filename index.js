@@ -10,16 +10,17 @@
  *
  * @dependencies
  * - commander
+ * - q
  */
-var _getLog, Config, Q, closeRegex, config, fs, generate, get, git, linkToCommit, linkToIssue, lorax, parseCommit, util, write;
-
-util = require("util");
-fs = require("fs");
-Q = require("q");
-config = require("./lib/config");
-git = require("./lib/git");
-Config = new config();
-closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
+ 
+var util = require("util"),
+    fs = require("fs"),
+    Q = require("q"),
+    config = require("./lib/config"),
+    git = require("./lib/git"),
+    Config = new config(),
+    closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i,
+    generate, get, parseCommit, write;
 
 
 /**
@@ -31,13 +32,13 @@ closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
  * @returns {String} markdown text
  */
 
-linkToIssue = function(issue) {
+function linkToIssue(issue) {
   var issueLink, issueTmpl, url;
-  
+
   if (!issue) {
     return '';
   }
-  
+
   url = Config.get("url");
   issueTmpl = Config.get("issue");
   if (url && issueTmpl) {
@@ -46,7 +47,7 @@ linkToIssue = function(issue) {
   } else {
     return "#" + issue;
   }
-};
+}
 
 
 /**
@@ -58,13 +59,13 @@ linkToIssue = function(issue) {
  * @returns {String} markdown text
  */
 
-linkToCommit = function(hash) {
+function linkToCommit(hash) {
   var commitLink, commitTmpl, url;
-  
+
   if (!hash) {
     return '';
   }
-  
+
   url = Config.get("url");
   commitTmpl = Config.get("commit");
   if (url && commitTmpl) {
@@ -73,7 +74,7 @@ linkToCommit = function(hash) {
   } else {
     return hash.substr(0, 8);
   }
-};
+}
 
 
 /**
@@ -112,7 +113,7 @@ parseCommit = function(commit) {
     }
   }
   lines = newLines;
-  
+
   // Rejoin the rest of the lines after stripping out certain information
   message = lines.join("\n");
 
@@ -125,7 +126,7 @@ parseCommit = function(commit) {
       commitObj.message += "\n" + message;
     }
   }
-  
+
   // Check for breaking change commit
   // Replace commit description with breaking changes
   match = message.match(/BREAKING CHANGE[S]?:?([\s\S]*)/);
@@ -215,14 +216,14 @@ write = function(commits, version) {
  * @returns {Promise}   Promise with an array of commits
  */
 
-_getLog = function(grep, tag) {
+function _getLog(grep, tag) {
   var msg = "Reading commits";
   if (tag) {
     msg += " since " + tag;
   }
   console.log(msg);
   return git.getLog(grep, tag);
-};
+}
 
 
 /**
@@ -281,7 +282,7 @@ generate = function(toTag, file) {
   });
 };
 
-lorax = module.exports = {
+module.exports = {
   linkToIssue: linkToIssue,
   linkToCommit: linkToCommit,
   config: Config,
