@@ -3,9 +3,9 @@ module.exports = function(grunt) {
     nodeunit: {
       files: ["test/**/*_test.js"]
     },
-    jshint: {
+    eslint: {
       options: {
-        node: true
+        configFile: 'eslint.json'
       },
       src: {
         files: {
@@ -25,21 +25,21 @@ module.exports = function(grunt) {
     },
     watch: {
       gruntfile: {
-        files: "<%= jshint.gruntfile.files.src %>",
-        tasks: ["jshint:gruntfile"]
+        files: "<%= eslint.gruntfile.files.src %>",
+        tasks: ["eslint:gruntfile"]
       },
       src: {
-        files: "<%= jshint.src.files.src %>",
-        tasks: ["jshint:src", "nodeunit"]
+        files: "<%= eslint.src.files.src %>",
+        tasks: ["eslint:src", "nodeunit"]
       },
       test: {
-        files: "<%= jshint.test.files.src %>",
-        tasks: ["jshint:test", "nodeunit"]
+        files: "<%= eslint.test.files.src %>",
+        tasks: ["eslint:test", "nodeunit"]
       }
     }
   });
-  
+
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask("default", ["jshint", "nodeunit"]);
+  grunt.registerTask("default", ["eslint", "nodeunit"]);
 };

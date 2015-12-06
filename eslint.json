@@ -1,0 +1,18 @@
+{
+  "env": {
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "no-console": 0
+  },
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "classes": true,
+    "forOf": true,
+    "modules": true,
+    "superInFunctions": true,
+    "templateStrings": true
+  }
+}
