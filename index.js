@@ -12,16 +12,14 @@
  * - commander
  * - q
  */
- 
-var util = require("util"),
-    fs = require("fs"),
-    Q = require("q"),
-    config = require("./lib/config"),
-    git = require("./lib/git"),
-    Config = new config(),
-    closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i,
-    generate, get, parseCommit, write;
+'use strict';
 
+const util = require("util");
+const fs = require("fs");
+const config = require("./lib/config");
+const git = require("./lib/git");
+const Config = new config();
+const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
 
 /**
  * @function
@@ -33,19 +31,17 @@ var util = require("util"),
  */
 
 function linkToIssue(issue) {
-  var issueLink, issueTmpl, url;
-
   if (!issue) {
     return '';
   }
 
-  url = Config.get("url");
-  issueTmpl = Config.get("issue");
+  const url = Config.get("url");
+  const issueTmpl = Config.get("issue");
   if (url && issueTmpl) {
-    issueLink = "[#%s](" + url + issueTmpl + ")";
+    const issueLink = `[#%s](${url}${issueTmpl})`;
     return util.format(issueLink, issue, issue);
   } else {
-    return "#" + issue;
+    return `#${issue}`;
   }
 }
 
@@ -58,18 +54,15 @@ function linkToIssue(issue) {
  * @param {String} hash Commit hash
  * @returns {String} markdown text
  */
-
 function linkToCommit(hash) {
-  var commitLink, commitTmpl, url;
-
   if (!hash) {
     return '';
   }
 
-  url = Config.get("url");
-  commitTmpl = Config.get("commit");
+  const url = Config.get("url");
+  const commitTmpl = Config.get("commit");
   if (url && commitTmpl) {
-    commitLink = "[%s](" + url + commitTmpl + ")";
+    const commitLink = `[%s](${url}${commitTmpl})`
     return util.format(commitLink, hash.substr(0, 8), hash);
   } else {
     return hash.substr(0, 8);
@@ -86,14 +79,11 @@ function linkToCommit(hash) {
  * @param {String} commit Commit string
  * @returns {Array} Array of commit objects
  */
+function parseCommit(commit) {
+  if (!commit) return;
 
-parseCommit = function(commit) {
-  var commitObj, i, line, lines, match, message, newLines, _len;
-  if (!((commit !== undefined) && commit)) {
-    return;
-  }
-  lines = commit.split("\n");
-  commitObj = {
+  let lines = commit.split("\n");
+  const commitObj = {
     type: "",
     component: "",
     message: "",
@@ -101,27 +91,27 @@ parseCommit = function(commit) {
     issues: [],
     title: lines.shift()
   };
+
   // Get all related commits
-  newLines = [];
-  for (i = 0, _len = lines.length; i < _len; i++) {
-    line = lines[i];
-    match = line.match(closeRegex);
+  const newLines = [];
+  lines.forEach((line) => {
+    const match = line.match(closeRegex);
     if (match) {
       commitObj.issues.push(parseInt(match[1]));
     } else {
       newLines.push(line);
     }
-  }
+  });
   lines = newLines;
 
   // Rejoin the rest of the lines after stripping out certain information
-  message = lines.join("\n");
+  const message = lines.join("\n");
 
-  match = commitObj.title.match(/^([^\(]+)\(([^\)]+)\):\s+(.+)/);
-  if (match) {
-    commitObj.type = match[1];
-    commitObj.component = match[2];
-    commitObj.message = match[3];
+  const titleMatch = commitObj.title.match(/^([^\(]+)\(([^\)]+)\):\s+(.+)/);
+  if (titleMatch) {
+    commitObj.type = titleMatch[1];
+    commitObj.component = titleMatch[2];
+    commitObj.message = titleMatch[3];
     if (message) {
       commitObj.message += "\n" + message;
     }
@@ -129,15 +119,14 @@ parseCommit = function(commit) {
 
   // Check for breaking change commit
   // Replace commit description with breaking changes
-  match = message.match(/BREAKING CHANGE[S]?:?([\s\S]*)/);
-  if (match) {
+  const breakingMatch = message.match(/BREAKING CHANGE[S]?:?([\s\S]*)/);
+  if (breakingMatch) {
     commitObj.type = "breaking";
-    commitObj.message = match[1];
+    commitObj.message = breakingMatch[1];
   }
 
   return commitObj;
-};
-
+}
 
 /**
  * @function
@@ -149,61 +138,62 @@ parseCommit = function(commit) {
  * @param {String} version Current version
  * @returns {String} Markdown format changelog
  */
+function write(commits, version) {
+  let output = "";
+  const sections = {};
+  const display = Config.get("display");
 
-write = function(commits, version) {
-  var commit, componentName, components, display, item, key, list, output, prefix, section, sectionType, sections, today, _i, _j, _k, _len, _len1, _len2, _name, _ref;
-  output = "";
-  sections = {};
-  display = Config.get("display");
-
-  for (key in display) {
+  for (let key in display) {
     sections[key] = {};
   }
 
-  for (_i = 0, _len = commits.length; _i < _len; _i++) {
-    commit = commits[_i];
-    section = sections[commit.type];
-    if (section[_name = commit.component] === undefined) {
-      section[_name] = [];
-    }
-    section[commit.component].push(commit);
-  }
+  commits.forEach((commit) => {
+    const name = commit.component;
+    const section = sections[commit.type];
 
-  today = new Date();
-  output += "# " + version + " (" + (today.getFullYear()) + "/" + (today.getMonth() + 1) + "/" + (today.getDate()) + ")\n";
-  for (sectionType in sections) {
-    list = sections[sectionType];
-    components = Object.getOwnPropertyNames(list).sort();
+    if (!section[name]) {
+      section[name] = []
+    }
+    section[name].push(commit);
+  });
+
+  const today = new Date();
+  output += `# ${version} (${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()})\n`;
+
+  for (let sectionType in sections) {
+    const list = sections[sectionType];
+    const components = Object.getOwnPropertyNames(list).sort();
     if (!components.length) {
       continue;
     }
-    output += "## " + display[sectionType] + "\n";
-    for (_j = 0, _len1 = components.length; _j < _len1; _j++) {
-      componentName = components[_j];
-      prefix = "-";
-      if (list[componentName].length > 1) {
+
+    output += `## ${display[sectionType]}\n`;
+
+    components.forEach((componentName) => {
+      let prefix = '-';
+      const componentList = list[componentName] || [];
+
+      if (componentList.length > 1) {
         output += util.format("- **%s:**\n", componentName);
         prefix = "  -";
       } else {
         prefix = util.format("- **%s:**", componentName);
       }
-      _ref = list[componentName];
-      for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
-        item = _ref[_k];
+
+      componentList.forEach((item) => {
         output += util.format("%s %s\n  (%s", prefix, item.message, linkToCommit(item.hash));
         if (item.issues.length) {
           output += ",\n   " + (item.issues.map(linkToIssue).join(", "));
         }
         output += ")\n";
-      }
-    }
+      });
+    });
     output += "\n";
   }
   output += "\n";
+
   return output;
-};
-
-
+}
 
 /**
  * @function
@@ -217,14 +207,13 @@ write = function(commits, version) {
  */
 
 function _getLog(grep, tag) {
-  var msg = "Reading commits";
+  let msg = "Reading commits";
   if (tag) {
     msg += " since " + tag;
   }
   console.log(msg);
   return git.getLog(grep, tag);
 }
-
 
 /**
  * @function
@@ -235,17 +224,16 @@ function _getLog(grep, tag) {
  * @param {String} tag   Tag to read commits from
  * @returns {Promise} Promise with an array of commits
  */
-
-get = function(grep, tag) {
+function get(grep, tag) {
   if (tag !== undefined) {
     return _getLog(grep, tag);
   } else {
-    return git.getLastTag().then(function(lastTag) {
+    return git.getLastTag()
+    .then((lastTag) => {
       return _getLog(grep, lastTag);
     });
   }
-};
-
+}
 
 /**
  * @function
@@ -256,22 +244,20 @@ get = function(grep, tag) {
  * @param {String} file Filename to write to
  */
 
-generate = function(toTag, file) {
-  var grep = Config.get("type").join("|");
+function generate(toTag, file) {
+  let grep = Config.get("type").join("|");
 
-  return get(grep).then(function(commits) {
-    var commit, parsedCommits, result, i;
-
-    parsedCommits = [];
-    for (i = 0; i < commits.length; i++) {
-      commit = commits[i];
+  return get(grep)
+  .then((commits) => {
+    const parsedCommits = [];
+    commits.forEach((commit) => {
       if (commit) {
         parsedCommits.push(parseCommit(commit));
       }
-    }
+    });
 
     console.log("Parsed " + parsedCommits.length + " commit(s)");
-    result = write(parsedCommits, toTag);
+    const result = write(parsedCommits, toTag);
     fs.writeFileSync(file, result, {
       encoding: "utf-8"
     });
@@ -280,7 +266,7 @@ generate = function(toTag, file) {
 
     return;
   });
-};
+}
 
 module.exports = {
   linkToIssue: linkToIssue,
