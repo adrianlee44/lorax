@@ -1,20 +1,18 @@
-var util = require("../lib/util");
+import test from 'ava';
+import * as util from '../lib/util';
 
-exports.utilTest = {
-  "Extend test": function(test) {
-    var newObj, orig, result;
-    orig = {
-      a: "1",
-      b: "2"
-    };
-    newObj = {
-      a: "3",
-      c: "4"
-    };
-    result = util.extend({}, orig, newObj);
-    test.equal(result.a, "3");
-    test.equal(result.b, "2");
-    test.equal(result.c, "4");
-    test.done();
-  }
-};
+test('extend', t => {
+  const orig = {
+    a: "1",
+    b: "2"
+  };
+  const newObj = {
+    a: "3",
+    c: "4"
+  };
+  const result = util.extend({}, orig, newObj);
+
+  t.is(result.a, "3");
+  t.is(result.b, "2");
+  t.is(result.c, "4");
+});

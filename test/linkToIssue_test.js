@@ -1,34 +1,32 @@
-var lorax = require('../index');
-var linkToIssue = lorax.linkToIssue;
+import test from 'ava';
 
-exports.linkToIssueTest = {
-  tearDown: function(callback) {
-    lorax.config.reset();
-    callback();
-  },
-  basicTest: function(test) {
-    var output = linkToIssue('123');
-    
-    test.equal(output, '[#123](https://github.com/adrianlee44/lorax/issues/123)');
-    test.done();
-  },
-  noUrlTest: function(test) {
-    lorax.config.set('url', '');
-    
-    var output = linkToIssue('123');
-    test.equal(output, '#123');
-    test.done();
-  },
-  noIssueTemplateTest: function(test) {
-    lorax.config.set('issue', '');
-    
-    var output = linkToIssue('123');
-    test.equal(output, '#123');
-    test.done();
-  },
-  noIssueTest: function(test) {
-    var output = linkToIssue();
-    test.equal(output, '');
-    test.done();
-  }
-};
+const lorax = require('../index');
+const linkToIssue = lorax.linkToIssue;
+
+test.afterEach(() => {
+  lorax.config.reset();
+});
+
+test('basicTest', t => {
+  const output = linkToIssue('123');
+  t.is(output, '[#123](https://github.com/adrianlee44/lorax/issues/123)');
+});
+
+test('noUrlTest', t => {
+  lorax.config.set('url', '');
+
+  const output = linkToIssue('123');
+  t.is(output, '#123');
+});
+
+test('noIssueTemplateTest', t => {
+  lorax.config.set('issue', '');
+
+  const output = linkToIssue('123');
+  t.is(output, '#123');
+});
+
+test('noIssueTest', t => {
+  const output = linkToIssue();
+  t.is(output, '');
+});

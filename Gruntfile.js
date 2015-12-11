@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
   grunt.initConfig({
-    nodeunit: {
-      files: ["test/**/*_test.js"]
+    ava: {
+      target: ["test/**/*_test.js"]
     },
     eslint: {
       options: {
@@ -30,16 +30,16 @@ module.exports = function(grunt) {
       },
       src: {
         files: "<%= eslint.src.files.src %>",
-        tasks: ["eslint:src", "nodeunit"]
+        tasks: ["eslint:src", "ava"]
       },
       test: {
         files: "<%= eslint.test.files.src %>",
-        tasks: ["eslint:test", "nodeunit"]
+        tasks: ["eslint:test", "ava"]
       }
     }
   });
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask("default", ["eslint", "nodeunit"]);
+  grunt.registerTask("default", ["eslint", "ava"]);
 };
