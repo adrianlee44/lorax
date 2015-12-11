@@ -36,7 +36,8 @@
     "matchdep": "1.0.0"
   },
   "dependencies": {
-    "q": "1.4.1",
-    "commander": "2.9.0"
+    "commander": "2.9.0",
+    "findup-sync": "^0.3.0",
+    "q": "1.4.1"
   }
 }
