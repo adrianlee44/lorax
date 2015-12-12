@@ -131,15 +131,16 @@ function parseCommit(commit) {
 
 /**
  * @function
- * @name write
+ * @name render
  * @description
- * Using preprocessed array of commits, generate a changelog in markdown format with version
+ * Using preprocessed array of commits, render a changelog in markdown format with version
  * and today's date as the header
- * @param {Array} commits Preprocessed array of commits
- * @param {String} version Current version
+ * @param {Array} commits   Preprocessed array of commits
+ * @param {String} version  Current version
+ * @param {Object} options  Additional option
  * @returns {String} Markdown format changelog
  */
-function write(commits, version) {
+function render(commits, version, options) {
   let output = "";
   const sections = {};
   const display = Config.get("display");
@@ -158,8 +159,8 @@ function write(commits, version) {
     section[name].push(commit);
   });
 
-  const today = new Date();
-  output += `# ${version} (${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()})\n`;
+  const timestamp = options.timestamp || new Date();
+  output += `# ${version} (${timestamp.getFullYear()}/${timestamp.getMonth() + 1}/${timestamp.getDate()})\n`;
 
   for (let sectionType in sections) {
     const list = sections[sectionType];
@@ -253,12 +254,11 @@ function generate(toTag, file) {
 }
 
 module.exports = {
-  linkToIssue: linkToIssue,
-  linkToCommit: linkToCommit,
   config: Config,
-  git: git,
+  generate: generate,
   get: get,
+  linkToCommit: linkToCommit,
+  linkToIssue: linkToIssue,
   parseCommit: parseCommit,
-  write: write,
-  generate: generate
+  render: render
 };
