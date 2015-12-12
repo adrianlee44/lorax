@@ -242,7 +242,7 @@ function generate(toTag, file) {
     });
 
     console.log("Parsed " + parsedCommits.length + " commit(s)");
-    const result = write(parsedCommits, toTag);
+    const result = render(parsedCommits, toTag);
     fs.writeFileSync(file, result, {
       encoding: "utf-8"
     });
