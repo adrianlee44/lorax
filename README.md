@@ -85,6 +85,7 @@ Close #321
 ```
 
 ## Configurations
+Project can add `lorax.json` in root directory to override default settings
 ```js
 {
   issue: "/issues/%s",
@@ -95,27 +96,22 @@ Close #321
     feature: "Features",
     breaking: "Breaking Changes",
     refactor: "Optimizations"
-  }
+  },
   url: "https://github.com/adrianlee44/lorax"
 }
 ```
-### Issue
-Partial URL for issues
+key | description | Default
+--- | --- | ---
+issue | Partial URL for issues | `issues/%s`
+commit | Partial URL for commits | `/commit/%s`
+type | Type of commit message to parse. Items in this array are joined into a string and used for searching commit messages | `["^fix", "^feature", "^refactor", "BREAKING"]`
+display | Display name for each commit message type | See next section
+url | URL of the Github repo | ''
 
-### Commit
-Partial URL for commits
-
-### Type
-Type of commit message to parse. Items in this array are joined into a string and used for searching commit messages
-
-**Default** - ^fix|^feature|^refactor|BREAKING
-
-### Display
-Display name for each commit message type
-
-### Url
-URL of the Github repo
-
-## License
-
-MIT License
+### Display name default
+key | display name
+--- | ---
+fix | Bug Fixes
+feature | Features
+breaking | Breaking Changes
+refactor | Optimizations
