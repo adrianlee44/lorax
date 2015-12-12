@@ -6,7 +6,7 @@
   "bin": "bin/lorax",
   "scripts": {
     "test": "nyc grunt",
-    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc grunt && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
