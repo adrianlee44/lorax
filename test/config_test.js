@@ -1,3 +1,5 @@
+'use strict';
+
 import test from 'ava';
 const Config = require('../lib/config');
 

@@ -1,3 +1,5 @@
+'use strict';
+
 import test from 'ava';
 import * as util from '../lib/util';
 
