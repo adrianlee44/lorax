@@ -14,10 +14,11 @@
  */
 'use strict';
 
-const util = require("util");
-const fs = require("fs");
 const config = require("./lib/config");
+const fs = require("fs");
 const git = require("./lib/git");
+const Q = require('q');
+const util = require("util");
 const Config = new config();
 const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
 
@@ -195,25 +196,6 @@ function write(commits, version) {
   return output;
 }
 
-/**
- * @function
- * @private
- * @name _getLog
- * @description
- * Print message and retrieve get log
- * @param {String} grep String regex to match
- * @param {String} tag  Tag to read commits from
- * @returns {Promise}   Promise with an array of commits
- */
-
-function _getLog(grep, tag) {
-  let msg = "Reading commits";
-  if (tag) {
-    msg += " since " + tag;
-  }
-  console.log(msg);
-  return git.getLog(grep, tag);
-}
 
 /**
  * @function
@@ -225,14 +207,16 @@ function _getLog(grep, tag) {
  * @returns {Promise} Promise with an array of commits
  */
 function get(grep, tag) {
-  if (tag !== undefined) {
-    return _getLog(grep, tag);
-  } else {
-    return git.getLastTag()
-    .then((lastTag) => {
-      return _getLog(grep, lastTag);
-    });
-  }
+  const promise = tag ? Q(tag) : git.getLastTag();
+  return promise
+  .then((tag) => {
+    let msg = "Reading commits";
+    if (tag) {
+      msg += " since " + tag;
+    }
+    console.log(msg);
+    return git.getLog(grep, tag);
+  });
 }
 
 /**
