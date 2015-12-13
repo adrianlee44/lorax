@@ -8,17 +8,17 @@ test('get the last tag', t => {
   });
 });
 
-test('get current repo log', t => {
-  return getLog('^fix|^refactor', 'v0.1.0')
+test('get all repo log', t => {
+  return getLog('^fix|^refactor')
   .then(result => {
     t.ok(result.length);
   });
 });
 
-test('get all repo log', t => {
-  return getLog('^fix|^refactor')
-  .then(result => {
-    t.ok(result.length);
+test('fail when given invalid tag', t => {
+  return getLog('^fix|^refactor', 'doesNotExist')
+  .fail(result => {
+    t.notOk(result);
   });
 });
 
