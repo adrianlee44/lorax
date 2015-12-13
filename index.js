@@ -62,7 +62,6 @@ function linkToCommit(hash) {
 
   const url = Config.get("url");
   const commitTmpl = Config.get("commit");
-  console.log(url, commitTmpl);
   if (url && commitTmpl) {
     const commitLink = `[%s](${url}${commitTmpl})`
     return util.format(commitLink, hash.substr(0, 8), hash);
