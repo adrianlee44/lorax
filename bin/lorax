@@ -16,11 +16,16 @@ var path = require('path'),
 
 commander
   .version(pkg.version)
-  .usage("[options] [TAG] [FILE]")
+  .usage("[TAG] [FILE] [options]")
+  .option('-s, --since [tag]', 'Starting tag version')
   .parse(process.argv);
 
 if (commander.args.length >= 2) {
-  require(dir + 'index.js').generate(commander.args[0], commander.args[1]);
+  var options = {
+    since: commander.since
+  };
+
+  require(dir + 'index.js').generate(commander.args[0], commander.args[1], options);
 } else {
   console.log(commander.helpInformation());
 }

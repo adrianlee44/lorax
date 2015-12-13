@@ -228,12 +228,13 @@ function get(grep, tag) {
  * A shortcut function to get the latest tag, parse all the commits and generate the changelog
  * @param {String} toTag The latest tag
  * @param {String} file Filename to write to
+ * @param {Object} options
  */
 
-function generate(toTag, file) {
+function generate(toTag, file, options) {
   let grep = Config.get("type").join("|");
 
-  return get(grep)
+  return get(grep, options.since)
   .then((commits) => {
     const parsedCommits = [];
     commits.forEach((commit) => {
