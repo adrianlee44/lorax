@@ -54,12 +54,13 @@ $ npm install -g lorax
 ## Usage
 
 ```
-Usage: lorax [options] [TAG] [FILE]
+Usage: lorax [TAG] [FILE] [options]
 
 Options:
 
-  -h, --help     output usage information
-  -V, --version  output the version number
+  -h, --help         output usage information
+  -V, --version      output the version number
+  -s, --since [tag]  Starting tag version
 ```
 
 To generate the changelog
