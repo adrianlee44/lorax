@@ -6,13 +6,17 @@
   "rules": {
     "no-console": 0
   },
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "blockBindings": true,
-    "classes": true,
-    "forOf": true,
-    "modules": true,
-    "superInFunctions": true,
-    "templateStrings": true
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "arrowFunctions": true,
+      "blockBindings": true,
+      "classes": true,
+      "forOf": true,
+      "modules": true,
+      "superInFunctions": true,
+      "templateStrings": true
+    }
   }
 }
