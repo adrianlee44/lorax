@@ -32,7 +32,7 @@
   "devDependencies": {
     "coveralls": "^2.11.6",
     "grunt": "0.4.5",
-    "grunt-ava": "^0.5.1",
+    "grunt-ava": "^0.9.0",
     "grunt-contrib-watch": "0.6.1",
     "grunt-eslint": "^18.0.0",
     "matchdep": "1.0.0",
