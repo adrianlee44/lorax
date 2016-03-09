@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/adrianlee44/lorax",
   "devDependencies": {
+    "ava": "^0.12.0",
     "coveralls": "^2.11.6",
     "grunt": "0.4.5",
     "grunt-ava": "^0.9.0",
