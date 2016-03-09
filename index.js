@@ -17,59 +17,10 @@
 const config = require("./lib/config");
 const fs = require("fs");
 const git = require("./lib/git");
+const Printer = require("./lib/printer");
 const Q = require('q');
-const util = require("util");
 const Config = new config();
 const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
-
-/**
- * @function
- * @name linkToIssue
- * @description
- * Create a markdown link to issue page with issue number as text
- * @param {String} issue Issue number
- * @returns {String} markdown text
- */
-
-function linkToIssue(issue) {
-  if (!issue) {
-    return '';
-  }
-
-  const url = Config.get("url");
-  const issueTmpl = Config.get("issue");
-  if (url && issueTmpl) {
-    const issueLink = `[#%s](${url}${issueTmpl})`;
-    return util.format(issueLink, issue, issue);
-  } else {
-    return `#${issue}`;
-  }
-}
-
-
-/**
- * @function
- * @name linkToCommit
- * @description
- * Create a markdown link to commit page with commit hash as text
- * @param {String} hash Commit hash
- * @returns {String} markdown text
- */
-function linkToCommit(hash) {
-  if (!hash) {
-    return '';
-  }
-
-  const url = Config.get("url");
-  const commitTmpl = Config.get("commit");
-  if (url && commitTmpl) {
-    const commitLink = `[%s](${url}${commitTmpl})`
-    return util.format(commitLink, hash.substr(0, 8), hash);
-  } else {
-    return hash.substr(0, 8);
-  }
-}
-
 
 /**
  * @function
@@ -131,76 +82,6 @@ function parseCommit(commit) {
 
 /**
  * @function
- * @name render
- * @description
- * Using preprocessed array of commits, render a changelog in markdown format with version
- * and today's date as the header
- * @param {Array} commits   Preprocessed array of commits
- * @param {String} version  Current version
- * @param {Object} options  Additional option
- * @returns {String} Markdown format changelog
- */
-function render(commits, version, options) {
-  let output = "";
-  const sections = {};
-  const display = Config.get("display");
-  options = options || {};
-
-  for (let key in display) {
-    sections[key] = {};
-  }
-
-  commits.forEach((commit) => {
-    const name = commit.component;
-    const section = sections[commit.type];
-
-    if (!section[name]) {
-      section[name] = []
-    }
-    section[name].push(commit);
-  });
-
-  const timestamp = options.timestamp || new Date();
-  output += `# ${version} (${timestamp.getFullYear()}/${timestamp.getMonth() + 1}/${timestamp.getDate()})\n`;
-
-  for (let sectionType in sections) {
-    const list = sections[sectionType];
-    const components = Object.getOwnPropertyNames(list).sort();
-    if (!components.length) {
-      continue;
-    }
-
-    output += `## ${display[sectionType]}\n`;
-
-    components.forEach((componentName) => {
-      let prefix = '-';
-      const componentList = list[componentName] || [];
-
-      if (componentList.length > 1) {
-        output += util.format("- **%s:**\n", componentName);
-        prefix = "  -";
-      } else {
-        prefix = util.format("- **%s:**", componentName);
-      }
-
-      componentList.forEach((item) => {
-        output += util.format("%s %s\n  (%s", prefix, item.message, linkToCommit(item.hash));
-        if (item.issues.length) {
-          output += ",\n   " + (item.issues.map(linkToIssue).join(", "));
-        }
-        output += ")\n";
-      });
-    });
-    output += "\n";
-  }
-  output += "\n";
-
-  return output;
-}
-
-
-/**
- * @function
  * @name get
  * @description
  * Get all commits or commits since last tag
@@ -244,7 +125,8 @@ function generate(toTag, file, options) {
     });
 
     console.log("Parsed " + parsedCommits.length + " commit(s)");
-    const result = render(parsedCommits, toTag);
+    const printer = new Printer(parsedCommits, toTag);
+    const result = printer.print();
     fs.writeFileSync(file, result, {
       encoding: "utf-8"
     });
@@ -256,11 +138,7 @@ function generate(toTag, file, options) {
 }
 
 module.exports = {
-  config: Config,
   generate: generate,
   get: get,
-  linkToCommit: linkToCommit,
-  linkToIssue: linkToIssue,
-  parseCommit: parseCommit,
-  render: render
+  parseCommit: parseCommit
 };

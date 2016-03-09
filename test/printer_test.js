@@ -1,19 +1,23 @@
 'use strict';
 
 import test from 'ava';
-import {render} from '../index';
+import config from '../lib/config';
+import printer from '../lib/printer';
 
-test('render header', t => {
-  const output = render([], '0.1.0', {
+const Config = new config();
+
+test('print header', t => {
+  const Printer = new printer([], '0.1.0', Config)
+  const output = Printer.print({
     timestamp: new Date('2015/01/01')
   });
 
   t.ok(output);
-  t.is(output, '# 0.1.0 (2015/1/1)\n\n');
+  t.is(output, '# 0.1.0 (2015/1/1)');
 });
 
-test('render one section with two issues', t => {
-  const output = render([
+test('print one section with two issues', t => {
+  const Printer = new printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -25,7 +29,8 @@ test('render one section with two issues', t => {
       ],
       title: 'Some random title'
     }
-  ], '0.1.0', {
+  ], '0.1.0', Config);
+  const output = Printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -35,13 +40,14 @@ test('render one section with two issues', t => {
 ## Bug Fixes
 - **lorax:** This is a test
   ([123456](https://github.com/adrianlee44/lorax/commit/123456),
-   [#321](https://github.com/adrianlee44/lorax/issues/321), [#123](https://github.com/adrianlee44/lorax/issues/123))\n\n\n`
+   [#321](https://github.com/adrianlee44/lorax/issues/321),
+   [#123](https://github.com/adrianlee44/lorax/issues/123))\n`
 
   t.is(output, expected);
 });
 
-test('render one section with one issue', t => {
-  const output = render([
+test('print one section with one issue', t => {
+  const Printer = new printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -50,7 +56,8 @@ test('render one section with one issue', t => {
       issues: ['321'],
       title: 'Some random title'
     }
-  ], '0.1.0', {
+  ], '0.1.0', Config);
+  const output = Printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -60,13 +67,13 @@ test('render one section with one issue', t => {
 ## Bug Fixes
 - **lorax:** This is a test
   ([123456](https://github.com/adrianlee44/lorax/commit/123456),
-   [#321](https://github.com/adrianlee44/lorax/issues/321))\n\n\n`
+   [#321](https://github.com/adrianlee44/lorax/issues/321))\n`
 
   t.is(output, expected);
 });
 
-test('render one section with no issue', t => {
-  const output = render([
+test('print one section with no issue', t => {
+  const Printer = new printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -75,22 +82,23 @@ test('render one section with no issue', t => {
       issues: [],
       title: 'Some random title'
     }
-  ], '0.1.0', {
+  ], '0.1.0', Config);
+  const output = Printer.print({
     timestamp: new Date('2015/01/01')
-  });
+  })
 
   t.ok(output);
 
   const expected = `# 0.1.0 (2015/1/1)
 ## Bug Fixes
 - **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n\n\n`
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n`
 
   t.is(output, expected);
 });
 
-test('render two sections', t => {
-  const output = render([
+test('print two sections', t => {
+  const Printer = new printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -105,7 +113,8 @@ test('render two sections', t => {
       hash: '2351',
       issues: []
     }
-  ], '0.1.0', {
+  ], '0.1.0', Config);
+  const output = Printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -118,13 +127,13 @@ test('render two sections', t => {
 
 ## Optimizations
 - **lorax:** This is a refactor
-  ([2351](https://github.com/adrianlee44/lorax/commit/2351))\n\n\n`
+  ([2351](https://github.com/adrianlee44/lorax/commit/2351))\n`
 
   t.is(output, expected);
 });
 
-test('render two components in one section', t => {
-  const output = render([
+test('print two components in one section', t => {
+  const Printer = new printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -139,7 +148,8 @@ test('render two components in one section', t => {
       hash: '321',
       issues: []
     }
-  ], '0.1.0', {
+  ], '0.1.0', Config);
+  const output = Printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -150,7 +160,7 @@ test('render two components in one section', t => {
 - **config:** Trying to fix config
   ([321](https://github.com/adrianlee44/lorax/commit/321))
 - **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n\n\n`
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n`
 
   t.is(output, expected);
 });

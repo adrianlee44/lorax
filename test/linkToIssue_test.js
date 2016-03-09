@@ -1,34 +1,38 @@
 'use strict';
 
 import test from 'ava';
+import Printer from '../lib/printer';
+import Config from '../lib/config';
 
-const lorax = require('../index');
-const linkToIssue = lorax.linkToIssue;
+test.beforeEach(t => {
+  t.context.config = new Config();
+  t.context.printer = new Printer([], 'v0.1.0', t.context.config);
+});
 
-test.afterEach(() => {
-  lorax.config.reset();
+test.afterEach(t => {
+  t.context = {};
 });
 
 test('basicTest', t => {
-  const output = linkToIssue('123');
+  const output = t.context.printer.linkToIssue('123');
   t.is(output, '[#123](https://github.com/adrianlee44/lorax/issues/123)');
 });
 
 test('noUrlTest', t => {
-  lorax.config.set('url', '');
+  t.context.config.set('url', '');
 
-  const output = linkToIssue('123');
+  const output = t.context.printer.linkToIssue('123');
   t.is(output, '#123');
 });
 
 test('noIssueTemplateTest', t => {
-  lorax.config.set('issue', '');
+  t.context.config.set('issue', '');
 
-  const output = linkToIssue('123');
+  const output = t.context.printer.linkToIssue('123');
   t.is(output, '#123');
 });
 
 test('noIssueTest', t => {
-  const output = linkToIssue();
+  const output = t.context.printer.linkToIssue();
   t.is(output, '');
 });
