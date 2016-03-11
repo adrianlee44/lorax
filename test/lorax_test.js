@@ -16,11 +16,11 @@ test.before.cb(t => {
 });
 
 test.afterEach.cb(t => {
-  fs.stat('test.md', (err, stats) => {
-    if (stats) {
-      fs.unlink('test.md', t.end);
+  fs.access('test.md', (err) => {
+    if (err) {
+      t.end()
     } else {
-      t.end();
+      fs.unlink('test.md', t.end);
     }
   });
 });
