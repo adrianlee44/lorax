@@ -125,7 +125,7 @@ function generate(toTag, file, options) {
     });
 
     console.log("Parsed " + parsedCommits.length + " commit(s)");
-    const printer = new Printer(parsedCommits, toTag);
+    const printer = new Printer(parsedCommits, toTag, Config);
     const result = printer.print();
     fs.writeFileSync(file, result, {
       encoding: "utf-8"
