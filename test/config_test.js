@@ -1,7 +1,18 @@
 'use strict';
 
 import test from 'ava';
+import * as fs from 'fs';
 const Config = require('../lib/config');
+
+test.afterEach.cb(t => {
+  fs.access('test-config.json', (err) => {
+    if (err) {
+      t.end()
+    } else {
+      fs.unlink('test-config.json', t.end);
+    }
+  });
+});
 
 test('default', t => {
   const configObj = new Config("random.json");
@@ -48,6 +59,19 @@ test('custom property', t => {
 test('custom property false', t => {
   const configObj = new Config("random.json");
   t.is(configObj.custom, false);
+});
+
+test.cb('write back to config', t => {
+  const configObj = new Config();
+  configObj.set({
+    'issue': '/issues/test/%s',
+    'commit': '/commit/test/%s'
+  });
+
+  configObj.path = 'test-config.json';
+
+  configObj.write();
+  fs.readFile('test-config.json', t.end);
 });
 
 test('reset', t => {
