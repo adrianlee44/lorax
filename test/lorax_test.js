@@ -14,24 +14,27 @@ test.afterEach.cb(t => {
   });
 });
 
-test('get logs', async t => {
-  const log = lorax.get("^fix|^feature|^refactor|BREAKING");
-  t.ok(await log);
+test('get logs', t => {
+  return lorax.get("^fix|^feature|^refactor|BREAKING")
+  .then((log) => {
+    t.ok(log);
+  });
 });
 
-test('get logs since a certain tag', async t => {
+test('get logs since a certain tag', t => {
   const grepString = '^fix|^feature|^refactor|BREAKING'
   const grepRegex = new RegExp(grepString);
 
-  const log = lorax.get(grepString, 'v0.1.3');
-  const data = await log;
-  t.plan(data.length - 1);
+  return lorax.get(grepString, 'v0.1.3')
+  .then((data) => {
+    t.plan(data.length - 1);
 
-  data.forEach((commit) => {
-    if (!commit) return;
+    data.forEach((commit) => {
+      if (!commit) return;
 
-    const lines = commit.split('\n');
-    t.ok(grepRegex.test(lines[1]));
+      const lines = commit.split('\n');
+      t.ok(grepRegex.test(lines[1]));
+    });
   });
 });
 
