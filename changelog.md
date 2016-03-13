@@ -1,3 +1,13 @@
+# v1.1.0 (2016/3/12)
+## Bug Fixes
+- **lorax:** Fix Config not getting passed to printer
+  ([3195601d](https://github.com/adrianlee44/lorax/commit/3195601dc401f7cb20fb6749f1feef63b2e5d40e))
+
+## Optimizations
+- **printer:** Add Printer class
+  ([8f0ffa60](https://github.com/adrianlee44/lorax/commit/8f0ffa609b69d1e4a2879474391a6e7b56a8a601))
+
+
 # v1.0.0 (2015/12/13)
 ## Bug Fixes
 - **lorax:**
