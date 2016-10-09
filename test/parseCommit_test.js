@@ -1,8 +1,8 @@
 'use strict';
 
 import test from 'ava';
+import lorax from '../index';
 
-const lorax = require("../index");
 const commit = "7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n\nFixes #123";
 
 test('hash parse', t => {

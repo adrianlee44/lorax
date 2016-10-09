@@ -2,7 +2,7 @@
 
 import test from 'ava';
 import * as fs from 'fs';
-const Config = require('../lib/config');
+import Config from '../lib/config';
 
 test('default', t => {
   const configObj = new Config("random.json");
