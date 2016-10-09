@@ -9,7 +9,7 @@ git:
   depth: 200
 
 node_js:
-  - 4.2
-  - 5.2
+  - 4.6
+  - 6.7
 before_script:
   - npm install -g grunt-cli
