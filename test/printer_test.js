@@ -12,7 +12,7 @@ test('print header', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.ok(output);
+  t.truthy(output);
   t.is(output, '# 0.1.0 (2015/1/1)');
 });
 
@@ -34,7 +34,7 @@ test('print one section with two issues', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.ok(output);
+  t.truthy(output);
 
   const expected = `# 0.1.0 (2015/1/1)
 ## Bug Fixes
@@ -61,7 +61,7 @@ test('print one section with one issue', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.ok(output);
+  t.truthy(output);
 
   const expected = `# 0.1.0 (2015/1/1)
 ## Bug Fixes
@@ -87,7 +87,7 @@ test('print one section with no issue', t => {
     timestamp: new Date('2015/01/01')
   })
 
-  t.ok(output);
+  t.truthy(output);
 
   const expected = `# 0.1.0 (2015/1/1)
 ## Bug Fixes
@@ -118,7 +118,7 @@ test('print two sections', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.ok(output);
+  t.truthy(output);
 
   const expected = `# 0.1.0 (2015/1/1)
 ## Bug Fixes
@@ -153,7 +153,7 @@ test('print two components in one section', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.ok(output);
+  t.truthy(output);
 
   const expected = `# 0.1.0 (2015/1/1)
 ## Bug Fixes

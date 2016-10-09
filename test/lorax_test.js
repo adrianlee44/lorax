@@ -28,7 +28,7 @@ test.afterEach.cb(t => {
 test('get logs', t => {
   return lorax.get("^fix|^feature|^refactor|BREAKING")
   .then((log) => {
-    t.ok(log);
+    t.truthy(log);
   });
 });
 
@@ -44,7 +44,7 @@ test('get logs since a certain tag', t => {
       if (!commit) return;
 
       const lines = commit.split('\n');
-      t.ok(grepRegex.test(lines[1]));
+      t.truthy(grepRegex.test(lines[1]));
     });
   });
 });

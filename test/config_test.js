@@ -22,7 +22,7 @@ test('default', t => {
 
 test('invalid file', t => {
   const configObj = new Config("/null");
-  t.same(configObj.jsonData, undefined);
+  t.deepEqual(configObj.jsonData, undefined);
 });
 
 test('load lorax json', t => {
@@ -53,7 +53,7 @@ test('set object', t => {
 
 test('custom property', t => {
   const configObj = new Config();
-  t.ok(configObj.custom);
+  t.truthy(configObj.custom);
 });
 
 test('custom property false', t => {

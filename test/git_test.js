@@ -5,7 +5,7 @@ let child = require('child_process');
 test('get the last tag', t => {
   return getLastTag()
   .then(result => {
-    t.ok(result);
+    t.truthy(result);
   });
 });
 
@@ -18,7 +18,7 @@ test.serial('failed to get last tag', t => {
 
   return getLastTag()
   .then(result => {
-    t.ok(!result);
+    t.truthy(!result);
     child.exec = tmpExec;
   });
 });
@@ -26,20 +26,20 @@ test.serial('failed to get last tag', t => {
 test('get all repo log', t => {
   return getLog('^fix|^refactor')
   .then(result => {
-    t.ok(result.length);
+    t.truthy(result.length);
   });
 });
 
 test('fail when given invalid tag', t => {
   return getLog('^fix|^refactor', 'doesNotExist')
   .fail(result => {
-    t.notOk(result);
+    t.falsy(result);
   });
 });
 
 test('get no commit', t => {
   return getLog('^doesNotExist')
   .then(result => {
-    t.same(result.length, 0);
+    t.deepEqual(result.length, 0);
   });
 });
