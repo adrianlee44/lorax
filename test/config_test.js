@@ -4,16 +4,6 @@ import test from 'ava';
 import * as fs from 'fs';
 const Config = require('../lib/config');
 
-test.afterEach.cb(t => {
-  fs.access('test-config.json', (err) => {
-    if (err) {
-      t.end()
-    } else {
-      fs.unlink('test-config.json', t.end);
-    }
-  });
-});
-
 test('default', t => {
   const configObj = new Config("random.json");
   t.is(configObj.config.type.length, 4);
@@ -71,7 +61,9 @@ test.cb('write back to config', t => {
   configObj.path = 'test-config.json';
 
   configObj.write();
-  fs.readFile('test-config.json', t.end);
+  fs.readFileSync('test-config.json');
+
+  fs.unlink('test-config.json', t.end);
 });
 
 test('reset', t => {
