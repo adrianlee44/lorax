@@ -1,10 +1,25 @@
 import test from 'ava';
 import {getLastTag, getLog} from '../lib/git';
+let child = require('child_process');
 
 test('get the last tag', t => {
   return getLastTag()
   .then(result => {
     t.ok(result);
+  });
+});
+
+test.serial('failed to get last tag', t => {
+  let tmpExec = child.exec;
+
+  child.exec = function (cmd, fn) {
+    fn('failed', 'some stdout lines');
+  }
+
+  return getLastTag()
+  .then(result => {
+    t.ok(!result);
+    child.exec = tmpExec;
   });
 });
 
