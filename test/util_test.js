@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import * as util from '../lib/util';
+import * as util from '../build/lib/util';
 
 test('extend', t => {
   const orig = {

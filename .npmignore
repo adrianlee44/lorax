@@ -1,0 +1,7 @@
+src/
+test/
+/.babelrc
+/.flowconfig
+/.travis.yml
+/eslint.json
+/lorax.json

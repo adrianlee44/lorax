@@ -1,4 +1,5 @@
 {
+  "parser": "babel-eslint",
   "env": {
     "node": true
   },
@@ -6,6 +7,9 @@
   "rules": {
     "no-console": 0
   },
+  "plugins": [
+    "flowtype"
+  ],
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module",
@@ -18,5 +22,8 @@
       "superInFunctions": true,
       "templateStrings": true
     }
+  },
+  "globals": {
+    "Promise": true
   }
 }

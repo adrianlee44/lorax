@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import * as lorax from '../index';
+import * as lorax from '../build/lorax';
 import * as fs from 'fs';
 import * as child from 'child_process';
 

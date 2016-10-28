@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * @name git
  * @description
@@ -6,9 +8,10 @@
 
 'use strict';
 
-const Q = require("q");
-const child = require("child_process");
-const util = require("util");
+import * as Q from 'q';
+import {exec} from 'child_process';
+import * as util from 'util';
+
 const GIT_LOG = "git log --grep='%s' -E --format=%s %s..HEAD";
 const GIT_LOG_ALL = "git log --grep='%s' -E --format=%s";
 const GIT_TAG = "git describe --tags --abbrev=0";
@@ -18,11 +21,10 @@ const GIT_LOG_FORMAT = "%H%n%s%n%b%n==END==";
  * @name getLastTag
  * @description
  * Get the lastest tag
- * @returns {Promise} A promise with tag string
  */
-function getLastTag() {
+function getLastTag(): Promise<string> {
   const deferred = Q.defer();
-  child.exec(GIT_TAG, function(error, stdout) {
+  exec(GIT_TAG, function(error, stdout) {
     if (error) {
       deferred.resolve(null, error);
     } else {
@@ -37,15 +39,12 @@ function getLastTag() {
  * @name getLog
  * @description
  * Read all commits watching match pattern since a certain tag
- * @param {String} match String regex to match
- * @param {String} tag   Tag to read commits from
- * @returns {Promise}    A promise with an array of commits
  */
-function getLog(match, tag) {
+function getLog(match: string, tag: string): Promise<Array<string>> {
   const deferred = Q.defer();
   const cmd = tag ? util.format(GIT_LOG, match, GIT_LOG_FORMAT, tag) : util.format(GIT_LOG_ALL, match, GIT_LOG_FORMAT);
 
-  child.exec(cmd, function(error, stdout) {
+  exec(cmd, function(error, stdout) {
     stdout = stdout || '';
 
     if (error) {

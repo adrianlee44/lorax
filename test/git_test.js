@@ -1,5 +1,5 @@
 import test from 'ava';
-import {getLastTag, getLog} from '../lib/git';
+import {getLastTag, getLog} from '../build/lib/git';
 let child = require('child_process');
 
 test('get the last tag', t => {

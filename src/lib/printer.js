@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * @name printer
  * @description
@@ -6,33 +8,30 @@
 
 'use strict';
 
-const util = require('util');
+import * as util from 'util';
+
+import type {Config} from './config';
+import type {Commit} from './parser';
 
 class Printer {
-/**
- * @param {Array} commits   Preprocessed array of commits
- * @param {String} version  Current version
- * @constructor
- */
-  constructor(commits, version, config) {
+  commits: Array<Commit>;
+  version: string;
+  config: Config;
+  constructor(commits: Array<Commit>, version: string, config: Config) {
     this.commits = commits;
     this.version = version;
     this.config = config;
   }
 
   /**
-   * @function
-   * @name linkToIssue
    * @description
    * Create a markdown link to issue page with issue number as text
-   * @param {String} issue Issue number
-   * @returns {String} markdown text
    */
-  linkToIssue(issue) {
+  linkToIssue(issue: string): string {
     if (!issue) return '';
 
     const url = this.config.get("url");
-    const issueTmpl = this.config.get("issue");
+    const issueTmpl = this.config.get('issue');
     if (url && issueTmpl) {
       const issueLink = `[#%s](${url}${issueTmpl})`;
       return util.format(issueLink, issue, issue);
@@ -47,10 +46,8 @@ class Printer {
    * @name linkToCommit
    * @description
    * Create a markdown link to commit page with commit hash as text
-   * @param {String} hash Commit hash
-   * @returns {String} markdown text
    */
-  linkToCommit(hash) {
+  linkToCommit(hash: string): string {
     if (!hash) return '';
 
     const url = this.config.get("url");
@@ -64,14 +61,11 @@ class Printer {
   }
 
   /**
-   * @name print
    * @description
    * Using preprocessed array of commits, render a changelog in markdown format with version
    * and today's date as the header
-   * @param {Object} options  Additional option
-   * @returns {String} Markdown format changelog
    */
-  print(options) {
+  print(options: Object): string {
     const lines = [];
     const sections = {};
     const display = this.config.get("display");
@@ -135,3 +129,5 @@ class Printer {
 }
 
 module.exports = Printer;
+
+export type {Printer};

@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       },
       src: {
         files: {
-          src: ["lib/*.js", "index.js"]
+          src: ["src/**/*.js"]
         }
       },
       test: {
@@ -36,10 +36,21 @@ module.exports = function(grunt) {
         files: "<%= eslint.test.files.src %>",
         tasks: ["eslint:test", "ava"]
       }
+    },
+    babel: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: '**/*.js',
+          dest: 'build'
+        }]
+      }
     }
   });
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask("default", ["eslint", "ava"]);
+  grunt.registerTask("default", ["eslint", "test"]);
+  grunt.registerTask("test", ["babel", "ava"])
 };

@@ -18,67 +18,9 @@ const config = require("./lib/config");
 const fs = require("fs");
 const git = require("./lib/git");
 const Printer = require("./lib/printer");
+const Parser = require('./lib/parser');
 const Q = require('q');
 const Config = new config();
-const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
-
-/**
- * @function
- * @name parseCommit
- * @description
- * Given a string of commits in a special format, parse string and creates an array of
- * commit objects with information
- * @param {String} commit Commit string
- * @returns {Array} Array of commit objects
- */
-function parseCommit(commit) {
-  if (!commit) return;
-
-  let lines = commit.split("\n");
-  const commitObj = {
-    type: "",
-    component: "",
-    message: "",
-    hash: lines.shift(),
-    issues: [],
-    title: lines.shift()
-  };
-
-  // Get all related commits
-  const newLines = [];
-  lines.forEach((line) => {
-    const match = line.match(closeRegex);
-    if (match) {
-      commitObj.issues.push(parseInt(match[1]));
-    } else {
-      newLines.push(line);
-    }
-  });
-  lines = newLines;
-
-  // Rejoin the rest of the lines after stripping out certain information
-  const message = lines.join("\n");
-
-  const titleMatch = commitObj.title.match(/^([^\(]+)\(([^\)]+)\):\s+(.+)/);
-  if (titleMatch) {
-    commitObj.type = titleMatch[1];
-    commitObj.component = titleMatch[2];
-    commitObj.message = titleMatch[3];
-    if (message) {
-      commitObj.message += "\n" + message;
-    }
-  }
-
-  // Check for breaking change commit
-  // Replace commit description with breaking changes
-  const breakingMatch = message.match(/BREAKING CHANGE[S]?:?([\s\S]*)/);
-  if (breakingMatch) {
-    commitObj.type = "breaking";
-    commitObj.message = breakingMatch[1];
-  }
-
-  return commitObj;
-}
 
 /**
  * @function
@@ -114,13 +56,14 @@ function get(grep, tag) {
 
 function generate(toTag, file, options) {
   let grep = Config.get("type").join("|");
+  const parser = new Parser();
 
   return get(grep, options.since)
   .then((commits) => {
     const parsedCommits = [];
     commits.forEach((commit) => {
       if (commit) {
-        parsedCommits.push(parseCommit(commit));
+        parsedCommits.push(parser.parse(commit));
       }
     });
 
@@ -137,8 +80,4 @@ function generate(toTag, file, options) {
   });
 }
 
-module.exports = {
-  generate: generate,
-  get: get,
-  parseCommit: parseCommit
-};
+module.exports = {generate, get};

@@ -1,8 +1,8 @@
 'use strict';
 
 import test from 'ava';
-import config from '../lib/config';
-import printer from '../lib/printer';
+import config from '../build/lib/config';
+import printer from '../build/lib/printer';
 
 const Config = new config();
 

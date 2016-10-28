@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * @name config
  * @description
@@ -6,13 +8,18 @@
 
 'use strict';
 
-const fs = require("fs");
-const util = require("./util");
-const findup = require('findup-sync');
-const path = require('path');
+import * as fs from 'fs';
+import * as util from './util';
+import findup from 'findup-sync';
+import * as path from 'path';
 
 class Config {
-  constructor(configPath) {
+  path: string;
+  custom: boolean;
+  jsonData: Object;
+  config: Object;
+  default: Object;
+  constructor(configPath: string) {
     this.path = configPath || 'lorax.json';
 
     if (this.path && !path.isAbsolute(this.path)) {
@@ -36,11 +43,11 @@ class Config {
     this.config = util.extend({}, this.default, this.jsonData);
   }
 
-  get(key) {
+  get(key: string): any {
     return this.config[key];
   }
 
-  set(key, value) {
+  set(key: string, value: any): any {
     if (typeof key === "object") {
       for (let hashKey in key) {
         const hashValue = key[hashKey];
@@ -55,7 +62,7 @@ class Config {
     return value;
   }
 
-  write(force) {
+  write(force: boolean) {
     if (this.custom || !!force) {
       const rawData = JSON.stringify(this.config, null, '  ');
       return fs.writeFileSync(this.path, rawData, {
@@ -82,3 +89,5 @@ Config.prototype.default = {
 };
 
 module.exports = Config;
+
+export type {Config}
