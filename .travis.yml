@@ -11,7 +11,5 @@ git:
 node_js:
   - 6
   - 7
-before_script:
-  - npm install -g grunt-cli
 after_success:
   - npm run-script report
