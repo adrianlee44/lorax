@@ -1,7 +1,13 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     ava: {
-      target: ["test/**/*_test.js"]
+      target: ["test/**/*_test.js"],
+      options: {
+        nyc: true,
+        require: [
+          'babel-register'
+        ]
+      }
     },
     eslint: {
       options: {
@@ -52,5 +58,5 @@ module.exports = function(grunt) {
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.registerTask("default", ["eslint", "test"]);
-  grunt.registerTask("test", ["babel", "ava"])
+  grunt.registerTask("test", ["ava"])
 };
