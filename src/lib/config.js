@@ -19,7 +19,7 @@ class Config {
   jsonData: Object;
   config: Object;
   default: Object;
-  constructor(configPath: string) {
+  constructor(configPath: ?string) {
     this.path = configPath || 'lorax.json';
 
     if (this.path && !path.isAbsolute(this.path)) {

@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * @name Lorax
  *
@@ -14,25 +16,23 @@
  */
 'use strict';
 
-const config = require("./lib/config");
-const fs = require("fs");
-const git = require("./lib/git");
-const Printer = require("./lib/printer");
-const Parser = require('./lib/parser');
-const Q = require('q');
-const Config = new config();
+import Config from './lib/config';
+import * as fs from 'fs';
+import * as git from './lib/git';
+import Printer from './lib/printer';
+import Parser from './lib/parser';
+import Q from 'q';
+
+import type {Commit} from './lib/parser';
+
+const config = new Config();
 
 /**
- * @function
- * @name get
  * @description
  * Get all commits or commits since last tag
- * @param {String} grep  String regex to match
- * @param {String} tag   Tag to read commits from
- * @returns {Promise} Promise with an array of commits
  */
-function get(grep, tag) {
-  const promise = tag ? Q(tag) : git.getLastTag();
+function get(grep: string, tag: string): Promise<Array<string>> {
+  const promise = tag ? Q.resolve(tag) : git.getLastTag();
   return promise
   .then((tag) => {
     let msg = "Reading commits";
@@ -45,30 +45,27 @@ function get(grep, tag) {
 }
 
 /**
- * @function
- * @name generate
  * @description
  * A shortcut function to get the latest tag, parse all the commits and generate the changelog
- * @param {String} toTag The latest tag
- * @param {String} file Filename to write to
- * @param {Object} options
  */
 
-function generate(toTag, file, options) {
-  let grep = Config.get("type").join("|");
+function generate(toTag: string, file: string, options: Object) {
+  let grep = config.get("type").join("|");
   const parser = new Parser();
 
   return get(grep, options.since)
-  .then((commits) => {
-    const parsedCommits = [];
-    commits.forEach((commit) => {
-      if (commit) {
-        parsedCommits.push(parser.parse(commit));
+  .then((commits: Array<string>) => {
+    const parsedCommits: Array<Commit> = [];
+    commits.forEach((commit: string) => {
+      let parsedCommit = parser.parse(commit);
+
+      if (parsedCommit) {
+        parsedCommits.push(parsedCommit);
       }
     });
 
     console.log("Parsed " + parsedCommits.length + " commit(s)");
-    const printer = new Printer(parsedCommits, toTag, Config);
+    const printer = new Printer(parsedCommits, toTag, config);
     const result = printer.print();
     fs.writeFileSync(file, result, {
       encoding: "utf-8"

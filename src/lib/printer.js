@@ -65,7 +65,7 @@ class Printer {
    * Using preprocessed array of commits, render a changelog in markdown format with version
    * and today's date as the header
    */
-  print(options: Object): string {
+  print(options: ?Object): string {
     const lines = [];
     const sections = {};
     const display = this.config.get("display");
