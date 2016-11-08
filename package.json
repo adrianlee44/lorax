@@ -5,7 +5,7 @@
   "main": "lib/lorax.js",
   "bin": "bin/lorax",
   "scripts": {
-    "test": "nyc grunt && nyc report --reporter=text-lcov | coveralls",
+    "test": "npm run-script flow; nyc grunt && nyc report --reporter=text-lcov | coveralls",
     "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "repository": {
