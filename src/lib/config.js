@@ -36,7 +36,7 @@ class Config {
 
         this.jsonData = JSON.parse(rawData);
       } catch (e) {
-        return console.error(`Invalid ${this.path}`);
+        return console.error(`Invalid ${path.basename(this.path)}`);
       }
     }
 

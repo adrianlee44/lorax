@@ -15,6 +15,21 @@ test('invalid file', t => {
   t.deepEqual(configObj.jsonData, undefined);
 });
 
+test.serial('bad data in valid file', t => {
+  let oldConsoleError = console.error;
+  let errorMsg;
+
+  console.error = function (message) {
+    errorMsg = message;
+  }
+
+  const configObj = new Config("invalid.json");
+  t.deepEqual(configObj.jsonData, undefined);
+  t.is(errorMsg, 'Invalid invalid.json');
+
+  console.error = oldConsoleError;
+});
+
 test('load lorax json', t => {
   const configObj = new Config();
   t.is(configObj.config.url, "https://github.com/adrianlee44/lorax");
