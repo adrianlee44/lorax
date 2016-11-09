@@ -143,6 +143,13 @@ test('print two components in one section', t => {
     },
     {
       type: 'fix',
+      component: 'lorax',
+      message: 'This is my second test',
+      hash: '92749a8',
+      issues: []
+    },
+    {
+      type: 'fix',
       component: 'config',
       message: 'Trying to fix config',
       hash: '321',
@@ -159,8 +166,11 @@ test('print two components in one section', t => {
 ## Bug Fixes
 - **config:** Trying to fix config
   ([321](https://github.com/adrianlee44/lorax/commit/321))
-- **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n`
+- **lorax:**
+  - This is a test
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))
+  - This is my second test
+  ([92749a8](https://github.com/adrianlee44/lorax/commit/92749a8))\n`
 
   t.is(output, expected);
 });
