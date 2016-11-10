@@ -9,6 +9,7 @@
 'use strict';
 
 import * as util from 'util';
+import template from './template';
 
 import type {Config} from './config';
 import type {Commit} from './parser';
@@ -32,12 +33,13 @@ class Printer {
 
     const url = this.config.get("url");
     const issueTmpl = this.config.get('issue');
+
+    let issueLink = template.ISSUE;
     if (url && issueTmpl) {
-      const issueLink = `[#%s](${url}${issueTmpl})`;
-      return util.format(issueLink, issue, issue);
-    } else {
-      return `#${issue}`;
+      issueLink = util.format(template.LINK_TO_ISSUE, issue, url, issueTmpl);
     }
+
+    return util.format(issueLink, issue);
   }
 
 
@@ -52,12 +54,14 @@ class Printer {
 
     const url = this.config.get("url");
     const commitTmpl = this.config.get("commit");
+
+    let commitLink = template.COMMIT;
+    const shortenHash = hash.substr(0, 8);
     if (url && commitTmpl) {
-      const commitLink = `[%s](${url}${commitTmpl})`
-      return util.format(commitLink, hash.substr(0, 8), hash);
-    } else {
-      return hash.substr(0, 8);
+      commitLink = util.format(template.LINK_TO_COMMIT, shortenHash, url, commitTmpl);
     }
+
+    return util.format(commitLink, shortenHash);
   }
 
   /**
@@ -72,6 +76,12 @@ class Printer {
 
     options = options || {};
 
+    // Header section
+    const timestamp = options.timestamp || new Date();
+    lines.push(
+      util.format(template.HEADER, this.version, timestamp.getFullYear(), timestamp.getMonth() + 1, timestamp.getDate())
+    );
+
     for (let key in display) {
       sections[key] = {};
     }
@@ -81,13 +91,10 @@ class Printer {
       const section = sections[commit.type];
 
       if (!section[name]) {
-        section[name] = []
+        section[name] = [];
       }
       section[name].push(commit);
     });
-
-    const timestamp = options.timestamp || new Date();
-    lines.push(`# ${this.version} (${timestamp.getFullYear()}/${timestamp.getMonth() + 1}/${timestamp.getDate()})`);
 
     for (let sectionType in sections) {
       const list = sections[sectionType];
@@ -96,28 +103,25 @@ class Printer {
         continue;
       }
 
-      lines.push(`## ${display[sectionType]}`);
+      lines.push(util.format(template.SECTION_HEADER, display[sectionType]));
 
       components.forEach((componentName) => {
-        let prefix = '-';
         const componentList = list[componentName] || [];
 
-        if (componentList.length > 1) {
-          lines.push(util.format("- **%s:**", componentName));
-          prefix = '  -';
-        } else {
-          prefix = util.format("- **%s:**", componentName);
-        }
+        const title = util.format(template.COMPONENT_TITLE, componentName);
+        const hasOneItem = componentList.length == 1;
+        componentList.forEach((item, index) => {
+          if (!hasOneItem && !index) lines.push(title);
 
-        componentList.forEach((item) => {
-          lines.push(util.format("%s %s", prefix, item.message));
+          let prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
+          lines.push(util.format(template.COMPONENT_LINE, prefix, item.message));
 
-          const additionalInfo = [this.linkToCommit(item.hash)];
-          if (item.issues.length) {
-            additionalInfo.push.apply(additionalInfo, item.issues.map(this.linkToIssue, this));
-          }
+          const additionalInfo = item.issues.map((issue) => this.linkToIssue(issue));
+          additionalInfo.unshift(this.linkToCommit(item.hash));
 
-          lines.push(`  (${additionalInfo.join(',\n   ')})`);
+          lines.push(
+            util.format(template.COMMIT_ADDITIONAL_INFO, additionalInfo.join(',\n   '))
+          );
         });
       });
 
