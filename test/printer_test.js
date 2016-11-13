@@ -7,7 +7,7 @@ import printer from '../src/lib/printer';
 const Config = new config();
 
 test('print header', t => {
-  const Printer = new printer([], '0.1.0', Config)
+  const Printer = new printer([], '0.1.0', Config);
   const output = Printer.print({
     timestamp: new Date('2015/01/01')
   });
@@ -41,7 +41,7 @@ test('print one section with two issues', t => {
 - **lorax:** This is a test
   ([123456](https://github.com/adrianlee44/lorax/commit/123456),
    [#321](https://github.com/adrianlee44/lorax/issues/321),
-   [#123](https://github.com/adrianlee44/lorax/issues/123))\n`
+   [#123](https://github.com/adrianlee44/lorax/issues/123))\n`;
 
   t.is(output, expected);
 });
@@ -67,7 +67,7 @@ test('print one section with one issue', t => {
 ## Bug Fixes
 - **lorax:** This is a test
   ([123456](https://github.com/adrianlee44/lorax/commit/123456),
-   [#321](https://github.com/adrianlee44/lorax/issues/321))\n`
+   [#321](https://github.com/adrianlee44/lorax/issues/321))\n`;
 
   t.is(output, expected);
 });
@@ -85,14 +85,14 @@ test('print one section with no issue', t => {
   ], '0.1.0', Config);
   const output = Printer.print({
     timestamp: new Date('2015/01/01')
-  })
+  });
 
   t.truthy(output);
 
   const expected = `# 0.1.0 (2015/1/1)
 ## Bug Fixes
 - **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n`
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n`;
 
   t.is(output, expected);
 });
@@ -127,7 +127,7 @@ test('print two sections', t => {
 
 ## Optimizations
 - **lorax:** This is a refactor
-  ([2351](https://github.com/adrianlee44/lorax/commit/2351))\n`
+  ([2351](https://github.com/adrianlee44/lorax/commit/2351))\n`;
 
   t.is(output, expected);
 });
@@ -170,7 +170,7 @@ test('print two components in one section', t => {
   - This is a test
   ([123456](https://github.com/adrianlee44/lorax/commit/123456))
   - This is my second test
-  ([92749a8](https://github.com/adrianlee44/lorax/commit/92749a8))\n`
+  ([92749a8](https://github.com/adrianlee44/lorax/commit/92749a8))\n`;
 
   t.is(output, expected);
 });

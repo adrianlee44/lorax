@@ -9,4 +9,4 @@ module.exports = {
   COMPONENT_ITEM: '  -',
   COMPONENT_LINE: '%s %s',
   COMMIT_ADDITIONAL_INFO: '  (%s)'
-}
+};

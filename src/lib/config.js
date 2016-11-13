@@ -90,4 +90,4 @@ Config.prototype.default = {
 
 module.exports = Config;
 
-export type {Config}
+export type {Config};

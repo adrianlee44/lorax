@@ -14,7 +14,7 @@ test.serial('failed to get last tag', t => {
 
   child.exec = function (cmd, fn) {
     fn('failed', 'some stdout lines');
-  }
+  };
 
   return getLastTag()
   .then(result => {

@@ -21,7 +21,7 @@ test.serial('bad data in valid file', t => {
 
   console.error = function (message) {
     errorMsg = message;
-  }
+  };
 
   const configObj = new Config("invalid.json");
   t.deepEqual(configObj.jsonData, undefined);

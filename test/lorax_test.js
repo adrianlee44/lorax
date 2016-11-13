@@ -11,14 +11,14 @@ test.before.cb(t => {
   const last2Tags = 'git for-each-ref refs/tags --sort=-creatordate --format=\'%(refname:short)\' --count=2';
   child.exec(last2Tags, (error, stdout) => {
     secondTag = stdout.split('\n')[1];
-    t.end()
+    t.end();
   });
 });
 
 test.afterEach.cb(t => {
   fs.access('test.md', (err) => {
     if (err) {
-      t.end()
+      t.end();
     } else {
       fs.unlink('test.md', t.end);
     }
@@ -33,7 +33,7 @@ test.serial('get logs', t => {
 });
 
 test.serial('get logs since a certain tag', t => {
-  const grepString = '^fix|^feature|^refactor|BREAKING'
+  const grepString = '^fix|^feature|^refactor|BREAKING';
   const grepRegex = new RegExp(grepString);
 
   return lorax.get(grepString, secondTag)
