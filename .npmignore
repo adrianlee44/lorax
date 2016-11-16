@@ -4,4 +4,5 @@ test/
 /.flowconfig
 /.travis.yml
 /eslint.json
+/Gruntfile.js
 /lorax.json
