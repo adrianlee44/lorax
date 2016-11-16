@@ -64,4 +64,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['eslint', 'ava']);
   grunt.registerTask('ci', ['eslint', 'ava:ci']);
+  grunt.registerTask('build', ['babel']);
 };

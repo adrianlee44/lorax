@@ -5,6 +5,7 @@
   "main": "lib/lorax.js",
   "bin": "bin/lorax",
   "scripts": {
+    "prepublish": "grunt babel",
     "test": "npm run-script flow; grunt ci;",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "report": "nyc report --reporter=text-lcov | coveralls"
