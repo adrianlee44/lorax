@@ -5,4 +5,3 @@ test/
 /.travis.yml
 /eslint.json
 /Gruntfile.js
-/lorax.json
