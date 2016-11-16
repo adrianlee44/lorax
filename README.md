@@ -56,19 +56,21 @@ $ npm install -g lorax
 
 ## Usage
 
-```
-Usage: lorax [TAG] [FILE] [options]
+```bash
+Usage: lorax -t [tag] [options]
 
-Options:
+  Options:
 
-  -h, --help         output usage information
-  -V, --version      output the version number
-  -s, --since [tag]  Starting tag version
+    -h, --help         output usage information
+    -V, --version      output the version number
+    -F, --file [FILE]  Name of the file to write to [changelog.md]
+    -s, --since [tag]  Starting tag version
+    -t, --tag [tag]    Tag of the upcoming release [1.1.0]
 ```
 
 To generate the changelog
 ```bash
-$ lorax v0.1.0 changelog.md
+$ lorax -t v0.1.0 -F changelog.md
 ```
 
 ## Git commit format
