@@ -16,16 +16,16 @@ var path = require('path'),
 
 commander
   .version(pkg.version)
-  .usage("[TAG] [FILE] [options]")
+  .usage('-t [tag] [options]')
+  .option('-F, --file [FILE]', 'Name of the file to write to [changelog.md]', 'changelog.md')
   .option('-s, --since [tag]', 'Starting tag version')
+  .option('-t, --tag [tag]', 'Tag of the upcoming release [' + pkg.version + ']', pkg.version)
   .parse(process.argv);
 
-if (commander.args.length >= 2) {
-  var options = {
-    since: commander.since
-  };
-
-  require(dir + 'bin/lorax.js').generate(commander.args[0], commander.args[1], options);
-} else {
-  console.log(commander.helpInformation());
+if (!process.argv.slice(2).length) {
+  commander.help();
 }
+
+require(dir + 'build/lorax.js').generate(commander.tag, commander.file, {
+  since: commander.since
+});
