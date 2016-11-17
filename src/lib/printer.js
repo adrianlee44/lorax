@@ -128,6 +128,8 @@ class Printer {
       lines.push('');
     }
 
+    // Add 2 new lines
+    lines.push('', '');
     return lines.join('\n');
   }
 }

@@ -13,7 +13,7 @@ test('print header', t => {
   });
 
   t.truthy(output);
-  t.is(output, '# 0.1.0 (2015/1/1)');
+  t.is(output, '# 0.1.0 (2015/1/1)\n\n');
 });
 
 test('print one section with two issues', t => {
@@ -41,7 +41,7 @@ test('print one section with two issues', t => {
 - **lorax:** This is a test
   ([123456](https://github.com/adrianlee44/lorax/commit/123456),
    [#321](https://github.com/adrianlee44/lorax/issues/321),
-   [#123](https://github.com/adrianlee44/lorax/issues/123))\n`;
+   [#123](https://github.com/adrianlee44/lorax/issues/123))\n\n\n`;
 
   t.is(output, expected);
 });
@@ -67,7 +67,7 @@ test('print one section with one issue', t => {
 ## Bug Fixes
 - **lorax:** This is a test
   ([123456](https://github.com/adrianlee44/lorax/commit/123456),
-   [#321](https://github.com/adrianlee44/lorax/issues/321))\n`;
+   [#321](https://github.com/adrianlee44/lorax/issues/321))\n\n\n`;
 
   t.is(output, expected);
 });
@@ -92,7 +92,7 @@ test('print one section with no issue', t => {
   const expected = `# 0.1.0 (2015/1/1)
 ## Bug Fixes
 - **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n`;
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n\n\n`;
 
   t.is(output, expected);
 });
@@ -127,7 +127,7 @@ test('print two sections', t => {
 
 ## Optimizations
 - **lorax:** This is a refactor
-  ([2351](https://github.com/adrianlee44/lorax/commit/2351))\n`;
+  ([2351](https://github.com/adrianlee44/lorax/commit/2351))\n\n\n`;
 
   t.is(output, expected);
 });
@@ -170,7 +170,7 @@ test('print two components in one section', t => {
   - This is a test
   ([123456](https://github.com/adrianlee44/lorax/commit/123456))
   - This is my second test
-  ([92749a8](https://github.com/adrianlee44/lorax/commit/92749a8))\n`;
+  ([92749a8](https://github.com/adrianlee44/lorax/commit/92749a8))\n\n\n`;
 
   t.is(output, expected);
 });
