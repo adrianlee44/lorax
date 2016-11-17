@@ -64,15 +64,27 @@ function generate(toTag: string, file: string, options: Object) {
       }
     });
 
-    console.log("Parsed " + parsedCommits.length + " commit(s)");
+    console.log(`Parsed ${parsedCommits.length} commit(s)`);
     const printer = new Printer(parsedCommits, toTag, config);
     const result = printer.print();
-    fs.writeFileSync(file, result, {
-      encoding: "utf-8"
-    });
 
-    console.log("Generated changelog to " + file + " (" + toTag + ")");
+    let existingData = '';
+    if (options.prepend) {
+      existingData = fs.readFileSync(file, {
+        encoding: 'utf-8'
+      });
+    }
 
+    let fd = fs.openSync(file, 'w+');
+    fs.appendFile(fd, result);
+
+    if (existingData){
+      fs.appendFile(fd, existingData);
+    }
+
+    fs.close(fd);
+
+    console.log(`Generated changelog to ${file} (${toTag})`);
     return;
   });
 }

@@ -55,3 +55,21 @@ test.cb('should write to file', t => {
     fs.readFile('test.md', t.end);
   });
 });
+
+test.cb('should prepend to file', t => {
+  let testFile = 'prepend_test.md';
+  let originalData = fs.readFileSync(testFile);
+  lorax.generate('vtest', testFile, {since: secondTag, prepend: true})
+  .then(() => {
+    let data = fs.readFileSync(testFile);
+
+    t.truthy(data.indexOf('existing data') > -1);
+    t.truthy(data.indexOf('vtest') > -1);
+
+    fs.writeFileSync(testFile, originalData, {
+      'encoding': 'utf-8'
+    });
+
+    t.end();
+  });
+});

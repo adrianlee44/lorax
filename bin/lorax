@@ -18,6 +18,7 @@ commander
   .version(pkg.version)
   .usage('-t [tag] [options]')
   .option('-F, --file [FILE]', 'Name of the file to write to [changelog.md]', 'changelog.md')
+  .option('-p, --prepend', 'Prepend to the file')
   .option('-s, --since [tag]', 'Starting tag version')
   .option('-t, --tag [tag]', 'Tag of the upcoming release [' + pkg.version + ']', pkg.version)
   .parse(process.argv);
@@ -27,5 +28,6 @@ if (!process.argv.slice(2).length) {
 }
 
 require(dir + 'build/lorax.js').generate(commander.tag, commander.file, {
-  since: commander.since
+  since: commander.since,
+  prepend: !!commander.prepend
 });
