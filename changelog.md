@@ -1,3 +1,14 @@
+# v2.0.0 (2016/11/17)
+## Breaking Changes
+- **lorax:**  Command went from `lorax [tag] [file]` to `lorax -t [tag] -F [file]` with default values
+
+  ([f19449bf](https://github.com/adrianlee44/lorax/commit/f19449bf))
+
+## Optimizations
+- **printer:** Abstract out all the templates
+  ([9eabf1f6](https://github.com/adrianlee44/lorax/commit/9eabf1f6))
+
+
 # v1.1.0 (2016/3/12)
 ## Bug Fixes
 - **lorax:** Fix Config not getting passed to printer
