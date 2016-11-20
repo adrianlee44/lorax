@@ -43,7 +43,6 @@
     "grunt": "^1.0.1",
     "grunt-ava": "^0.14.0",
     "grunt-babel": "^6.0.0",
-    "grunt-contrib-watch": "^1.0.0",
     "grunt-eslint": "^19.0.0",
     "matchdep": "^1.0.0",
     "nyc": "^9.0.0"

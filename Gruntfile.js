@@ -34,20 +34,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    watch: {
-      gruntfile: {
-        files: '<%= eslint.gruntfile.files.src %>',
-        tasks: ['eslint:gruntfile']
-      },
-      src: {
-        files: '<%= eslint.src.files.src %>',
-        tasks: ['eslint:src', 'ava']
-      },
-      test: {
-        files: '<%= eslint.test.files.src %>',
-        tasks: ['eslint:test', 'ava']
-      }
-    },
     babel: {
       dist: {
         files: [{
