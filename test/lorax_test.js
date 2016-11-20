@@ -57,7 +57,7 @@ test.cb('should write to file', t => {
 });
 
 test.cb('should prepend to file', t => {
-  let testFile = 'prepend_test.md';
+  let testFile = 'test/prepend_test.md';
   let originalData = fs.readFileSync(testFile);
   lorax.generate('vtest', testFile, {since: secondTag, prepend: true})
   .then(() => {
