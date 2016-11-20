@@ -1,9 +1,6 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     ava: {
-      options: {
-        require: ['babel-register']
-      },
       ci: {
         options: {
           nyc: true
