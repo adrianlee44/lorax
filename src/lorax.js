@@ -72,23 +72,17 @@ class Lorax {
 
       console.log(`Parsed ${parsedCommits.length} commit(s)`);
       const printer = new Printer(parsedCommits, toTag, this._config);
-      const result = printer.print();
+      let result = printer.print();
 
-      let existingData = '';
       if (options.prepend) {
-        existingData = fs.readFileSync(file, {
+        let existingData = fs.readFileSync(file, {
           encoding: 'utf-8'
         });
+
+        result += existingData;
       }
 
-      let fd = fs.openSync(file, 'w+');
-      fs.appendFile(fd, result);
-
-      if (existingData){
-        fs.appendFile(fd, existingData);
-      }
-
-      fs.close(fd);
+      fs.writeFileSync(file, result, {flag: 'w'});
 
       console.log(`Generated changelog to ${file} (${toTag})`);
       return;
