@@ -49,8 +49,8 @@
   },
   "dependencies": {
     "commander": "2.9.0",
-    "findup-sync": "^0.4.0",
-    "q": "1.4.1"
+    "findup-sync": "^1.0.0",
+    "q": "1.5.0"
   },
   "ava": {
     "require": ["babel-register"]
