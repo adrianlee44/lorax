@@ -39,13 +39,13 @@
     "babel-register": "^6.18.0",
     "coveralls": "^2.11.6",
     "eslint-plugin-flowtype": "^2.25.0",
-    "flow-bin": "^0.35.0",
+    "flow-bin": "^0.45.0",
     "grunt": "^1.0.1",
     "grunt-ava": "^0.17.0",
     "grunt-babel": "^6.0.0",
     "grunt-eslint": "^19.0.0",
     "matchdep": "^1.0.0",
-    "nyc": "^9.0.0"
+    "nyc": "^10.3.0"
   },
   "dependencies": {
     "commander": "2.9.0",
