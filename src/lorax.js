@@ -38,7 +38,7 @@ class Lorax {
    * @description
    * Get all commits or commits since last tag
    */
-  get(grep: string, tag: string): Promise<Array<string>> {
+  get(grep: string, tag?: string): Promise<Array<string>> {
     const promise = tag ? Q.resolve(tag) : git.getLastTag();
     return promise
     .then((tag) => {
@@ -52,9 +52,9 @@ class Lorax {
   }
 
   /**
-  * @description
-  * A shortcut function to get the latest tag, parse all the commits and generate the changelog
-  */
+   * @description
+   * A shortcut function to get the latest tag, parse all the commits and generate the changelog
+   */
 
   generate(toTag: string, file: string, options: Object) {
     let grep = this._config.get("type").join("|");
