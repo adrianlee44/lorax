@@ -1,3 +1,18 @@
+# v2.1.0 (2017/5/6)
+## Features
+- **lorax:** Add prepend option and prepend new changelog to existing file
+  ([8bcf88ff](https://github.com/adrianlee44/lorax/commit/8bcf88ff))
+
+## Optimizations
+- **lorax:**
+  - Clean up how lorax write to file
+  ([4c8bef97](https://github.com/adrianlee44/lorax/commit/4c8bef97))
+  - Classify lorax
+  ([fad27194](https://github.com/adrianlee44/lorax/commit/fad27194))
+- **printer:** Add 2 extra lines to the end of the changelog
+  ([78d5ef7b](https://github.com/adrianlee44/lorax/commit/78d5ef7b))
+
+
 # v2.0.0 (2016/11/17)
 ## Breaking Changes
 - **lorax:**  Command went from `lorax [tag] [file]` to `lorax -t [tag] -F [file]` with default values
