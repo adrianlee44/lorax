@@ -6,8 +6,9 @@
   "bin": "bin/lorax",
   "scripts": {
     "prepublish": "grunt babel",
-    "test": "npm run-script flow; grunt ci;",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "test": "npm run-script flow && grunt ci",
+    "flow": "sh -c 'node_modules/.bin/flow; test $? -eq 0 -o $? -eq 2'",
+    "build": "grunt babel && npm run flow && grunt",
     "report": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -53,6 +54,8 @@
     "q": "1.5.0"
   },
   "ava": {
-    "require": ["babel-register"]
+    "require": [
+      "babel-register"
+    ]
   }
 }
