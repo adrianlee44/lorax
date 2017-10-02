@@ -8,8 +8,8 @@
 
 'use strict';
 
-function extend(dest: Object): Object{
-  const args = Array.prototype.slice.call(arguments, 1);
+function extend(dest: Object, ...args: any): Object{
+  //const args = Array.prototype.slice.call(arguments, 1);
 
   for (let i = 0; i < args.length ; i++) {
     const obj = args[i];
