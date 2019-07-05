@@ -5,9 +5,6 @@ Lorax
 [![License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](https://github.com/adrianlee44/lorax/blob/master/LICENSE-MIT)
 [![NPM](https://img.shields.io/npm/v/lorax.svg?style=flat-square)](https://www.npmjs.org/package/lorax)
 
-[![Dependencies](https://img.shields.io/david/adrianlee44/lorax.svg?style=flat-square)](https://david-dm.org/adrianlee44/lorax#info=dependencies&view=table)
-[![devDependencies](https://img.shields.io/david/dev/adrianlee44/lorax.svg?style=flat-square)](https://david-dm.org/adrianlee44/lorax#info=devDependencies&view=table)
-
 <img align="right" height="200" src="http://4.bp.blogspot.com/-nIhDGmiP2Vc/T1MD0BbiWxI/AAAAAAAABeQ/3DMn5DYC3YY/s1600/lorax1.png">
 
 Lorax is a simple node package to generate changelog by parsing formatted git commits. One of the problems people run into when working with an open-sourced project is having trouble knowing what have been fixed, updated or created. Some people solve this problem by reading through the git log while other might ask on Github issue or Stackoverflow.
