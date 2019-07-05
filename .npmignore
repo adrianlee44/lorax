@@ -1,7 +1,0 @@
-src/
-test/
-/.babelrc
-/.flowconfig
-/.travis.yml
-/eslint.json
-/Gruntfile.js
