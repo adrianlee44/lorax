@@ -3,7 +3,10 @@
   "env": {
     "node": true
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:flowtype/recommended"
+  ],
   "rules": {
     "no-console": 0,
     "semi": 2

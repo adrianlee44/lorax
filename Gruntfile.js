@@ -12,9 +12,6 @@ module.exports = function(grunt) {
       test: ['test/**/*_test.js']
     },
     eslint: {
-      options: {
-        configFile: 'eslint.json'
-      },
       src: {
         files: {
           src: ['src/**/*.js']
