@@ -9,20 +9,36 @@
 'use strict';
 
 import * as fs from 'fs';
-import * as util from './util';
+import {extend} from './util';
 import findup from 'findup-sync';
-import * as path from 'path';
+import {isAbsolute, basename} from 'path';
 
-class Config {
-  path: string;
+type DisplayConfiguration = {|
+  breaking: string,
+  feature: string,
+  fix: string,
+  refactor: string
+|}
+
+type Configuration = {
+  commit: string,
+  display: DisplayConfiguration,
+  issue: string,
+  type: Array<string>,
+  url?: string,
+}
+
+export default class Config {
+  config: Configuration;
   custom: boolean;
   jsonData: Object;
-  config: Object;
-  default: Object;
+  path: string;
+  static default: Configuration;
+
   constructor(configPath: ?string) {
     this.path = configPath || 'lorax.json';
 
-    if (this.path && !path.isAbsolute(this.path)) {
+    if (this.path && !isAbsolute(this.path)) {
       this.path = findup(this.path);
     }
 
@@ -30,38 +46,35 @@ class Config {
 
     if (this.custom) {
       try {
-        const rawData = fs.readFileSync(this.path, {
+        const rawData: string = fs.readFileSync(this.path, {
           encoding: 'utf-8'
         });
 
         this.jsonData = JSON.parse(rawData);
       } catch (e) {
-        return console.error(`Invalid ${path.basename(this.path)}`);
+        return console.error(`Invalid ${basename(this.path)}`);
       }
     }
 
-    this.config = util.extend({}, this.default, this.jsonData);
+    this.config = extend({}, Config.default, this.jsonData);
   }
 
-  get(key: string): any {
-    return this.config[key];
+  get<K: $Keys<Configuration>>(key: K): any {
+    return (this.config[key]: any);
   }
 
-  set(key: string, value: any): any {
+  set<K: $Keys<Configuration> | Object, V: $Values<Configuration>>(key: K, value: V): Configuration {
     if (typeof key === "object") {
       for (let hashKey in key) {
-        const hashValue = key[hashKey];
-        if (this.config[hashKey] !== undefined) {
-          this.config[hashKey] = hashValue;
-        }
+        this.set(hashKey, key[hashKey]);
       }
     } else {
-      this.config[key] = value;
+      this.config[key] = (value: any);
     }
-
-    return value;
+  
+    return this.config;
   }
-
+  
   write(force: boolean) {
     if (this.custom || !!force) {
       const rawData = JSON.stringify(this.config, null, '  ');
@@ -72,11 +85,11 @@ class Config {
   }
 
   reset() {
-    this.config = util.extend({}, this.default, this.jsonData);
+    this.config = extend({}, Config.default, this.jsonData);
   }
 }
 
-Config.prototype.default = {
+Config.default = {
   issue: "/issues/%s",
   commit: "/commit/%s",
   type: ["^fix", "^feature", "^refactor", "BREAKING"],
@@ -88,6 +101,4 @@ Config.prototype.default = {
   }
 };
 
-module.exports = Config;
-
-export type {Config};
+export type { Config, Configuration};

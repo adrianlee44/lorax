@@ -8,14 +8,12 @@
 
 'use strict';
 
-function extend(dest: Object): Object{
-  const args = Array.prototype.slice.call(arguments, 1);
-
+export function extend(dest: Object, ...args: Array<Object>): Object{
   for (let i = 0; i < args.length ; i++) {
     const obj = args[i];
     if (obj) {
       for (let key in obj) {
-        if (!obj.hasOwnProperty(key)) continue;
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
         dest[key] = obj[key];
       }
     }
@@ -23,5 +21,3 @@ function extend(dest: Object): Object{
 
   return dest;
 }
-
-module.exports = {extend};

@@ -24,7 +24,7 @@ const GIT_LOG_FORMAT = "%H%n%s%n%b%n==END==";
  */
 function getLastTag(): Promise<string> {
   const deferred = Q.defer();
-  exec(GIT_TAG, function(error, stdout) {
+  exec(GIT_TAG, function(error: Error, stdout: string) {
     if (error) {
       deferred.resolve(null, error);
     } else {
@@ -44,7 +44,7 @@ function getLog(match: string, tag: string): Promise<Array<string>> {
   const deferred = Q.defer();
   const cmd = tag ? util.format(GIT_LOG, match, GIT_LOG_FORMAT, tag) : util.format(GIT_LOG_ALL, match, GIT_LOG_FORMAT);
 
-  exec(cmd, function(error, stdout) {
+  exec(cmd, function(error: Error, stdout?: string) {
     stdout = stdout || '';
 
     if (error) {

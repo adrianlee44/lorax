@@ -9,9 +9,9 @@
 'use strict';
 
 import * as util from 'util';
-import template from './template';
+import {template} from './template';
 
-import type {Config} from './config';
+import type {Config, Configuration} from './config';
 import type {Commit} from './parser';
 
 class Printer {
@@ -31,7 +31,7 @@ class Printer {
   linkToIssue(issue: string): string {
     if (!issue) return '';
 
-    const url = this.config.get("url");
+    const url: $PropertyType<Configuration, "url"> = this.config.get("url");
     const issueTmpl = this.config.get('issue');
 
     let issueLink = template.ISSUE;
@@ -72,7 +72,7 @@ class Printer {
   print(options: ?Object): string {
     const lines = [];
     const sections = {};
-    const display = this.config.get("display");
+    const display = (this.config.get("display"): $PropertyType<Configuration, "display">);
 
     options = options || {};
 
