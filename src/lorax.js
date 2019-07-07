@@ -21,7 +21,8 @@ import * as fs from 'fs';
 import * as git from './lib/git';
 import Printer from './lib/printer';
 import Parser from './lib/parser';
-import Q from 'q';
+
+const Promise = require('bluebird');
 
 import type {Commit} from './lib/parser';
 
@@ -39,16 +40,16 @@ class Lorax {
    * Get all commits or commits since last tag
    */
   get(grep: string, tag?: string): Promise<Array<string>> {
-    const promise = tag ? Q.resolve(tag) : git.getLastTag();
+    const promise = tag ? Promise.resolve(tag) : git.getLastTag();
     return promise
-    .then((tag) => {
-      let msg = "Reading commits";
-      if (tag) {
-        msg += " since " + tag;
-      }
-      console.log(msg);
-      return git.getLog(grep, tag);
-    });
+      .then((tag: ?string): Promise<Array<string>> => {
+        let msg = "Reading commits";
+        if (tag) {
+          msg += " since " + tag;
+        }
+        console.log(msg);
+        return git.getLog(grep, tag);
+      });
   }
 
   /**

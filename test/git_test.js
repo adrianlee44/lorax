@@ -30,16 +30,16 @@ test('get all repo log', t => {
   });
 });
 
-test('fail when given invalid tag', t => {
+test('return empty array when given invalid tag', t => {
   return getLog('^fix|^refactor', 'doesNotExist')
-  .fail(result => {
-    t.falsy(result);
+  .then((result) => {
+    t.is(result.length, 0);
   });
 });
 
 test('get no commit', t => {
   return getLog('^doesNotExist')
   .then(result => {
-    t.deepEqual(result.length, 0);
+    t.is(result.length, 0);
   });
 });

@@ -54,9 +54,9 @@
     "nyc": "^14.1.1"
   },
   "dependencies": {
+    "bluebird": "^3.5.5",
     "commander": "2.20.0",
-    "findup-sync": "^3.0.0",
-    "q": "1.5.1"
+    "findup-sync": "^3.0.0"
   },
   "ava": {
     "require": [
