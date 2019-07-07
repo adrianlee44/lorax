@@ -8,8 +8,9 @@
     "bin/lorax",
     "build/**/*"
   ],
+  "engines" : { "node" : ">=8" },
   "scripts": {
-    "prepublish": "grunt babel",
+    "prepublishOnly": "grunt babel",
     "test": "npm run-script flow; grunt ci;",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "report": "nyc report --reporter=text-lcov | coveralls"
