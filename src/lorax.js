@@ -26,6 +26,12 @@ const Promise = require('bluebird');
 
 import type {Commit} from './lib/parser';
 
+type LoraxOptions = {
+  since?: string,
+  prepend?: Boolean,
+  timestamp?: Date,
+}
+
 class Lorax {
   _config: Config;
   _parser: Parser;
@@ -57,7 +63,7 @@ class Lorax {
    * A shortcut function to get the latest tag, parse all the commits and generate the changelog
    */
 
-  generate(toTag: string, file: string, options: Object) {
+  generate(toTag: string, file: string, options: LoraxOptions) {
     let grep = this._config.get("type").join("|");
 
     return this.get(grep, options.since)
@@ -92,3 +98,5 @@ class Lorax {
 }
 
 module.exports = new Lorax();
+
+export type {Lorax, LoraxOptions};

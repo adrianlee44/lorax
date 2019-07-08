@@ -13,12 +13,13 @@ import {extend} from './util';
 import findup from 'findup-sync';
 import {isAbsolute, basename} from 'path';
 
-type DisplayConfiguration = {|
+type DisplayConfiguration = {
+  [string]: string,
   breaking: string,
   feature: string,
   fix: string,
   refactor: string
-|}
+}
 
 type Configuration = {
   commit: string,
@@ -31,7 +32,7 @@ type Configuration = {
 export default class Config {
   config: Configuration;
   custom: boolean;
-  jsonData: Object;
+  jsonData: Configuration;
   path: string;
   static default: Configuration;
 
@@ -95,10 +96,10 @@ Config.default = {
   type: ["^fix", "^feature", "^refactor", "BREAKING"],
   display: {
     fix: "Bug Fixes",
-    feature: "Features",
-    breaking: "Breaking Changes",
-    refactor: "Optimizations"
-  }
-};
-
-export type { Config, Configuration};
+      feature: "Features",
+      breaking: "Breaking Changes",
+      refactor: "Optimizations"
+    }
+  };
+  
+export type {Config, Configuration, DisplayConfiguration };

@@ -11,8 +11,9 @@
 import * as util from 'util';
 import {template} from './template';
 
-import type {Config, Configuration} from './config';
-import type {Commit} from './parser';
+import type { Config, Configuration, DisplayConfiguration} from './config';
+import type { Commit } from './parser';
+import type { LoraxOptions } from '../lorax';
 
 class Printer {
   commits: Array<Commit>;
@@ -28,11 +29,11 @@ class Printer {
    * @description
    * Create a markdown link to issue page with issue number as text
    */
-  linkToIssue(issue: string): string {
+  linkToIssue(issue: number): string {
     if (!issue) return '';
 
     const url: $PropertyType<Configuration, "url"> = this.config.get("url");
-    const issueTmpl = this.config.get('issue');
+    const issueTmpl: $PropertyType<Configuration, "issue"> = this.config.get('issue');
 
     let issueLink = template.ISSUE;
     if (url && issueTmpl) {
@@ -52,8 +53,8 @@ class Printer {
   linkToCommit(hash: string): string {
     if (!hash) return '';
 
-    const url = this.config.get("url");
-    const commitTmpl = this.config.get("commit");
+    const url: $PropertyType<Configuration, "url"> = this.config.get("url");
+    const commitTmpl: $PropertyType<Configuration, "commit"> = this.config.get("commit");
 
     let commitLink = template.COMMIT;
     const shortenHash = hash.substr(0, 8);
@@ -69,9 +70,13 @@ class Printer {
    * Using preprocessed array of commits, render a changelog in markdown format with version
    * and today's date as the header
    */
-  print(options: ?Object): string {
-    const lines = [];
-    const sections = {};
+  print(options: ?LoraxOptions): string {
+    const lines: Array<string> = [];
+    const sections: {
+      [$Keys<DisplayConfiguration>]: {
+        [component: string]: Array<Commit>
+      }
+    } = {};
     const display = (this.config.get("display"): $PropertyType<Configuration, "display">);
 
     options = options || {};
@@ -86,14 +91,14 @@ class Printer {
       sections[key] = {};
     }
 
-    this.commits.forEach((commit) => {
-      const name = commit.component;
-      const section = sections[commit.type];
+    this.commits.forEach((commit: Commit) => {
+      const {component, type} = commit;
 
-      if (!section[name]) {
-        section[name] = [];
+      const section = sections[type];
+      if (!section[component]) {
+        section[component] = [];
       }
-      section[name].push(commit);
+      section[component].push(commit);
     });
 
     for (let sectionType in sections) {
@@ -105,7 +110,7 @@ class Printer {
 
       lines.push(util.format(template.SECTION_HEADER, display[sectionType]));
 
-      components.forEach((componentName) => {
+      components.forEach((componentName: string) => {
         const componentList = list[componentName] || [];
 
         const title = util.format(template.COMPONENT_TITLE, componentName);
