@@ -34,16 +34,7 @@ test('print one section with two issues', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.truthy(output);
-
-  const expected = `# 0.1.0 (2015/1/1)
-## Bug Fixes
-- **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456),
-   [#321](https://github.com/adrianlee44/lorax/issues/321),
-   [#123](https://github.com/adrianlee44/lorax/issues/123))\n\n\n`;
-
-  t.is(output, expected);
+  t.snapshot(output);
 });
 
 test('print one section with one issue', t => {
@@ -61,15 +52,7 @@ test('print one section with one issue', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.truthy(output);
-
-  const expected = `# 0.1.0 (2015/1/1)
-## Bug Fixes
-- **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456),
-   [#321](https://github.com/adrianlee44/lorax/issues/321))\n\n\n`;
-
-  t.is(output, expected);
+  t.snapshot(output);
 });
 
 test('print one section with no issue', t => {
@@ -87,14 +70,7 @@ test('print one section with no issue', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.truthy(output);
-
-  const expected = `# 0.1.0 (2015/1/1)
-## Bug Fixes
-- **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456))\n\n\n`;
-
-  t.is(output, expected);
+  t.snapshot(output);
 });
 
 test('print two sections', t => {
@@ -118,18 +94,7 @@ test('print two sections', t => {
     timestamp: new Date('2015/01/01')
   });
 
-  t.truthy(output);
-
-  const expected = `# 0.1.0 (2015/1/1)
-## Bug Fixes
-- **lorax:** This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456))
-
-## Optimizations
-- **lorax:** This is a refactor
-  ([2351](https://github.com/adrianlee44/lorax/commit/2351))\n\n\n`;
-
-  t.is(output, expected);
+  t.snapshot(output);
 });
 
 test('print two components in one section', t => {
@@ -159,18 +124,6 @@ test('print two components in one section', t => {
   const output = Printer.print({
     timestamp: new Date('2015/01/01')
   });
-
-  t.truthy(output);
-
-  const expected = `# 0.1.0 (2015/1/1)
-## Bug Fixes
-- **config:** Trying to fix config
-  ([321](https://github.com/adrianlee44/lorax/commit/321))
-- **lorax:**
-  - This is a test
-  ([123456](https://github.com/adrianlee44/lorax/commit/123456))
-  - This is my second test
-  ([92749a8](https://github.com/adrianlee44/lorax/commit/92749a8))\n\n\n`;
-
-  t.is(output, expected);
+  
+  t.snapshot(output);
 });
