@@ -1,14 +1,17 @@
 'use strict';
 
 import test from 'ava';
-import config from '../src/lib/config';
-import printer from '../src/lib/printer';
+import Config from '../src/lib/config';
+import Printer from '../src/lib/printer';
 
-const Config = new config();
+test.beforeEach(t => {
+  t.context.config = new Config();
+});
+
 
 test('print header', t => {
-  const Printer = new printer([], '0.1.0', Config);
-  const output = Printer.print({
+  const printer = new Printer([], '0.1.0', t.context.config);
+  const output = printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -17,7 +20,7 @@ test('print header', t => {
 });
 
 test('print one section with two issues', t => {
-  const Printer = new printer([
+  const printer = new Printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -29,8 +32,8 @@ test('print one section with two issues', t => {
       ],
       title: 'Some random title'
     }
-  ], '0.1.0', Config);
-  const output = Printer.print({
+  ], '0.1.0', t.context.config);
+  const output = printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -38,7 +41,7 @@ test('print one section with two issues', t => {
 });
 
 test('print one section with one issue', t => {
-  const Printer = new printer([
+  const printer = new Printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -47,8 +50,8 @@ test('print one section with one issue', t => {
       issues: ['321'],
       title: 'Some random title'
     }
-  ], '0.1.0', Config);
-  const output = Printer.print({
+  ], '0.1.0', t.context.config);
+  const output = printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -56,7 +59,7 @@ test('print one section with one issue', t => {
 });
 
 test('print one section with no issue', t => {
-  const Printer = new printer([
+  const printer = new Printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -65,8 +68,8 @@ test('print one section with no issue', t => {
       issues: [],
       title: 'Some random title'
     }
-  ], '0.1.0', Config);
-  const output = Printer.print({
+  ], '0.1.0', t.context.config);
+  const output = printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -74,7 +77,7 @@ test('print one section with no issue', t => {
 });
 
 test('print two sections', t => {
-  const Printer = new printer([
+  const printer = new Printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -89,8 +92,8 @@ test('print two sections', t => {
       hash: '2351',
       issues: []
     }
-  ], '0.1.0', Config);
-  const output = Printer.print({
+  ], '0.1.0', t.context.config);
+  const output = printer.print({
     timestamp: new Date('2015/01/01')
   });
 
@@ -98,7 +101,7 @@ test('print two sections', t => {
 });
 
 test('print two components in one section', t => {
-  const Printer = new printer([
+  const printer = new Printer([
     {
       type: 'fix',
       component: 'lorax',
@@ -120,10 +123,29 @@ test('print two components in one section', t => {
       hash: '321',
       issues: []
     }
-  ], '0.1.0', Config);
-  const output = Printer.print({
+  ], '0.1.0', t.context.config);
+  const output = printer.print({
     timestamp: new Date('2015/01/01')
   });
-  
+
+  t.snapshot(output);
+});
+
+test('print without url', t => {
+  t.context.config.set('url', '');
+  const printer = new Printer([
+    {
+      type: 'fix',
+      component: 'lorax',
+      message: 'This is a test',
+      hash: '123456',
+      issues: []
+    },
+  ], '0.1.0', t.context.config);
+
+  const output = printer.print({
+    timestamp: new Date('2015/01/01')
+  });
+
   t.snapshot(output);
 });
