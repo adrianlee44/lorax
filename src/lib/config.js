@@ -93,13 +93,15 @@ export default class Config {
 Config.default = {
   issue: "/issues/%s",
   commit: "/commit/%s",
-  type: ["^fix", "^feature", "^refactor", "BREAKING"],
+  type: ["^fix", "^feature", "^refactor", "BREAKING", "^test", "^doc"],
   display: {
     fix: "Bug Fixes",
-      feature: "Features",
-      breaking: "Breaking Changes",
-      refactor: "Optimizations"
-    }
-  };
+    feature: "Features",
+    breaking: "Breaking Changes",
+    refactor: "Optimizations",
+    test: "Testing",
+    doc: "Documentation"
+  }
+};
   
 export type {Config, Configuration, DisplayConfiguration };
