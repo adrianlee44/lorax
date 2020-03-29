@@ -52,7 +52,7 @@ class Parser {
     // Rejoin the rest of the lines after stripping out certain information
     const message = lines.join("\n");
 
-    const titleMatch = commitObj.title.match(/^([^(]+)\(([^)]+)\):\s+(.+)/);
+    const titleMatch = commitObj.title.match(/^([^(]+)\s*\(([^)]+)\):?\s+(.+)/);
     if (titleMatch) {
       commitObj.type = titleMatch[1];
       commitObj.component = titleMatch[2];

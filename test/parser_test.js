@@ -1,11 +1,11 @@
 'use strict';
 
 import test from 'ava';
-import Paser from '../src/lib/parser';
+import Parser from '../src/lib/parser';
 
 const commit = "7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n\nFixes #123";
 
-const parser = new Paser();
+const parser = new Parser();
 
 test('hash parse', t => {
   const obj = parser.parse(commit);
@@ -22,6 +22,12 @@ test('component parse', t => {
   t.is(obj.component, "lorax");
 });
 
+test('parsing component with whitespace', t => {
+  const commitWithWhitespace = "7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature (lorax): Basic testing\n\nFixes #123";
+  const obj = parser.parse(commitWithWhitespace);
+  t.is(obj.component, "lorax");
+});
+
 test('component special character parse', t => {
   const specialCommit = "7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax-test!): Basic testing";
   const obj = parser.parse(specialCommit);
@@ -30,6 +36,12 @@ test('component special character parse', t => {
 
 test('message parse', t => {
   const obj = parser.parse(commit);
+  t.is(obj.message, "Basic testing");
+});
+
+test('parsing message without :', t => {
+  const commitWithoutColon = "7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax-test) Basic testing";
+  const obj = parser.parse(commitWithoutColon);
   t.is(obj.message, "Basic testing");
 });
 
