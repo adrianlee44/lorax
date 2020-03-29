@@ -6,8 +6,8 @@ import Config from '../src/lib/config';
 
 test('default', t => {
   const configObj = new Config("random.json");
-  t.is(configObj.config.type.length, 4);
-  t.is(configObj.config.url);
+  t.is(configObj.config.type.length, 6);
+  t.falsy(configObj.config.url);
 });
 
 test('invalid file', t => {
