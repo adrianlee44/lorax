@@ -1,4 +1,4 @@
-// @flow
+'use strict';
 
 /**
  * @name Lorax
@@ -14,22 +14,20 @@
  * - commander
  * - q
  */
-'use strict';
 
-import Config from './lib/config';
+import {Config} from './lib/config';
 import * as fs from 'fs';
 import * as git from './lib/git';
-import Printer from './lib/printer';
-import Parser from './lib/parser';
-
-const Promise = require('bluebird');
+import {Printer} from './lib/printer';
+import {Parser} from './lib/parser';
 
 import type {Commit} from './lib/parser';
 
-type LoraxOptions = {
-  since?: string,
-  prepend?: Boolean,
-  timestamp?: Date,
+
+interface LoraxOptions {
+  since?: string;
+  prepend?: boolean;
+  timestamp?: Date;
 }
 
 class Lorax {
@@ -46,9 +44,9 @@ class Lorax {
    * Get all commits or commits since last tag
    */
   get(grep: string, tag?: string): Promise<Array<string>> {
-    const promise = tag ? Promise.resolve(tag) : git.getLastTag();
+    const promise = tag ? Promise.resolve<string>(tag) : git.getLastTag();
     return promise
-      .then((tag: ?string): Promise<Array<string>> => {
+      .then((tag: Nullable<string>): Promise<Array<string>> => {
         let msg = "Reading commits";
         if (tag) {
           msg += " since " + tag;
@@ -62,15 +60,14 @@ class Lorax {
    * @description
    * A shortcut function to get the latest tag, parse all the commits and generate the changelog
    */
-
-  generate(toTag: string, file: string, options: LoraxOptions) {
-    let grep = this._config.get("type").join("|");
+  generate(toTag: string, file: string, options: LoraxOptions): Promise<void> {
+    const grep = this._config.get("type").join("|");
 
     return this.get(grep, options.since)
-    .then((commits: Array<string>) => {
+    .then((commits: Array<string>): void => {
       const parsedCommits: Array<Commit> = [];
       commits.forEach((commit: string) => {
-        let parsedCommit = this._parser.parse(commit);
+        const parsedCommit = this._parser.parse(commit);
 
         if (parsedCommit) {
           parsedCommits.push(parsedCommit);
@@ -82,7 +79,7 @@ class Lorax {
       let result = printer.print();
 
       if (options.prepend) {
-        let existingData = fs.readFileSync(file, {
+        const existingData = fs.readFileSync(file, {
           encoding: 'utf-8'
         });
 
@@ -97,6 +94,4 @@ class Lorax {
   }
 }
 
-module.exports = new Lorax();
-
-export type {Lorax, LoraxOptions};
+export {Lorax, LoraxOptions};

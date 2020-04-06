@@ -27,7 +27,8 @@ if (!process.argv.slice(2).length) {
   commander.help();
 }
 
-require(dir + 'build/lorax.js').generate(commander.tag, commander.file, {
+var lorax = new require(dir + 'build/lorax.js')();
+lorax.generate(commander.tag, commander.file, {
   since: commander.since,
   prepend: !!commander.prepend
 });

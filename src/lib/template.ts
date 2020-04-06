@@ -1,15 +1,14 @@
-// @flow
 type TemplateType = {
-  LINK_TO_ISSUE: string,
-  ISSUE: string,
-  LINK_TO_COMMIT: string,
-  COMMIT: string,
-  HEADER: string,
-  SECTION_HEADER: string,
-  COMPONENT_TITLE: string,
-  COMPONENT_ITEM: string,
-  COMPONENT_LINE: string,
-  COMMIT_ADDITIONAL_INFO: string,
+  LINK_TO_ISSUE: string;
+  ISSUE: string;
+  LINK_TO_COMMIT: string;
+  COMMIT: string;
+  HEADER: string;
+  SECTION_HEADER: string;
+  COMPONENT_TITLE: string;
+  COMPONENT_ITEM: string;
+  COMPONENT_LINE: string;
+  COMMIT_ADDITIONAL_INFO: string;
 }
 
 export const template: TemplateType = {
@@ -24,5 +23,3 @@ export const template: TemplateType = {
   COMPONENT_LINE: '%s %s',
   COMMIT_ADDITIONAL_INFO: '  (%s)'
 };
-
-export type { TemplateType };

@@ -1,8 +1,8 @@
 'use strict';
 
 import test from 'ava';
-import Config from '../src/lib/config';
-import Printer from '../src/lib/printer';
+import {Config} from '../build/lib/config';
+import {Printer} from '../build/lib/printer';
 
 test.beforeEach(t => {
   t.context.config = new Config();

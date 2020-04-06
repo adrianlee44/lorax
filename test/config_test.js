@@ -2,7 +2,7 @@
 
 import test from 'ava';
 import * as fs from 'fs';
-import Config from '../src/lib/config';
+import {Config} from '../build/lib/config';
 
 test('default', t => {
   const configObj = new Config("random.json");
@@ -12,7 +12,7 @@ test('default', t => {
 
 test('invalid file', t => {
   const configObj = new Config("/null");
-  t.deepEqual(configObj.jsonData, undefined);
+  t.deepEqual(configObj.jsonData, {});
 });
 
 test.serial('bad data in valid file', t => {
@@ -24,7 +24,7 @@ test.serial('bad data in valid file', t => {
   };
 
   const configObj = new Config("test/invalid.json");
-  t.deepEqual(configObj.jsonData, undefined);
+  t.deepEqual(configObj.jsonData, {});
   t.is(errorMsg, 'Invalid invalid.json');
 
   console.error = oldConsoleError;

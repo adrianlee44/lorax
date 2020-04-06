@@ -1,7 +1,7 @@
 'use strict';
 
 import test from 'ava';
-import Parser from '../src/lib/parser';
+import {Parser} from '../build/lib/parser';
 
 const commit = "7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n\nFixes #123";
 

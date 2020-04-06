@@ -12,9 +12,10 @@
     "node": ">=8"
   },
   "scripts": {
-    "prepublishOnly": "grunt babel",
-    "test": "npm run-script flow; grunt ci;",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "prepublishOnly": "tsc",
+    "lint": "eslint . --ext .ts",
+    "test": "tsc; ava",
+    "coverage": "nyc ava",
     "report": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -39,31 +40,24 @@
   },
   "homepage": "https://github.com/adrianlee44/lorax",
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/preset-flow": "^7.0.0",
-    "@babel/register": "^7.4.4",
+    "@ava/typescript": "^1.1.1",
+    "@types/findup-sync": "^2.0.2",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "ava": "^2.1.0",
-    "babel-eslint": "^10.0.2",
     "coveralls": "^3.0.4",
     "eslint": "^6.0.1",
-    "eslint-plugin-flowtype": "^3.11.1",
-    "flow-bin": "^0.102.0",
-    "grunt": "^1.0.4",
-    "grunt-ava": "^0.19.0",
-    "grunt-babel": "^8.0.0",
-    "grunt-eslint": "^22.0.0",
     "matchdep": "^2.0.0",
-    "nyc": "^14.1.1"
+    "nyc": "^14.1.1",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
-    "bluebird": "^3.5.5",
     "commander": "2.20.0",
     "findup-sync": "^3.0.0"
   },
   "ava": {
-    "require": [
-      "@babel/register"
+    "files": [
+      "test/**/*_test.js"
     ]
   }
 }

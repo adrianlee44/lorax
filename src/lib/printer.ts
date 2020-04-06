@@ -1,4 +1,4 @@
-// @flow
+'use strict';
 
 /**
  * @name printer
@@ -6,19 +6,26 @@
  * Printing parsed data back into readable format
  */
 
-'use strict';
-
 import * as util from 'util';
 import {template} from './template';
 
-import type { Config, Configuration, DisplayConfiguration} from './config';
-import type { Commit } from './parser';
+import { Config } from './config'
+
+import type {Configuration, DisplayConfiguration} from './config';
+import type {Commit} from './parser';
 import type { LoraxOptions } from '../lorax';
 
+type PrintSection = {
+  [P in keyof DisplayConfiguration]: {
+    [component: string]: Array<Commit>;
+  }
+}
+
 class Printer {
-  commits: Array<Commit>;
-  version: string;
-  config: Config;
+  private commits: Array<Commit>;
+  private version: string;
+  private config: Config;
+
   constructor(commits: Array<Commit>, version: string, config: Config) {
     this.commits = commits;
     this.version = version;
@@ -32,8 +39,8 @@ class Printer {
   linkToIssue(issue: number): string {
     if (!issue) return '';
 
-    const url: $PropertyType<Configuration, "url"> = this.config.get("url");
-    const issueTmpl: $PropertyType<Configuration, "issue"> = this.config.get('issue');
+    const url: Configuration["url"] = this.config.get("url");
+    const issueTmpl: Configuration["issue"] = this.config.get('issue');
 
     let issueLink = template.ISSUE;
     if (url && issueTmpl) {
@@ -53,8 +60,8 @@ class Printer {
   linkToCommit(hash: string): string {
     if (!hash) return '';
 
-    const url: $PropertyType<Configuration, "url"> = this.config.get("url");
-    const commitTmpl: $PropertyType<Configuration, "commit"> = this.config.get("commit");
+    const url = this.config.get("url");
+    const commitTmpl = this.config.get("commit");
 
     let commitLink = template.COMMIT;
     const shortenHash = hash.substr(0, 8);
@@ -70,14 +77,10 @@ class Printer {
    * Using preprocessed array of commits, render a changelog in markdown format with version
    * and today's date as the header
    */
-  print(options: ?LoraxOptions): string {
+  print(options?: LoraxOptions): string {
     const lines: Array<string> = [];
-    const sections: {
-      [$Keys<DisplayConfiguration>]: {
-        [component: string]: Array<Commit>
-      }
-    } = {};
-    const display = (this.config.get("display"): $PropertyType<Configuration, "display">);
+    const sections = {} as PrintSection;
+    const display = this.config.get("display");
 
     options = options || {};
 
@@ -87,7 +90,7 @@ class Printer {
       util.format(template.HEADER, this.version, timestamp.getFullYear(), timestamp.getMonth() + 1, timestamp.getDate())
     );
 
-    for (let key in display) {
+    for (const key in display) {
       sections[key] = {};
     }
 
@@ -101,7 +104,7 @@ class Printer {
       section[component].push(commit);
     });
 
-    for (let sectionType in sections) {
+    for (const sectionType in sections) {
       const list = sections[sectionType];
       const components = Object.getOwnPropertyNames(list).sort();
       if (!components.length) {
@@ -118,7 +121,7 @@ class Printer {
         componentList.forEach((item, index) => {
           if (!hasOneItem && !index) lines.push(title);
 
-          let prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
+          const prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
           lines.push(util.format(template.COMPONENT_LINE, prefix, item.message));
 
           const additionalInfo = item.issues.map((issue) => this.linkToIssue(issue));
@@ -139,6 +142,4 @@ class Printer {
   }
 }
 
-module.exports = Printer;
-
-export type {Printer};
+export {Printer};

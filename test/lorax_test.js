@@ -1,13 +1,14 @@
 'use strict';
 
 import test from 'ava';
-import lorax from '../src/lorax';
+import {Lorax} from '../build/lorax';
 import * as fs from 'fs';
 import * as child from 'child_process';
 
 let secondTag;
 
 test.before.cb(t => {
+  t.context.lorax = new Lorax()
   const last2Tags = 'git for-each-ref refs/tags --sort=-creatordate --format=\'%(refname:short)\' --count=2';
   child.exec(last2Tags, (error, stdout) => {
     secondTag = stdout.split('\n')[1];
@@ -26,7 +27,7 @@ test.afterEach.cb(t => {
 });
 
 test.serial('get logs', t => {
-  return lorax.get("^fix|^feature|^refactor|BREAKING")
+  return t.context.lorax.get("^fix|^feature|^refactor|BREAKING")
   .then((log) => {
     t.truthy(log);
   });
@@ -36,7 +37,7 @@ test.serial('get logs since a certain tag', t => {
   const grepString = '^fix|^feature|^refactor|BREAKING';
   const grepRegex = new RegExp(grepString);
 
-  return lorax.get(grepString, secondTag)
+  return t.context.lorax.get(grepString, secondTag)
   .then((data) => {
     t.plan(data.length - 1);
 
@@ -50,7 +51,7 @@ test.serial('get logs since a certain tag', t => {
 });
 
 test.cb('should write to file', t => {
-  lorax.generate('vtest', 'test.md', {since: secondTag})
+  t.context.lorax.generate('vtest', 'test.md', {since: secondTag})
   .then(() => {
     fs.readFile('test.md', t.end);
   });
@@ -59,7 +60,7 @@ test.cb('should write to file', t => {
 test.cb('should prepend to file', t => {
   let testFile = 'test/prepend_test.md';
   let originalData = fs.readFileSync(testFile);
-  lorax.generate('vtest', testFile, {since: secondTag, prepend: true})
+  t.context.lorax.generate('vtest', testFile, {since: secondTag, prepend: true})
   .then(() => {
     let data = fs.readFileSync(testFile);
 

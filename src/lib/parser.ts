@@ -1,20 +1,18 @@
-// @flow
+'use strict';
 
 /**
  * @name parser
  */
 
-'use strict';
-
 const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
 
-type Commit = {
-  type: string,
-  component: string,
-  message: string,
-  hash: string,
-  issues: Array<number>,
-  title: string
+interface Commit {
+  type: string;
+  component: string;
+  message: string;
+  hash: string;
+  issues: Array<number>;
+  title: string;
 }
 
 class Parser {
@@ -24,21 +22,21 @@ class Parser {
    * Given a string of commits in a special format, parse string and creates an array of
    * commit objects with information
    */
-  parse(commit: string): ?Commit {
-    if (!commit) return;
+  parse(commit: Nullable<string>): Nullable<Commit> {
+    if (!commit) return null;
 
-    let lines = commit.split("\n");
+    let lines = commit.split("\n") as Array<string>;
     const commitObj: Commit = {
       type: "",
       component: "",
       message: "",
-      hash: lines.shift(),
+      hash: lines.shift() || '',
       issues: [],
-      title: lines.shift()
+      title: lines.shift() || ''
     };
 
     // Get all related commits
-    const newLines = [];
+    const newLines = [] as Array<string>
     lines.forEach((line) => {
       const match = line.match(closeRegex);
       if (match) {
@@ -74,6 +72,4 @@ class Parser {
   }
 }
 
-module.exports = Parser;
-
-export type {Parser, Commit};
+export {Commit, Parser};
