@@ -14,7 +14,7 @@
   "scripts": {
     "prepublishOnly": "tsc",
     "lint": "eslint . --ext .ts",
-    "test": "tsc; ava",
+    "test": "tsc; npm run coverage",
     "coverage": "nyc ava",
     "report": "nyc report --reporter=text-lcov | coveralls"
   },
