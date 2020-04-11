@@ -1,8 +1,8 @@
 'use strict';
 
-import test from 'ava';
-import * as fs from 'fs';
-import {Config} from '../build/lib/config';
+const test = require('ava');
+const fs = require('fs');
+const { Config } = require('../build/lib/config');
 
 test('default', t => {
   const configObj = new Config("random.json");

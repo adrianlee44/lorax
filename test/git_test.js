@@ -1,5 +1,5 @@
-import test from 'ava';
-import {getLastTag, getLog} from '../build/lib/git';
+const test = require('ava');
+const {getLastTag, getLog} = require('../build/lib/git');
 let child = require('child_process');
 
 test('get the last tag', t => {
@@ -12,12 +12,12 @@ test('get the last tag', t => {
 test.serial('failed to get last tag', t => {
   let tmpExec = child.exec;
 
-  child.exec = function (cmd, fn) {
+  child.exec = function (cmd, opt, fn) {
     fn('failed', 'some stdout lines');
   };
 
   return getLastTag()
-  .then(result => {
+  .then((result) => {
     t.truthy(!result);
     child.exec = tmpExec;
   });

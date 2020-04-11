@@ -1,8 +1,8 @@
 'use strict';
 
-import test from 'ava';
-import {Config} from '../build/lib/config';
-import {Printer} from '../build/lib/printer';
+const test = require('ava');
+const {Config} = require('../build/lib/config');
+const {Printer} = require('../build/lib/printer');
 
 test.beforeEach(t => {
   t.context.config = new Config();

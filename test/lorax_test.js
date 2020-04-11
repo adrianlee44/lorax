@@ -1,9 +1,9 @@
 'use strict';
 
-import test from 'ava';
-import {Lorax} from '../build/lorax';
-import * as fs from 'fs';
-import * as child from 'child_process';
+const test =require('ava');
+const {Lorax} =require('../build/lorax');
+const fs =require('fs');
+const child =require('child_process');
 
 let secondTag;
 
@@ -57,10 +57,10 @@ test.cb('should write to file', t => {
   });
 });
 
-test.cb('should prepend to file', t => {
+test('should prepend to file', t => {
   let testFile = 'test/prepend_test.md';
   let originalData = fs.readFileSync(testFile);
-  t.context.lorax.generate('vtest', testFile, {since: secondTag, prepend: true})
+  return t.context.lorax.generate('vtest', testFile, {since: secondTag, prepend: true})
   .then(() => {
     let data = fs.readFileSync(testFile);
 
@@ -70,7 +70,5 @@ test.cb('should prepend to file', t => {
     fs.writeFileSync(testFile, originalData, {
       'encoding': 'utf-8'
     });
-
-    t.end();
   });
 });
