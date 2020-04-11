@@ -7,7 +7,6 @@
  */
 
 import * as fs from 'fs';
-import {extend} from './util';
 import findup from 'findup-sync';
 import {isAbsolute, basename} from 'path';
 
@@ -69,7 +68,7 @@ class Config {
       }
     }
 
-    this.config = extend<Partial<Configuration>>({}, Config.default, this.jsonData) as Configuration;
+    this.config = Object.assign({}, Config.default, this.jsonData) as Configuration;
   }
 
   get<K extends keyof Configuration>(key: K): Configuration[K] {
@@ -98,7 +97,7 @@ class Config {
   }
 
   reset(): void {
-    this.config = extend<Partial<Configuration>>(
+    this.config = Object.assign(
       {},
       Config.default,
       this.jsonData
