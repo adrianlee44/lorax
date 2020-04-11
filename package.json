@@ -14,9 +14,10 @@
   "scripts": {
     "prepublishOnly": "tsc",
     "lint": "eslint . --ext .ts",
-    "test": "tsc; npm run coverage",
+    "test": "npm run clean; tsc; npm run coverage",
     "coverage": "nyc ava",
-    "report": "nyc report --reporter=text-lcov | coveralls"
+    "report": "nyc report --reporter=text-lcov | coveralls",
+    "clean": "rm -rf coverage/ build/"
   },
   "repository": {
     "type": "git",
@@ -44,7 +45,7 @@
     "@types/findup-sync": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
-    "ava": "^2.1.0",
+    "ava": "^3.6.0",
     "coveralls": "^3.0.4",
     "eslint": "^6.0.1",
     "matchdep": "^2.0.0",
@@ -58,6 +59,9 @@
   "ava": {
     "files": [
       "test/**/*_test.js"
-    ]
+    ],
+    "nodeArguments": [
+			"--experimental-modules"
+		]
   }
 }
