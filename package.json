@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "commander": "2.20.0",
-    "findup-sync": "^3.0.0"
+    "findup-sync": "^4.0.0"
   },
   "ava": {
     "files": [
