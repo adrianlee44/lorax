@@ -53,7 +53,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "commander": "2.20.0",
+    "commander": "^5.0.0",
     "findup-sync": "^4.0.0"
   },
   "ava": {
