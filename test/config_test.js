@@ -2,20 +2,20 @@
 
 const test = require('ava');
 const fs = require('fs');
-const { Config } = require('../build/lib/config');
+const {Config} = require('../build/lib/config');
 
-test('default', t => {
-  const configObj = new Config("random.json");
+test('default', (t) => {
+  const configObj = new Config('random.json');
   t.is(configObj.config.type.length, 6);
   t.falsy(configObj.config.url);
 });
 
-test('invalid file', t => {
-  const configObj = new Config("/null");
+test('invalid file', (t) => {
+  const configObj = new Config('/null');
   t.deepEqual(configObj.jsonData, {});
 });
 
-test.serial('bad data in valid file', t => {
+test.serial('bad data in valid file', (t) => {
   let oldConsoleError = console.error;
   let errorMsg;
 
@@ -23,54 +23,54 @@ test.serial('bad data in valid file', t => {
     errorMsg = message;
   };
 
-  const configObj = new Config("test/invalid.json");
+  const configObj = new Config('test/invalid.json');
   t.deepEqual(configObj.jsonData, {});
   t.is(errorMsg, 'Invalid invalid.json');
 
   console.error = oldConsoleError;
 });
 
-test('load lorax json', t => {
+test('load lorax json', (t) => {
   const configObj = new Config();
-  t.is(configObj.config.url, "https://github.com/adrianlee44/lorax");
+  t.is(configObj.config.url, 'https://github.com/adrianlee44/lorax');
 });
 
-test('get', t => {
+test('get', (t) => {
   const configObj = new Config();
-  t.is(configObj.get("url"), "https://github.com/adrianlee44/lorax");
+  t.is(configObj.get('url'), 'https://github.com/adrianlee44/lorax');
 });
 
-test('set', t => {
+test('set', (t) => {
   const configObj = new Config();
-  configObj.set("issue", "/issues/test/%s");
-  t.is(configObj.get("issue"), "/issues/test/%s");
+  configObj.set('issue', '/issues/test/%s');
+  t.is(configObj.get('issue'), '/issues/test/%s');
 });
 
-test('set object', t => {
+test('set object', (t) => {
   const configObj = new Config();
   configObj.set({
-    'issue': '/issues/test/%s',
-    'commit': '/commit/test/%s'
+    issue: '/issues/test/%s',
+    commit: '/commit/test/%s',
   });
-  t.is(configObj.get("issue"), "/issues/test/%s");
-  t.is(configObj.get("commit"), "/commit/test/%s");
+  t.is(configObj.get('issue'), '/issues/test/%s');
+  t.is(configObj.get('commit'), '/commit/test/%s');
 });
 
-test('custom property', t => {
+test('custom property', (t) => {
   const configObj = new Config();
   t.truthy(configObj.custom);
 });
 
-test('custom property false', t => {
-  const configObj = new Config("random.json");
+test('custom property false', (t) => {
+  const configObj = new Config('random.json');
   t.is(configObj.custom, false);
 });
 
-test.cb('write back to config', t => {
+test.cb('write back to config', (t) => {
   const configObj = new Config();
   configObj.set({
-    'issue': '/issues/test/%s',
-    'commit': '/commit/test/%s'
+    issue: '/issues/test/%s',
+    commit: '/commit/test/%s',
   });
 
   configObj.path = 'test-config.json';
@@ -81,13 +81,13 @@ test.cb('write back to config', t => {
   fs.unlink('test-config.json', t.end);
 });
 
-test('reset', t => {
+test('reset', (t) => {
   const configObj = new Config();
 
-  configObj.set("url", "https://github.com/");
-  t.not(configObj.get("url"), "https://github.com/adrianlee44/lorax");
+  configObj.set('url', 'https://github.com/');
+  t.not(configObj.get('url'), 'https://github.com/adrianlee44/lorax');
 
   configObj.reset();
 
-  t.is(configObj.get("url"), "https://github.com/adrianlee44/lorax");
+  t.is(configObj.get('url'), 'https://github.com/adrianlee44/lorax');
 });

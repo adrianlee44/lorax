@@ -4,35 +4,35 @@ const test = require('ava');
 const {Printer} = require('../build/lib/printer');
 const {Config} = require('../build/lib/config');
 
-test.beforeEach(t => {
+test.beforeEach((t) => {
   t.context.config = new Config();
   t.context.printer = new Printer([], 'v0.1.0', t.context.config);
 });
 
-test.afterEach(t => {
+test.afterEach((t) => {
   t.context = {};
 });
 
-test('basicTest', t => {
+test('basicTest', (t) => {
   const output = t.context.printer.linkToIssue('123');
   t.is(output, '[#123](https://github.com/adrianlee44/lorax/issues/123)');
 });
 
-test('noUrlTest', t => {
+test('noUrlTest', (t) => {
   t.context.config.set('url', '');
 
   const output = t.context.printer.linkToIssue('123');
   t.is(output, '#123');
 });
 
-test('noIssueTemplateTest', t => {
+test('noIssueTemplateTest', (t) => {
   t.context.config.set('issue', '');
 
   const output = t.context.printer.linkToIssue('123');
   t.is(output, '#123');
 });
 
-test('noIssueTest', t => {
+test('noIssueTest', (t) => {
   const output = t.context.printer.linkToIssue();
   t.is(output, '');
 });

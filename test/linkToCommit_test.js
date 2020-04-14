@@ -4,35 +4,38 @@ const test = require('ava');
 const {Printer} = require('../build/lib/printer');
 const {Config} = require('../build/lib/config');
 
-test.beforeEach(t => {
+test.beforeEach((t) => {
   t.context.config = new Config();
   t.context.printer = new Printer([], 'v0.1.0', t.context.config);
 });
 
-test.afterEach(t => {
+test.afterEach((t) => {
   t.context = {};
 });
 
-test('basicTest', t => {
+test('basicTest', (t) => {
   const output = t.context.printer.linkToCommit('1a91039');
-  t.is(output, '[1a91039](https://github.com/adrianlee44/lorax/commit/1a91039)');
+  t.is(
+    output,
+    '[1a91039](https://github.com/adrianlee44/lorax/commit/1a91039)'
+  );
 });
 
-test('noUrlTest', t => {
+test('noUrlTest', (t) => {
   t.context.config.set('url', '');
 
   const output = t.context.printer.linkToCommit('1a91031a9849');
   t.is(output, '1a91031a');
 });
 
-test('noCommitTemplateTest', t => {
+test('noCommitTemplateTest', (t) => {
   t.context.config.set('commit', '');
 
   const output = t.context.printer.linkToCommit('1a91031a9849');
   t.is(output, '1a91031a');
 });
 
-test('noCommitTest', t => {
+test('noCommitTest', (t) => {
   const output = t.context.printer.linkToCommit();
   t.is(output, '');
 });
