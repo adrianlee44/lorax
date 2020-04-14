@@ -33,17 +33,17 @@ class Config {
   readonly path: string;
 
   static default = {
-    issue: "/issues/%s",
-    commit: "/commit/%s",
-    type: ["^fix", "^feature", "^refactor", "BREAKING", "^test", "^doc"],
+    issue: '/issues/%s',
+    commit: '/commit/%s',
+    type: ['^fix', '^feature', '^refactor', 'BREAKING', '^test', '^doc'],
     display: {
-      fix: "Bug Fixes",
-      feature: "Features",
-      breaking: "Breaking Changes",
-      refactor: "Optimizations",
-      test: "Testing",
-      doc: "Documentation"
-    }
+      fix: 'Bug Fixes',
+      feature: 'Features',
+      breaking: 'Breaking Changes',
+      refactor: 'Optimizations',
+      test: 'Testing',
+      doc: 'Documentation',
+    },
   };
 
   constructor(configPath = 'lorax.json') {
@@ -59,7 +59,7 @@ class Config {
     if (this.custom) {
       try {
         const rawData: string = fs.readFileSync(this.path, {
-          encoding: 'utf-8'
+          encoding: 'utf-8',
         });
 
         this.jsonData = JSON.parse(rawData);
@@ -68,30 +68,37 @@ class Config {
       }
     }
 
-    this.config = Object.assign({}, Config.default, this.jsonData) as Configuration;
+    this.config = Object.assign(
+      {},
+      Config.default,
+      this.jsonData
+    ) as Configuration;
   }
 
   get<K extends keyof Configuration>(key: K): Configuration[K] {
     return this.config[key];
   }
 
-  set<K extends keyof Configuration | Partial<Configuration>>(key: K, value?: any ): Configuration {
-    if (typeof key === "object") {
+  set<K extends keyof Configuration | Partial<Configuration>>(
+    key: K,
+    value?: any
+  ): Configuration {
+    if (typeof key === 'object') {
       for (const hashKey in key) {
-        this.set((hashKey as keyof Configuration), key[hashKey]);
+        this.set(hashKey as keyof Configuration, key[hashKey]);
       }
     } else {
-      this.config[(key as keyof Configuration)] = value;
+      this.config[key as keyof Configuration] = value;
     }
-  
+
     return this.config;
   }
-  
+
   write(force: boolean): string | void {
     if (this.custom || !!force) {
       const rawData = JSON.stringify(this.config, null, '  ');
       return fs.writeFileSync(this.path, rawData, {
-        encoding: 'utf-8'
+        encoding: 'utf-8',
       });
     }
   }
@@ -101,8 +108,8 @@ class Config {
       {},
       Config.default,
       this.jsonData
-    ) as Configuration
+    ) as Configuration;
   }
 }
 
-export { Config, Configuration, DisplayConfiguration }
+export {Config, Configuration, DisplayConfiguration};

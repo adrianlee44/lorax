@@ -9,17 +9,17 @@
 import * as util from 'util';
 import {template} from './template';
 
-import { Config } from './config'
+import {Config} from './config';
 
 import type {Configuration, DisplayConfiguration} from './config';
 import type {Commit} from './parser';
-import type { LoraxOptions } from '../lorax';
+import type {LoraxOptions} from '../lorax';
 
 type PrintSection = {
   [P in keyof DisplayConfiguration]: {
     [component: string]: Array<Commit>;
-  }
-}
+  };
+};
 
 class Printer {
   private commits: Array<Commit>;
@@ -39,8 +39,8 @@ class Printer {
   linkToIssue(issue: number): string {
     if (!issue) return '';
 
-    const url: Configuration["url"] = this.config.get("url");
-    const issueTmpl: Configuration["issue"] = this.config.get('issue');
+    const url: Configuration['url'] = this.config.get('url');
+    const issueTmpl: Configuration['issue'] = this.config.get('issue');
 
     let issueLink = template.ISSUE;
     if (url && issueTmpl) {
@@ -49,7 +49,6 @@ class Printer {
 
     return util.format(issueLink, issue);
   }
-
 
   /**
    * @function
@@ -60,13 +59,18 @@ class Printer {
   linkToCommit(hash: string): string {
     if (!hash) return '';
 
-    const url = this.config.get("url");
-    const commitTmpl = this.config.get("commit");
+    const url = this.config.get('url');
+    const commitTmpl = this.config.get('commit');
 
     let commitLink = template.COMMIT;
     const shortenHash = hash.substr(0, 8);
     if (url && commitTmpl) {
-      commitLink = util.format(template.LINK_TO_COMMIT, shortenHash, url, commitTmpl);
+      commitLink = util.format(
+        template.LINK_TO_COMMIT,
+        shortenHash,
+        url,
+        commitTmpl
+      );
     }
 
     return util.format(commitLink, shortenHash);
@@ -80,14 +84,20 @@ class Printer {
   print(options?: LoraxOptions): string {
     const lines: Array<string> = [];
     const sections = {} as PrintSection;
-    const display = this.config.get("display");
+    const display = this.config.get('display');
 
     options = options || {};
 
     // Header section
     const timestamp = options.timestamp || new Date();
     lines.push(
-      util.format(template.HEADER, this.version, timestamp.getFullYear(), timestamp.getMonth() + 1, timestamp.getDate())
+      util.format(
+        template.HEADER,
+        this.version,
+        timestamp.getFullYear(),
+        timestamp.getMonth() + 1,
+        timestamp.getDate()
+      )
     );
 
     for (const key in display) {
@@ -122,13 +132,20 @@ class Printer {
           if (!hasOneItem && !index) lines.push(title);
 
           const prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
-          lines.push(util.format(template.COMPONENT_LINE, prefix, item.message));
+          lines.push(
+            util.format(template.COMPONENT_LINE, prefix, item.message)
+          );
 
-          const additionalInfo = item.issues.map((issue) => this.linkToIssue(issue));
+          const additionalInfo = item.issues.map((issue) =>
+            this.linkToIssue(issue)
+          );
           additionalInfo.unshift(this.linkToCommit(item.hash));
 
           lines.push(
-            util.format(template.COMMIT_ADDITIONAL_INFO, additionalInfo.join(',\n   '))
+            util.format(
+              template.COMMIT_ADDITIONAL_INFO,
+              additionalInfo.join(',\n   ')
+            )
           );
         });
       });

@@ -23,7 +23,6 @@ import {Parser} from './lib/parser';
 
 import type {Commit} from './lib/parser';
 
-
 interface LoraxOptions {
   since?: string;
   prepend?: boolean;
@@ -45,15 +44,16 @@ class Lorax {
    */
   get(grep: string, tag?: string): Promise<Array<string>> {
     const promise = tag ? Promise.resolve<string>(tag) : git.getLastTag();
-    return promise
-      .then((tag: Nullable<string>): Promise<Array<string>> => {
-        let msg = "Reading commits";
+    return promise.then(
+      (tag: Nullable<string>): Promise<Array<string>> => {
+        let msg = 'Reading commits';
         if (tag) {
-          msg += " since " + tag;
+          msg += ' since ' + tag;
         }
         console.log(msg);
         return git.getLog(grep, tag);
-      });
+      }
+    );
   }
 
   /**
@@ -61,36 +61,37 @@ class Lorax {
    * A shortcut function to get the latest tag, parse all the commits and generate the changelog
    */
   generate(toTag: string, file: string, options: LoraxOptions): Promise<void> {
-    const grep = this._config.get("type").join("|");
+    const grep = this._config.get('type').join('|');
 
-    return this.get(grep, options.since)
-    .then((commits: Array<string>): void => {
-      const parsedCommits: Array<Commit> = [];
-      commits.forEach((commit: string) => {
-        const parsedCommit = this._parser.parse(commit);
+    return this.get(grep, options.since).then(
+      (commits: Array<string>): void => {
+        const parsedCommits: Array<Commit> = [];
+        commits.forEach((commit: string) => {
+          const parsedCommit = this._parser.parse(commit);
 
-        if (parsedCommit) {
-          parsedCommits.push(parsedCommit);
-        }
-      });
-
-      console.log(`Parsed ${parsedCommits.length} commit(s)`);
-      const printer = new Printer(parsedCommits, toTag, this._config);
-      let result = printer.print();
-
-      if (options.prepend) {
-        const existingData = fs.readFileSync(file, {
-          encoding: 'utf-8'
+          if (parsedCommit) {
+            parsedCommits.push(parsedCommit);
+          }
         });
 
-        result += existingData;
+        console.log(`Parsed ${parsedCommits.length} commit(s)`);
+        const printer = new Printer(parsedCommits, toTag, this._config);
+        let result = printer.print();
+
+        if (options.prepend) {
+          const existingData = fs.readFileSync(file, {
+            encoding: 'utf-8',
+          });
+
+          result += existingData;
+        }
+
+        fs.writeFileSync(file, result, {flag: 'w'});
+
+        console.log(`Generated changelog to ${file} (${toTag})`);
+        return;
       }
-
-      fs.writeFileSync(file, result, {flag: 'w'});
-
-      console.log(`Generated changelog to ${file} (${toTag})`);
-      return;
-    });
+    );
   }
 }
 

@@ -9,7 +9,7 @@ type TemplateType = {
   COMPONENT_ITEM: string;
   COMPONENT_LINE: string;
   COMMIT_ADDITIONAL_INFO: string;
-}
+};
 
 export const template: TemplateType = {
   LINK_TO_ISSUE: '[#%s](%s%s)',
@@ -21,5 +21,5 @@ export const template: TemplateType = {
   COMPONENT_TITLE: '- **%s:**',
   COMPONENT_ITEM: '  -',
   COMPONENT_LINE: '%s %s',
-  COMMIT_ADDITIONAL_INFO: '  (%s)'
+  COMMIT_ADDITIONAL_INFO: '  (%s)',
 };
