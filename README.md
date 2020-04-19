@@ -5,11 +5,9 @@ Lorax
 [![License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](https://github.com/adrianlee44/lorax/blob/master/LICENSE-MIT)
 [![NPM](https://img.shields.io/npm/v/lorax.svg?style=flat-square)](https://www.npmjs.org/package/lorax)
 
-<img align="right" height="200" src="http://4.bp.blogspot.com/-nIhDGmiP2Vc/T1MD0BbiWxI/AAAAAAAABeQ/3DMn5DYC3YY/s1600/lorax1.png">
+Lorax is a node package to generate changelog by parsing formatted git commits. One of the problems people run into when working with an open-sourced project is having trouble knowing what have been fixed, updated or created. Some people solve this problem by reading through the git log while other might ask on Github issue or Stackoverflow.
 
-Lorax is a simple node package to generate changelog by parsing formatted git commits. One of the problems people run into when working with an open-sourced project is having trouble knowing what have been fixed, updated or created. Some people solve this problem by reading through the git log while other might ask on Github issue or Stackoverflow.
-
-Lorax tries to solve this problem by automating the changelog generation process. Lorax will read through all the commits between tags and gerate a beautiful and easy to read markdown changelog.
+Lorax tries to solve this problem by automating the changelog generation process. Lorax will read through all the commits between tags and generate an easy to read markdown changelog.
 
 [View Lorax's changelog as an example](https://github.com/adrianlee44/lorax/blob/master/changelog.md)
 
@@ -57,12 +55,12 @@ $ npm install -g lorax
 Usage: lorax -t [tag] [options]
 
   Options:
-
-    -h, --help         output usage information
     -V, --version      output the version number
-    -F, --file [FILE]  Name of the file to write to [changelog.md]
+    -F, --file [FILE]  Name of the file to write to [changelog.md] (default: "changelog.md")
+    -p, --prepend      Prepend to the file
     -s, --since [tag]  Starting tag version
-    -t, --tag [tag]    Tag of the upcoming release [1.1.0]
+    -t, --tag [tag]    Tag of the upcoming release [2.1.0] (default: "2.1.0")
+    -h, --help         display help for command
 ```
 
 To generate the changelog
@@ -115,7 +113,9 @@ url | URL of the Github repo | ''
 ### Display name default
 key | display name
 --- | ---
-fix | Bug Fixes
-feature | Features
 breaking | Breaking Changes
+doc | Documentation
+feature | Features
+fix | Bug Fixes
 refactor | Optimizations
+test | Testing
