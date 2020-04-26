@@ -23,13 +23,13 @@ import {Parser} from './lib/parser';
 
 import type {Commit} from './lib/parser';
 
-interface LoraxOptions {
+export interface LoraxOptions {
   since?: string;
   prepend?: boolean;
   timestamp?: Date;
 }
 
-class Lorax {
+export class Lorax {
   _config: Config;
   _parser: Parser;
 
@@ -94,5 +94,3 @@ class Lorax {
     );
   }
 }
-
-export {Lorax, LoraxOptions};

@@ -34,7 +34,8 @@ if (!process.argv.slice(2).length) {
   program.help();
 }
 
-const lorax = new require(dir + 'build/lorax.js')();
+const {Lorax} = require(dir + 'build/lorax.js');
+const lorax = new Lorax();
 lorax.generate(program.tag, program.file, {
   since: program.since,
   prepend: !!program.prepend,
