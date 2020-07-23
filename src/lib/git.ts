@@ -50,6 +50,8 @@ function getAllTags(): Promise<Array<string>> {
   })
 }
 
+// TODO: get commit date for given tag API
+
 /**
  * @name getLog
  * @description

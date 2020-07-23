@@ -4,6 +4,9 @@
 
 - **any:**
   - Changes:
+    - fix output for commit messages which are formatted as a plain markdown list ("Mother Of All" commits)
+    ([2d4e6d38](https://github.com/adrianlee44/lorax/commit/2d4e6d38))
+  - Changes:
     - fix git log with a given tag string: error on Windows plaforms, e.g.:
     
           Result: Command failed: git log -E --format=%H%n%B%n==END== HEAD '^v3.0.0' --
@@ -23,6 +26,10 @@
 ## Features
 
 - **any:** Changes:
+  - added code to strip off conflict reports of merge commits
+  - also strip off sign-off lines, etc.
+  ([2d4e6d38](https://github.com/adrianlee44/lorax/commit/2d4e6d38))
+
   - now `-a` (generate ALL) functionality is implemented completely: lorax cycles through the tags from old to young and builds up the CHANGELOG file as it goes.
   ([ab9d9057](https://github.com/adrianlee44/lorax/commit/ab9d9057))
 
@@ -37,7 +44,9 @@
 
 
 # v3.0.0 (2020/4/26)
+
 ## Bug Fixes
+
 - **lorax:**
   - Fix executable script
     ([9721c520](https://github.com/adrianlee44/lorax/commit/9721c520))
@@ -45,10 +54,12 @@
     ([7c8d0e39](https://github.com/adrianlee44/lorax/commit/7c8d0e39))
 
 ## Features
+
 - **lorax:** Add doc and test to default
   ([f9620729](https://github.com/adrianlee44/lorax/commit/f9620729))
 
 ## Optimizations
+
 - **lorax:**
   - Remove unused variable
     ([3087227f](https://github.com/adrianlee44/lorax/commit/3087227f))
@@ -61,11 +72,14 @@
 
 
 # v2.1.0 (2017/5/6)
+
 ## Features
+
 - **lorax:** Add prepend option and prepend new changelog to existing file
   ([8bcf88ff](https://github.com/adrianlee44/lorax/commit/8bcf88ff))
 
 ## Optimizations
+
 - **lorax:**
   - Clean up how lorax write to file
     ([4c8bef97](https://github.com/adrianlee44/lorax/commit/4c8bef97))
@@ -76,41 +90,47 @@
 
 
 # v2.0.0 (2016/11/17)
-## Breaking Changes
-- **lorax:**  Command went from `lorax [tag] [file]` to `lorax -t [tag] -F [file]` with default values
 
+## Breaking Changes
+
+- **lorax:**  Command went from `lorax [tag] [file]` to `lorax -t [tag] -F [file]` with default values
   ([f19449bf](https://github.com/adrianlee44/lorax/commit/f19449bf))
 
 ## Optimizations
+
 - **printer:** Abstract out all the templates
   ([9eabf1f6](https://github.com/adrianlee44/lorax/commit/9eabf1f6))
 
 
 # v1.1.0 (2016/3/12)
+
 ## Bug Fixes
+
 - **lorax:** Fix Config not getting passed to printer
   ([3195601d](https://github.com/adrianlee44/lorax/commit/3195601d))
 
 ## Optimizations
+
 - **printer:** Add Printer class
   ([8f0ffa60](https://github.com/adrianlee44/lorax/commit/8f0ffa60))
 
 
 # v1.0.0 (2015/12/13)
+
 ## Bug Fixes
+
 - **lorax:**
   - Fix unable to generate changelog
     ([16a05a5a](https://github.com/adrianlee44/lorax/commit/16a05a5a))
   - Forgot to rename write to render
     ([fec84fdd](https://github.com/adrianlee44/lorax/commit/fec84fdd))
   - Fixed not parsing long commit message correctly
-
     Line breaks were removed before to form a one line message
-
     Changes allow for creating markdown lists or code blocks
     ([a15c1769](https://github.com/adrianlee44/lorax/commit/a15c1769))
 
 ## Features
+
 - **config:**
   - Find lorax.json up the directory tree
     ([4bbce1df](https://github.com/adrianlee44/lorax/commit/4bbce1df))
@@ -121,6 +141,7 @@
    [#3](https://github.com/adrianlee44/lorax/issues/3))
 
 ## Optimizations
+
 - **git:** Updated API when errors occur
   ([8b6c8264](https://github.com/adrianlee44/lorax/commit/8b6c8264))
 - **lorax:**
@@ -143,12 +164,16 @@
 
 
 # v0.1.3 (2014/1/5)
+
 ## Features
+
 - **lorax:** Allow specifying tag when reading log
   ([0dff7d0d](https://github.com/adrianlee44/lorax/commit/0dff7d0d))
 
 # v0.1.2 (2014/1/5)
+
 ## Bug Fixes
+
 - **lorax:**
   - Fixed not able to parse multiple issues
     ([0d3a6e5c](https://github.com/adrianlee44/lorax/commit/0d3a6e5c))
@@ -156,12 +181,14 @@
     ([8911a1cf](https://github.com/adrianlee44/lorax/commit/8911a1cf))
 
 ## Features
+
 - **config:** Allow setting with an object
   ([84ae8ae7](https://github.com/adrianlee44/lorax/commit/84ae8ae7))
 - **lorax:** Updated API to include git and Config module
   ([72e47af9](https://github.com/adrianlee44/lorax/commit/72e47af9))
 
 ## Optimizations
+
 - **lorax:** Refactored lorax to make API easier to use
   ([070c798d](https://github.com/adrianlee44/lorax/commit/070c798d))
 
@@ -171,7 +198,9 @@
   ([070c798d](https://github.com/adrianlee44/lorax/commit/070c798dc663bee0b0e44cef6893e21daf24fe4a))
 
 # v0.1.0 (2013/12/13)
+
 ## Features
+
 - **all:** Initial commit
   ([c1cffd76](https://github.com/adrianlee44/lorax/commit/c1cffd76))
 - **config:** Allow custom path
@@ -183,3 +212,4 @@
     ([d5b66a21](https://github.com/adrianlee44/lorax/commit/d5b66a21))
   - Added creating markdown format changelog and shortcut generate function
     ([db035b70](https://github.com/adrianlee44/lorax/commit/db035b70))
+
