@@ -43,7 +43,7 @@ export class Lorax {
    * @description
    * Get all commits or commits since last tag
    */
-  get(grep: string, options: LoraxOptions): Promise<Array<string>> {
+  get(options: LoraxOptions): Promise<Array<string>> {
     const tag = options.since;
     const all = options.all;
     const promise = all ? Promise.resolve<string>('*') : tag ? Promise.resolve<string>(tag) : git.getLastTag();
@@ -59,7 +59,7 @@ export class Lorax {
           }
         }
         console.log(msg);
-        return git.getLog(grep, all ? null : tag);
+        return git.getLog(all ? null : tag);
       }
     )
     .catch((error) => {
@@ -72,14 +72,12 @@ export class Lorax {
    * A shortcut function to get the latest tag, parse all the commits and generate the changelog
    */
   generate(toTag: string, file: string, options: LoraxOptions): Promise<void> {
-    const grep = this._config.get('type').join('|');
-
-    return this.get(grep, options).then(
+    return this.get(options).then(
       (commits: Array<string>): void => {
         console.log('commits:', commits);
         const parsedCommits: Array<Commit> = [];
         commits.forEach((commit: string) => {
-          const parsedCommit = this._parser.parse(commit);
+          const parsedCommit = this._parser.parse(commit, this._config);
           console.log('@@@parsed commit:', { parsedCommit, commit });
 
           if (parsedCommit) {
@@ -105,7 +103,7 @@ export class Lorax {
         return;
       }
     ).catch((error) => {
-      console.error('Failure during changelog generation:', error.message);
+      console.error('Failure during changelog generation:', error);
       return;
     });
   }

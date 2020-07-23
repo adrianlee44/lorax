@@ -107,6 +107,9 @@ class Printer {
     this.commits.forEach((commit: Commit) => {
       const {component, type} = commit;
 
+      if (!sections[type]) {
+        sections[type] = {};
+      }
       const section = sections[type];
       if (!section[component]) {
         section[component] = [];
@@ -121,7 +124,9 @@ class Printer {
         continue;
       }
 
-      lines.push(util.format(template.SECTION_HEADER, display[sectionType]));
+      const title = display[sectionType] || sectionType.replace(/^./, (m) => m.toUpperCase());
+
+      lines.push(util.format(template.SECTION_HEADER, title));
 
       components.forEach((componentName: string) => {
         const componentList = list[componentName] || [];
