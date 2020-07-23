@@ -1,15 +1,11 @@
 {
-  "parser": "babel-eslint",
+  "root": true,
   "env": {
     "node": true
   },
-  "extends": "eslint:recommended",
-  "rules": {
-    "no-console": 0,
-    "semi": 2
-  },
-  "plugins": [
-    "flowtype"
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended"
   ],
   "parserOptions": {
     "ecmaVersion": 6,
@@ -23,8 +19,5 @@
       "superInFunctions": true,
       "templateStrings": true
     }
-  },
-  "globals": {
-    "Promise": true
   }
 }

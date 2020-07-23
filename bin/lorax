@@ -8,26 +8,35 @@
  * Licensed under the MIT license.
  */
 
-var path = require('path'),
-    fs   = require('fs'),
-    dir  = path.join(path.dirname(fs.realpathSync(__filename)), '../'),
-    pkg  = require(dir + 'package.json'),
-    commander = require('commander');
+const path = require('path'),
+  dir = path.join(__dirname, '../'),
+  pkg = require(dir + 'package.json'),
+  {program} = require('commander');
 
-commander
+program
   .version(pkg.version)
   .usage('-t [tag] [options]')
-  .option('-F, --file [FILE]', 'Name of the file to write to [changelog.md]', 'changelog.md')
+  .option(
+    '-F, --file [FILE]',
+    'Name of the file to write to [changelog.md]',
+    'changelog.md'
+  )
   .option('-p, --prepend', 'Prepend to the file')
   .option('-s, --since [tag]', 'Starting tag version')
-  .option('-t, --tag [tag]', 'Tag of the upcoming release [' + pkg.version + ']', pkg.version)
+  .option(
+    '-t, --tag [tag]',
+    'Tag of the upcoming release [' + pkg.version + ']',
+    pkg.version
+  )
   .parse(process.argv);
 
 if (!process.argv.slice(2).length) {
-  commander.help();
+  program.help();
 }
 
-require(dir + 'build/lorax.js').generate(commander.tag, commander.file, {
-  since: commander.since,
-  prepend: !!commander.prepend
+const {Lorax} = require(dir + 'build/lorax.js');
+const lorax = new Lorax();
+lorax.generate(program.tag, program.file, {
+  since: program.since,
+  prepend: !!program.prepend,
 });

@@ -1,20 +1,18 @@
-// @flow
+'use strict';
 
 /**
  * @name parser
  */
 
-'use strict';
-
 const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
 
-type Commit = {
-  type: string,
-  component: string,
-  message: string,
-  hash: string,
-  issues: Array<number>,
-  title: string
+interface Commit {
+  type: string;
+  component: string;
+  message: string;
+  hash: string;
+  issues: Array<number>;
+  title: string;
 }
 
 class Parser {
@@ -24,21 +22,21 @@ class Parser {
    * Given a string of commits in a special format, parse string and creates an array of
    * commit objects with information
    */
-  parse(commit: string): ?Commit {
-    if (!commit) return;
+  parse(commit: Nullable<string>): Nullable<Commit> {
+    if (!commit) return null;
 
-    let lines = commit.split("\n");
+    let lines = commit.split('\n') as Array<string>;
     const commitObj: Commit = {
-      type: "",
-      component: "",
-      message: "",
-      hash: lines.shift(),
+      type: '',
+      component: '',
+      message: '',
+      hash: lines.shift() || '',
       issues: [],
-      title: lines.shift()
+      title: lines.shift() || '',
     };
 
     // Get all related commits
-    const newLines = [];
+    const newLines = [] as Array<string>;
     lines.forEach((line) => {
       const match = line.match(closeRegex);
       if (match) {
@@ -50,15 +48,15 @@ class Parser {
     lines = newLines;
 
     // Rejoin the rest of the lines after stripping out certain information
-    const message = lines.join("\n");
+    const message = lines.join('\n');
 
-    const titleMatch = commitObj.title.match(/^([^(]+)\(([^)]+)\):\s+(.+)/);
+    const titleMatch = commitObj.title.match(/^([^(]+)\s*\(([^)]+)\):?\s+(.+)/);
     if (titleMatch) {
       commitObj.type = titleMatch[1];
       commitObj.component = titleMatch[2];
       commitObj.message = titleMatch[3];
       if (message) {
-        commitObj.message += "\n" + message;
+        commitObj.message += '\n' + message;
       }
     }
 
@@ -66,7 +64,7 @@ class Parser {
     // Replace commit description with breaking changes
     const breakingMatch = message.match(/BREAKING CHANGE[S]?:?([\s\S]*)/);
     if (breakingMatch) {
-      commitObj.type = "breaking";
+      commitObj.type = 'breaking';
       commitObj.message = breakingMatch[1];
     }
 
@@ -74,6 +72,4 @@ class Parser {
   }
 }
 
-module.exports = Parser;
-
-export type {Parser, Commit};
+export {Commit, Parser};

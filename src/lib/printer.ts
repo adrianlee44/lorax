@@ -1,4 +1,4 @@
-// @flow
+'use strict';
 
 /**
  * @name printer
@@ -6,18 +6,26 @@
  * Printing parsed data back into readable format
  */
 
-'use strict';
-
 import * as util from 'util';
-import template from './template';
+import {template} from './template';
 
-import type {Config} from './config';
+import {Config} from './config';
+
+import type {Configuration, DisplayConfiguration} from './config';
 import type {Commit} from './parser';
+import type {LoraxOptions} from '../lorax';
+
+type PrintSection = {
+  [P in keyof DisplayConfiguration]: {
+    [component: string]: Array<Commit>;
+  };
+};
 
 class Printer {
-  commits: Array<Commit>;
-  version: string;
-  config: Config;
+  private commits: Array<Commit>;
+  private version: string;
+  private config: Config;
+
   constructor(commits: Array<Commit>, version: string, config: Config) {
     this.commits = commits;
     this.version = version;
@@ -28,11 +36,11 @@ class Printer {
    * @description
    * Create a markdown link to issue page with issue number as text
    */
-  linkToIssue(issue: string): string {
+  linkToIssue(issue: number): string {
     if (!issue) return '';
 
-    const url = this.config.get("url");
-    const issueTmpl = this.config.get('issue');
+    const url: Configuration['url'] = this.config.get('url');
+    const issueTmpl: Configuration['issue'] = this.config.get('issue');
 
     let issueLink = template.ISSUE;
     if (url && issueTmpl) {
@@ -41,7 +49,6 @@ class Printer {
 
     return util.format(issueLink, issue);
   }
-
 
   /**
    * @function
@@ -52,13 +59,18 @@ class Printer {
   linkToCommit(hash: string): string {
     if (!hash) return '';
 
-    const url = this.config.get("url");
-    const commitTmpl = this.config.get("commit");
+    const url = this.config.get('url');
+    const commitTmpl = this.config.get('commit');
 
     let commitLink = template.COMMIT;
     const shortenHash = hash.substr(0, 8);
     if (url && commitTmpl) {
-      commitLink = util.format(template.LINK_TO_COMMIT, shortenHash, url, commitTmpl);
+      commitLink = util.format(
+        template.LINK_TO_COMMIT,
+        shortenHash,
+        url,
+        commitTmpl
+      );
     }
 
     return util.format(commitLink, shortenHash);
@@ -69,34 +81,40 @@ class Printer {
    * Using preprocessed array of commits, render a changelog in markdown format with version
    * and today's date as the header
    */
-  print(options: ?Object): string {
-    const lines = [];
-    const sections = {};
-    const display = this.config.get("display");
+  print(options?: LoraxOptions): string {
+    const lines: Array<string> = [];
+    const sections = {} as PrintSection;
+    const display = this.config.get('display');
 
     options = options || {};
 
     // Header section
     const timestamp = options.timestamp || new Date();
     lines.push(
-      util.format(template.HEADER, this.version, timestamp.getFullYear(), timestamp.getMonth() + 1, timestamp.getDate())
+      util.format(
+        template.HEADER,
+        this.version,
+        timestamp.getFullYear(),
+        timestamp.getMonth() + 1,
+        timestamp.getDate()
+      )
     );
 
-    for (let key in display) {
+    for (const key in display) {
       sections[key] = {};
     }
 
-    this.commits.forEach((commit) => {
-      const name = commit.component;
-      const section = sections[commit.type];
+    this.commits.forEach((commit: Commit) => {
+      const {component, type} = commit;
 
-      if (!section[name]) {
-        section[name] = [];
+      const section = sections[type];
+      if (!section[component]) {
+        section[component] = [];
       }
-      section[name].push(commit);
+      section[component].push(commit);
     });
 
-    for (let sectionType in sections) {
+    for (const sectionType in sections) {
       const list = sections[sectionType];
       const components = Object.getOwnPropertyNames(list).sort();
       if (!components.length) {
@@ -105,7 +123,7 @@ class Printer {
 
       lines.push(util.format(template.SECTION_HEADER, display[sectionType]));
 
-      components.forEach((componentName) => {
+      components.forEach((componentName: string) => {
         const componentList = list[componentName] || [];
 
         const title = util.format(template.COMPONENT_TITLE, componentName);
@@ -113,14 +131,21 @@ class Printer {
         componentList.forEach((item, index) => {
           if (!hasOneItem && !index) lines.push(title);
 
-          let prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
-          lines.push(util.format(template.COMPONENT_LINE, prefix, item.message));
+          const prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
+          lines.push(
+            util.format(template.COMPONENT_LINE, prefix, item.message)
+          );
 
-          const additionalInfo = item.issues.map((issue) => this.linkToIssue(issue));
+          const additionalInfo = item.issues.map((issue) =>
+            this.linkToIssue(issue)
+          );
           additionalInfo.unshift(this.linkToCommit(item.hash));
 
           lines.push(
-            util.format(template.COMMIT_ADDITIONAL_INFO, additionalInfo.join(',\n   '))
+            util.format(
+              template.COMMIT_ADDITIONAL_INFO,
+              additionalInfo.join(',\n   ')
+            )
           );
         });
       });
@@ -134,6 +159,4 @@ class Printer {
   }
 }
 
-module.exports = Printer;
-
-export type {Printer};
+export {Printer};

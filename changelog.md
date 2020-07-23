@@ -1,3 +1,27 @@
+# v3.0.0 (2020/4/26)
+## Bug Fixes
+- **lorax:**
+  - Fix executable script
+  ([9721c520](https://github.com/adrianlee44/lorax/commit/9721c520))
+  - Allow space before component
+  ([7c8d0e39](https://github.com/adrianlee44/lorax/commit/7c8d0e39))
+
+## Features
+- **lorax:** Add doc and test to default
+  ([f9620729](https://github.com/adrianlee44/lorax/commit/f9620729))
+
+## Optimizations
+- **lorax:**
+  - Remove unused variable
+  ([3087227f](https://github.com/adrianlee44/lorax/commit/3087227f))
+  - Convert to TypeScript
+  ([e6df0025](https://github.com/adrianlee44/lorax/commit/e6df0025))
+  - Switch q to bluebird
+  ([1b20fbbf](https://github.com/adrianlee44/lorax/commit/1b20fbbf))
+- **util:** Remove custom extend and use Object.assign
+  ([f70b2660](https://github.com/adrianlee44/lorax/commit/f70b2660))
+
+
 # v2.1.0 (2017/5/6)
 ## Features
 - **lorax:** Add prepend option and prepend new changelog to existing file
