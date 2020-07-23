@@ -25,6 +25,7 @@ import type {Commit} from './lib/parser';
 
 export interface LoraxOptions {
   since?: string;
+  all?: boolean;
   prepend?: boolean;
   timestamp?: Date;
 }
@@ -42,18 +43,28 @@ export class Lorax {
    * @description
    * Get all commits or commits since last tag
    */
-  get(grep: string, tag?: string): Promise<Array<string>> {
-    const promise = tag ? Promise.resolve<string>(tag) : git.getLastTag();
+  get(grep: string, options: LoraxOptions): Promise<Array<string>> {
+    const tag = options.since;
+    const all = options.all;
+    const promise = all ? Promise.resolve<string>('*') : tag ? Promise.resolve<string>(tag) : git.getLastTag();
     return promise.then(
       (tag: Nullable<string>): Promise<Array<string>> => {
-        let msg = 'Reading commits';
-        if (tag) {
-          msg += ' since ' + tag;
+        let msg;
+        if (all) {
+          msg = 'Reading all commits';
+        } else {
+          msg = 'Reading commits';
+          if (tag) {
+            msg += ' since ' + tag;
+          }
         }
         console.log(msg);
-        return git.getLog(grep, tag);
+        return git.getLog(grep, all ? null : tag);
       }
-    );
+    )
+    .catch((error) => {
+      throw error;
+    });
   }
 
   /**
@@ -63,11 +74,13 @@ export class Lorax {
   generate(toTag: string, file: string, options: LoraxOptions): Promise<void> {
     const grep = this._config.get('type').join('|');
 
-    return this.get(grep, options.since).then(
+    return this.get(grep, options).then(
       (commits: Array<string>): void => {
+        console.log('commits:', commits);
         const parsedCommits: Array<Commit> = [];
         commits.forEach((commit: string) => {
           const parsedCommit = this._parser.parse(commit);
+          console.log('@@@parsed commit:', { parsedCommit, commit });
 
           if (parsedCommit) {
             parsedCommits.push(parsedCommit);
@@ -91,6 +104,9 @@ export class Lorax {
         console.log(`Generated changelog to ${file} (${toTag})`);
         return;
       }
-    );
+    ).catch((error) => {
+      console.error('Failure during changelog generation:', error.message);
+      return;
+    });
   }
 }

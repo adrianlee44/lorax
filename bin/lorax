@@ -22,6 +22,7 @@ program
     'changelog.md'
   )
   .option('-p, --prepend', 'Prepend to the file')
+  .option('-a, --all', 'Gnerate a full ChangeLog, i.e. ALL git commits')
   .option('-s, --since [tag]', 'Starting tag version')
   .option(
     '-t, --tag [tag]',
@@ -36,7 +37,12 @@ if (!process.argv.slice(2).length) {
 
 const {Lorax} = require(dir + 'build/lorax.js');
 const lorax = new Lorax();
-lorax.generate(program.tag, program.file, {
-  since: program.since,
-  prepend: !!program.prepend,
-});
+try {
+  lorax.generate(program.tag, program.file, {
+    since: program.since,
+    all: !!program.all,
+    prepend: !!program.prepend,
+  });
+} catch (err) {
+  console.error('error:', err);
+}

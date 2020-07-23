@@ -12,7 +12,8 @@
     "node": ">=8"
   },
   "scripts": {
-    "build": "npm run clean && npm run lint && tsc && npm test",
+    "build": "npm run clean && npm run lint-fix && npm run compile && npm test",
+    "compile": "tsc",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "test": "npm run coverage",

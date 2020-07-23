@@ -9,9 +9,10 @@
 import * as util from 'util';
 import {exec, ExecException} from 'child_process';
 
-const GIT_LOG = "git log --grep='%s' -E --format=%s %s..HEAD";
-const GIT_LOG_ALL = "git log --grep='%s' -E --format=%s";
-const GIT_TAG = 'git describe --tags --abbrev=0';
+const GIT_LOG = "git log %s -E --format=%s HEAD '^%s'";
+const GIT_LOG_ALL = "git log %s -E --format=%s";
+const GIT_GREP_CLAUSE = "\"--grep='%s'\"";
+const GIT_TAG = 'git tag --list --merged HEAD --sort "-committerdate"';
 const GIT_LOG_FORMAT = '%H%n%s%n%b%n==END==';
 
 /**
@@ -28,7 +29,11 @@ function getLastTag(): Promise<Nullable<string>> {
     });
   })
     .then((stdout: string): string => {
-      return stdout.replace('\n', '');
+      const lst = stdout.split('\n').map((l) => l.trim()).filter((l, i) => l.length > 0);
+      // GIT_TAG sorts tags from most recent to oldest, 
+      // hence top entry will be the 'last' tag == most recent tag.
+      const last = lst[0] || '';
+      return last;
     })
     .catch(() => null);
 }
@@ -39,20 +44,22 @@ function getLastTag(): Promise<Nullable<string>> {
  * Read all commits watching match pattern since a certain tag
  */
 function getLog(match: string, tag: Nullable<string>): Promise<Array<string>> {
+  const grep_clause = match ? util.format(GIT_GREP_CLAUSE, match) : '';
   const cmd = tag
-    ? util.format(GIT_LOG, match, GIT_LOG_FORMAT, tag)
-    : util.format(GIT_LOG_ALL, match, GIT_LOG_FORMAT);
+    ? util.format(GIT_LOG, grep_clause, GIT_LOG_FORMAT, tag)
+    : util.format(GIT_LOG_ALL, grep_clause, GIT_LOG_FORMAT);
+  console.error('@@@ GIT command: ', { cmd, tag, match });
 
-  return new Promise<Array<string>>((resolve) => {
+  return new Promise<Array<string>>((resolve, reject) => {
     exec(cmd, {}, (error: Nullable<ExecException>, stdout = '') => {
-      let output: Array<string> = [];
+      console.log('exec:', {cmd, error, stdout })
       if (error) {
-        output = [];
+        reject(new Error(`failed to obtain git log output.\n\ncommandline:\n    ${cmd}\n\nResult: ${error.message}`));
       } else {
-        output = stdout ? stdout.split('\n==END==\n') : [];
-      }
+        let output: Array<string> = stdout ? stdout.split('\n==END==\n') : [];
 
-      resolve(output);
+        resolve(output);
+      }
     });
   });
 }
