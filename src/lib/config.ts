@@ -29,7 +29,7 @@ interface Configuration {
 class Config {
   config: Configuration;
   custom: boolean;
-  jsonData: Configuration | object;
+  jsonData: Configuration | any;
   readonly path: string;
 
   static default = {
