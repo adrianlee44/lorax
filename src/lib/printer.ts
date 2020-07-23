@@ -139,6 +139,10 @@ class Printer {
 
           const prefix = (hasOneItem && !index) ? title : template.COMPONENT_ITEM;
           const msgLines = item.message.split('\n');
+          // if the commit message looks like a Markdown LIST, then do not dump it on the first line:
+          if (msgLines[0].match(/^- [^\s]+/)) {
+            msgLines.unshift('Changes:');
+          }
           lines.push(
             util.format(template.COMPONENT_LINE, prefix, msgLines[0])
           );

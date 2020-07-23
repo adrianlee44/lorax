@@ -39,10 +39,19 @@ class Config {
       // specify these keys in order of decreasing importance!
       breaking: /\bBREAKING\b/,
       feature: /(?:\bfeature\\w*)|(?:\badd(?:ed|ing)?\s+support\b)|(?:\baugmented\b)/,
-      fix: /\bfix\\w*/,
+      fix: /\bfix(?:ed|ing)?/,
       refactor: /(?:\brefactor\\w*)|(?:\bredesign\\w*)/,
       doc: /\bdoc\\w*/,
       test: /\btest\\w*/,
+      chore: [
+        /bump build (?:revision|version)/i,
+        /updated npm packages/i,
+        /regenerate .*files/i,
+        /lint fixes/i,
+        /Merge .* branch/i,
+        /Merge tag/i,
+        /(?:es)?lint/i,
+      ],
       misc: null,
     },
     display: {

@@ -31,11 +31,24 @@ class Parser {
     if (commit.length === 0) return null;
 
     let lines = commit.split('\n') as Array<string>;
+
+    // strip off conflict reports of merge commits:
+    // also strip off sign-off lines, etc.:
+    let keep = true;
+    lines = lines.filter((l: string): boolean => {
+      if (keep) {
+        keep = !l.match(/^\s*(?:(?:# Conflicts:)|(?:Signed-off-by:)|(?:Co-authored-by:))/);
+      }
+      return keep;
+    });
+    const hash: string = lines.shift() || '';
+    const allLines = lines.slice();
+
     const commitObj: Commit = {
       type: '',
       component: '',
       message: '',
-      hash: lines.shift() || '',
+      hash: hash,
       issues: [],
       title: lines.shift() || '',
       processed: false,
@@ -68,13 +81,34 @@ class Parser {
       }
     } else {
       // free format commit: parse in a different way
-      message = commit;
+      message = allLines.join('\n').trim();
+
       commitObj.title = '';
       commitObj.component = '?';
 
       let deflist = (config.config as any).parse;
+      let reCheckList = [];
       for (let key in deflist) {
-        let re = deflist[key];
+        let reArr = deflist[key];
+        if (Array.isArray(reArr)) {
+          for(let i = 0; i < reArr.length; i++) {
+            reCheckList.push({
+              key,
+              re: reArr[i]
+            });
+          }
+        } else {
+          reCheckList.push({
+            key,
+            re: reArr
+          });
+        }
+      }
+      for (let j in reCheckList) {
+        let spec = reCheckList[j];
+        let re = spec.re;
+        let key = spec.key;
+
         if (re && re.test(message)) {
           commitObj.type = key;
           commitObj.message = message;
