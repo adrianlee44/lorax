@@ -48,7 +48,7 @@ export class Lorax {
     const all = options.all;
     const promise = all ? Promise.resolve<string>('*') : tag ? Promise.resolve<string>(tag) : git.getLastTag();
     return promise.then(
-      (tag: Nullable<string>): Promise<Array<string>> => {
+      (tag: string): Promise<Array<string>> => {
         let msg;
         if (all) {
           msg = 'Reading all commits';

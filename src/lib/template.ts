@@ -7,6 +7,7 @@ type TemplateType = {
   SECTION_HEADER: string;
   COMPONENT_TITLE: string;
   COMPONENT_ITEM: string;
+  COMPONENT_ITEM_CONTINUATION_PREFIX: string,
   COMPONENT_LINE: string;
   COMMIT_ADDITIONAL_INFO: string;
 };
@@ -20,6 +21,7 @@ export const template: TemplateType = {
   SECTION_HEADER: '## %s',
   COMPONENT_TITLE: '- **%s:**',
   COMPONENT_ITEM: '  -',
+  COMPONENT_ITEM_CONTINUATION_PREFIX: '  ',
   COMPONENT_LINE: '%s %s',
   COMMIT_ADDITIONAL_INFO: '  (%s)',
 };
