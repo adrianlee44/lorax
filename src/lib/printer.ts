@@ -124,30 +124,36 @@ class Printer {
         continue;
       }
 
-      const title = display[sectionType] || sectionType.replace(/^./, (m) => m.toUpperCase());
+      const title =
+        display[sectionType] ||
+        sectionType.replace(/^./, (m) => m.toUpperCase());
 
       lines.push(util.format(template.SECTION_HEADER, title));
 
-      const hasNoComponents = (components.length === 1 && components[0] === '?');
       components.forEach((componentName: string) => {
         const componentList = list[componentName] || [];
 
-        const title = util.format(template.COMPONENT_TITLE, componentName === '?' ? 'any' : componentName);
+        const title = util.format(
+          template.COMPONENT_TITLE,
+          componentName === '?' ? 'any' : componentName
+        );
         const hasOneItem = componentList.length == 1;
         componentList.forEach((item, index) => {
           if (!hasOneItem && !index) lines.push(title);
 
-          const prefix = (hasOneItem && !index) ? title : template.COMPONENT_ITEM;
+          const prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
           const msgLines = item.message.split('\n');
           // if the commit message looks like a Markdown LIST, then do not dump it on the first line:
           if (msgLines[0].match(/^- [^\s]+/)) {
             msgLines.unshift('Changes:');
           }
-          lines.push(
-            util.format(template.COMPONENT_LINE, prefix, msgLines[0])
-          );
+          lines.push(util.format(template.COMPONENT_LINE, prefix, msgLines[0]));
           for (let i = 1; i < msgLines.length; i++) {
-            lines.push((!hasOneItem ? template.COMPONENT_ITEM_CONTINUATION_PREFIX : '') + template.COMPONENT_ITEM_CONTINUATION_PREFIX + msgLines[i]);
+            lines.push(
+              (!hasOneItem ? template.COMPONENT_ITEM_CONTINUATION_PREFIX : '') +
+                template.COMPONENT_ITEM_CONTINUATION_PREFIX +
+                msgLines[i]
+            );
           }
 
           const additionalInfo = item.issues.map((issue) =>
@@ -157,10 +163,15 @@ class Printer {
 
           lines.push(
             (!hasOneItem ? template.COMPONENT_ITEM_CONTINUATION_PREFIX : '') +
-            util.format(
-              template.COMMIT_ADDITIONAL_INFO,
-              additionalInfo.join(',\n   ' + (!hasOneItem ? template.COMPONENT_ITEM_CONTINUATION_PREFIX : ''))
-            )
+              util.format(
+                template.COMMIT_ADDITIONAL_INFO,
+                additionalInfo.join(
+                  ',\n   ' +
+                    (!hasOneItem
+                      ? template.COMPONENT_ITEM_CONTINUATION_PREFIX
+                      : '')
+                )
+              )
           );
         });
       });

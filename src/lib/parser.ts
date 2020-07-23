@@ -37,7 +37,9 @@ class Parser {
     let keep = true;
     lines = lines.filter((l: string): boolean => {
       if (keep) {
-        keep = !l.match(/^\s*(?:(?:# Conflicts:)|(?:Signed-off-by:)|(?:Co-authored-by:))/);
+        keep = !l.match(
+          /^\s*(?:(?:# Conflicts:)|(?:Signed-off-by:)|(?:Co-authored-by:))/
+        );
       }
       return keep;
     });
@@ -69,9 +71,11 @@ class Parser {
     // Rejoin the rest of the lines after stripping out certain information
     let message = lines.join('\n').trim();
 
-    // does it match conventional-changelog format: 
+    // does it match conventional-changelog format:
     //   type(group): message
-    const titleMatch = commitObj.title.match(/^(\w+)\s*(?:\(([\w._@, !~-]+)\))?:\s+(.+)/);
+    const titleMatch = commitObj.title.match(
+      /^(\w+)\s*(?:\(([\w._@, !~-]+)\))?:\s+(.+)/
+    );
     if (titleMatch) {
       commitObj.type = titleMatch[1];
       commitObj.component = titleMatch[2] || '?';
@@ -86,33 +90,33 @@ class Parser {
       commitObj.title = '';
       commitObj.component = '?';
 
-      let deflist = (config.config as any).parse;
-      let reCheckList = [];
-      for (let key in deflist) {
-        let reArr = deflist[key];
+      const deflist = (config.config as any).parse;
+      const reCheckList = [];
+      for (const key in deflist) {
+        const reArr = deflist[key];
         if (Array.isArray(reArr)) {
-          for(let i = 0; i < reArr.length; i++) {
+          for (let i = 0; i < reArr.length; i++) {
             reCheckList.push({
               key,
-              re: reArr[i]
+              re: reArr[i],
             });
           }
         } else {
           reCheckList.push({
             key,
-            re: reArr
+            re: reArr,
           });
         }
       }
-      for (let j in reCheckList) {
-        let spec = reCheckList[j];
-        let re = spec.re;
-        let key = spec.key;
+      for (const j in reCheckList) {
+        const spec = reCheckList[j];
+        const re = spec.re;
+        const key = spec.key;
 
         if (re && re.test(message)) {
           commitObj.type = key;
           commitObj.message = message;
-          break;  // first type discovered in commit gets the entire commit message, so Mother Of All commits MAY land in the 'wrong' section.
+          break; // first type discovered in commit gets the entire commit message, so Mother Of All commits MAY land in the 'wrong' section.
         } else if (!re) {
           // bundle everything that's not clearly a certain category (aka type) off into misc category:
           commitObj.type = key;

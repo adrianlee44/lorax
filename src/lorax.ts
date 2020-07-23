@@ -46,25 +46,30 @@ export class Lorax {
   get(options: LoraxOptions): Promise<Array<string>> {
     const tag = options.since;
     const all = options.all;
-    const promise = all ? Promise.resolve<string>('*') : tag ? Promise.resolve<string>(tag) : git.getLastTag();
-    return promise.then(
-      (tag: string): Promise<Array<string>> => {
-        let msg;
-        if (all) {
-          msg = 'Reading all commits';
-        } else {
-          msg = 'Reading commits';
-          if (tag) {
-            msg += ' since ' + tag;
+    const promise = all
+      ? Promise.resolve<string>('*')
+      : tag
+      ? Promise.resolve<string>(tag)
+      : git.getLastTag();
+    return promise
+      .then(
+        (tag: string): Promise<Array<string>> => {
+          let msg;
+          if (all) {
+            msg = 'Reading all commits';
+          } else {
+            msg = 'Reading commits';
+            if (tag) {
+              msg += ' since ' + tag;
+            }
           }
+          console.log(msg);
+          return git.getLog(all ? null : tag);
         }
-        console.log(msg);
-        return git.getLog(all ? null : tag);
-      }
-    )
-    .catch((error) => {
-      throw error;
-    });
+      )
+      .catch((error) => {
+        throw error;
+      });
   }
 
   /**
@@ -73,29 +78,38 @@ export class Lorax {
    */
   generate(toTag: string, file: string, options: LoraxOptions): Promise<void> {
     const all = options.all;
+    /* eslint-disable @typescript-eslint/no-this-alias */
     const self = this;
 
     if (!all) {
-      return this.get(options).then(
-        (commits: Array<string>): void => {
+      return this.get(options)
+        .then((commits: Array<string>): void => {
           this.__processCommits(toTag, file, options, commits);
           return;
-        }
-      ).catch((error) => {
-        console.error('Failure during changelog generation:', error);
-      });
+        })
+        .catch((error) => {
+          console.error('Failure during changelog generation:', error);
+        });
     } else {
       const promise = git.getAllTags();
-      return promise.then(
-        (tags: Array<string>): void => {
-          let untilTag: Nullable<string> = tags.pop() || null;
-          let prevTag: Nullable<string> = null;
+      return promise
+        .then((tags: Array<string>): void => {
+          const untilTag: Nullable<string> = tags.pop() || null;
+          const prevTag: Nullable<string> = null;
 
-          function oneRound(prevTag: Nullable<string>, untilTag: Nullable<string>): void {
-            git.getLog(prevTag, untilTag)
-            .then(
-              (commits: Array<string>): void => {
-                self.__processCommits(untilTag || toTag, file, options, commits);
+          function oneRound(
+            prevTag: Nullable<string>,
+            untilTag: Nullable<string>
+          ): void {
+            git
+              .getLog(prevTag, untilTag)
+              .then((commits: Array<string>): void => {
+                self.__processCommits(
+                  untilTag || toTag,
+                  file,
+                  options,
+                  commits
+                );
 
                 if (tags.length === 0 && !untilTag) {
                   return;
@@ -104,24 +118,28 @@ export class Lorax {
                 untilTag = tags.pop() || null;
 
                 options.prepend = true;
-                
+
                 oneRound(prevTag, untilTag);
-              }
-            ).catch((error) => {
-              console.error('Failure during changelog generation:', error);
-            });
+              })
+              .catch((error) => {
+                console.error('Failure during changelog generation:', error);
+              });
           }
 
           oneRound(prevTag, untilTag);
-        }
-      )
-      .catch((error) => {
-        console.error('Failure during changelog generation:', error);
-      });
+        })
+        .catch((error) => {
+          console.error('Failure during changelog generation:', error);
+        });
     }
   }
 
-  __processCommits(toTag: string, file: string, options: LoraxOptions, commits: Array<string>): void {
+  __processCommits(
+    toTag: string,
+    file: string,
+    options: LoraxOptions,
+    commits: Array<string>
+  ): void {
     const parsedCommits: Array<Commit> = [];
     commits.forEach((commit: string) => {
       const parsedCommit = this._parser.parse(commit, this._config);
