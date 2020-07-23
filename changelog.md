@@ -33,7 +33,7 @@
   - now `-a` (generate ALL) functionality is implemented completely: lorax cycles through the tags from old to young and builds up the CHANGELOG file as it goes.
   ([ab9d9057](https://github.com/adrianlee44/lorax/commit/ab9d9057))
 
-  - added getAllTags() internal API as a first step towards proper -a = generate complete ChangeLog file functionality, which MAY span multiple tags = releases.
+  - added getAllTags() internal API as a first step towards proper `-a` = generate complete ChangeLog file functionality, which MAY span multiple tags = releases.
   ([7a1b8f05](https://github.com/adrianlee44/lorax/commit/7a1b8f05))
 
   - add support for arbitrary commits, not just strict conventional-changelog / angular format. (kill the `git log` grep clause, for starters)
@@ -41,6 +41,9 @@
   - cope properly with multiline commit messages: DO NOT nuke those newlines in the commit message
   - cope with arbitrary section types, e.g. 'chore'.
   ([735d9683](https://github.com/adrianlee44/lorax/commit/735d9683))
+
+  - make sure headings are surrounded by empty lines: the more strict markdown renderers require this for headings to be properly recognized.
+    ([d4694cdf](https://github.com/adrianlee44/lorax/commit/d4694cdf))
 
 
 # v3.0.0 (2020/4/26)
@@ -170,6 +173,7 @@
 - **lorax:** Allow specifying tag when reading log
   ([0dff7d0d](https://github.com/adrianlee44/lorax/commit/0dff7d0d))
 
+
 # v0.1.2 (2014/1/5)
 
 ## Bug Fixes
@@ -192,10 +196,14 @@
 - **lorax:** Refactored lorax to make API easier to use
   ([070c798d](https://github.com/adrianlee44/lorax/commit/070c798d))
 
+
 # v0.1.1 (2014/1/5)
+
 ## Optimizations
+
 - **lorax:** Refactored lorax to make API easier to use
   ([070c798d](https://github.com/adrianlee44/lorax/commit/070c798dc663bee0b0e44cef6893e21daf24fe4a))
+
 
 # v0.1.0 (2013/12/13)
 

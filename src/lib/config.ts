@@ -39,7 +39,7 @@ class Config {
       // specify these keys in order of decreasing importance!
       breaking: /\bBREAKING\b/,
       feature: /(?:\bfeature\\w*)|(?:\badd(?:ed|ing)?\s+support\b)|(?:\baugmented\b)/,
-      fix: /\bfix(?:ed|ing)?/,
+      fix: /\bfix\\w*/,
       refactor: /(?:\brefactor\\w*)|(?:\bredesign\\w*)/,
       doc: /\bdoc\\w*/,
       test: /\btest\\w*/,
