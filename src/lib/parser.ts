@@ -30,7 +30,6 @@ class Parser {
     commit = commit.trim();
     if (commit.length === 0) return null;
 
-    console.log('parsing commit RAW:', commit)
     let lines = commit.split('\n') as Array<string>;
     const commitObj: Commit = {
       type: '',
@@ -59,7 +58,7 @@ class Parser {
 
     // does it match conventional-changelog format: 
     //   type(group): message
-    const titleMatch = commitObj.title.match(/^(\w+)\s*(?:\(([\w._@,!~-]+)\))?:\s+(.+)/);
+    const titleMatch = commitObj.title.match(/^(\w+)\s*(?:\(([\w._@, !~-]+)\))?:\s+(.+)/);
     if (titleMatch) {
       commitObj.type = titleMatch[1];
       commitObj.component = titleMatch[2] || '?';
@@ -69,8 +68,6 @@ class Parser {
       }
     } else {
       // free format commit: parse in a different way
-      console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@ free floating commit: ', { commitObj, message, config });
-     
       message = commit;
       commitObj.title = '';
       commitObj.component = '?';
@@ -98,8 +95,6 @@ class Parser {
       commitObj.type = 'breaking';
       commitObj.message = breakingMatch[1];
     }
-    
-    console.log('>>> commit: ', { commitObj, commit });
 
     return commitObj;
   }

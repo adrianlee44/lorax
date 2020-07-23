@@ -9,8 +9,8 @@
 import * as util from 'util';
 import {exec, ExecException} from 'child_process';
 
-const GIT_LOG = "git log -E --format=%s HEAD \"^%s\" --";
-const GIT_LOG_ALL = "git log -E --format=%s";
+const GIT_LOG = "git log -E --format=%s \"%s\" \"^%s\" --";
+const GIT_LOG_ALL = "git log -E --format=%s \"%s\"";
 const GIT_TAG = 'git tag --list --merged HEAD --sort "-committerdate"';
 const GIT_LOG_FORMAT = '%H%n%B%n==END==';
 
@@ -55,11 +55,11 @@ function getAllTags(): Promise<Array<string>> {
  * @description
  * Read all commits watching match pattern since a certain tag
  */
-function getLog(tag: Nullable<string>): Promise<Array<string>> {
+function getLog(tag: Nullable<string>, untilTag?: Nullable<string>): Promise<Array<string>> {
   const cmd = tag
-    ? util.format(GIT_LOG, GIT_LOG_FORMAT, tag)
-    : util.format(GIT_LOG_ALL, GIT_LOG_FORMAT);
-  console.error('@@@ GIT command: ', { cmd, tag });
+    ? util.format(GIT_LOG, GIT_LOG_FORMAT, untilTag ? untilTag : "HEAD", tag)
+    : util.format(GIT_LOG_ALL, GIT_LOG_FORMAT, untilTag ? untilTag : "HEAD");
+  console.error('@@@ GIT command: ', cmd);
 
   return new Promise<Array<string>>((resolve, reject) => {
     exec(cmd, {}, (error: Nullable<ExecException>, stdout = '') => {

@@ -143,7 +143,7 @@ class Printer {
             util.format(template.COMPONENT_LINE, prefix, msgLines[0])
           );
           for (let i = 1; i < msgLines.length; i++) {
-            lines.push(template.COMPONENT_ITEM_CONTINUATION_PREFIX + msgLines[i]);
+            lines.push((!hasOneItem ? template.COMPONENT_ITEM_CONTINUATION_PREFIX : '') + template.COMPONENT_ITEM_CONTINUATION_PREFIX + msgLines[i]);
           }
 
           const additionalInfo = item.issues.map((issue) =>
@@ -152,9 +152,10 @@ class Printer {
           additionalInfo.unshift(this.linkToCommit(item.hash));
 
           lines.push(
+            (!hasOneItem ? template.COMPONENT_ITEM_CONTINUATION_PREFIX : '') +
             util.format(
               template.COMMIT_ADDITIONAL_INFO,
-              additionalInfo.join(',\n   ')
+              additionalInfo.join(',\n   ' + (!hasOneItem ? template.COMPONENT_ITEM_CONTINUATION_PREFIX : ''))
             )
           );
         });

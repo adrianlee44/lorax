@@ -72,39 +72,80 @@ export class Lorax {
    * A shortcut function to get the latest tag, parse all the commits and generate the changelog
    */
   generate(toTag: string, file: string, options: LoraxOptions): Promise<void> {
-    return this.get(options).then(
-      (commits: Array<string>): void => {
-        console.log('commits:', commits);
-        const parsedCommits: Array<Commit> = [];
-        commits.forEach((commit: string) => {
-          const parsedCommit = this._parser.parse(commit, this._config);
-          console.log('@@@parsed commit:', { parsedCommit, commit });
+    const all = options.all;
+    const self = this;
 
-          if (parsedCommit) {
-            parsedCommits.push(parsedCommit);
-          }
-        });
-
-        console.log(`Parsed ${parsedCommits.length} commit(s)`);
-        const printer = new Printer(parsedCommits, toTag, this._config);
-        let result = printer.print();
-
-        if (options.prepend) {
-          const existingData = fs.readFileSync(file, {
-            encoding: 'utf-8',
-          });
-
-          result += existingData;
+    if (!all) {
+      return this.get(options).then(
+        (commits: Array<string>): void => {
+          this.__processCommits(toTag, file, options, commits);
+          return;
         }
+      ).catch((error) => {
+        console.error('Failure during changelog generation:', error);
+      });
+    } else {
+      const promise = git.getAllTags();
+      return promise.then(
+        (tags: Array<string>): void => {
+          let untilTag: Nullable<string> = tags.pop() || null;
+          let prevTag: Nullable<string> = null;
 
-        fs.writeFileSync(file, result, {flag: 'w'});
+          function oneRound(prevTag: Nullable<string>, untilTag: Nullable<string>): void {
+            git.getLog(prevTag, untilTag)
+            .then(
+              (commits: Array<string>): void => {
+                self.__processCommits(untilTag || toTag, file, options, commits);
 
-        console.log(`Generated changelog to ${file} (${toTag})`);
-        return;
+                if (tags.length === 0 && !untilTag) {
+                  return;
+                }
+                prevTag = untilTag;
+                untilTag = tags.pop() || null;
+
+                options.prepend = true;
+                
+                oneRound(prevTag, untilTag);
+              }
+            ).catch((error) => {
+              console.error('Failure during changelog generation:', error);
+            });
+          }
+
+          oneRound(prevTag, untilTag);
+        }
+      )
+      .catch((error) => {
+        console.error('Failure during changelog generation:', error);
+      });
+    }
+  }
+
+  __processCommits(toTag: string, file: string, options: LoraxOptions, commits: Array<string>): void {
+    const parsedCommits: Array<Commit> = [];
+    commits.forEach((commit: string) => {
+      const parsedCommit = this._parser.parse(commit, this._config);
+
+      if (parsedCommit) {
+        parsedCommits.push(parsedCommit);
       }
-    ).catch((error) => {
-      console.error('Failure during changelog generation:', error);
-      return;
     });
+
+    console.log(`Parsed ${parsedCommits.length} commit(s)`);
+    const printer = new Printer(parsedCommits, toTag, this._config);
+    let result = printer.print();
+
+    if (options.prepend) {
+      const existingData = fs.readFileSync(file, {
+        encoding: 'utf-8',
+      });
+
+      result += existingData;
+    }
+
+    fs.writeFileSync(file, result, {flag: 'w'});
+
+    console.log(`Generated changelog to ${file} (${toTag})`);
+    return;
   }
 }

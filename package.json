@@ -1,6 +1,6 @@
 {
-  "name": "lorax",
-  "version": "3.0.0",
+  "name": "@gerhobbelt/lorax",
+  "version": "3.1.0-2",
   "description": "A node module which reads the git log and create a human readable changelog",
   "main": "lib/lorax.js",
   "bin": "bin/lorax",
@@ -19,7 +19,8 @@
     "test": "npm run coverage",
     "coverage": "nyc ava",
     "report": "nyc report --reporter=text-lcov | coveralls",
-    "clean": "rm -rf coverage/ build/"
+    "clean": "rm -rf coverage/ build/",
+    "pub": "npm publish --access public"
   },
   "repository": {
     "type": "git",
