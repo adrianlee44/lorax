@@ -4,23 +4,23 @@
 
 - **any:** Changes:
   - implement the 'do not print this commit type' functionality described in the readme (when display type title map value is `false`)
-  (c58e44ed)
+  ([c58e44ed](https://github.com/adrianlee44/lorax/commit/c58e44ed))
 
 ## Optimizations
 
 - **any:** refactor parser to have all important heuristic regexes as constants at the top of the file.
-  (a23bc026)
+  ([a23bc026](https://github.com/adrianlee44/lorax/commit/a23bc026))
 
 ## Documentation
 
 - **any:** Changes:
   - update & augment the documentation in the README page
-  (c58e44ed)
+  ([c58e44ed](https://github.com/adrianlee44/lorax/commit/c58e44ed))
 
 
 # 3.1.0-4 (2020/7/24)
 
-## Misc
+## Miscellaneous
 
 - **any:**
   - remove debug statements
@@ -39,6 +39,28 @@
 
 
 # 3.1.0-2 (2020/7/24)
+
+## Features
+
+- **any:** Changes:
+  - added code to strip off conflict reports of merge commits
+  - also strip off sign-off lines, etc.
+  ([2d4e6d38](https://github.com/adrianlee44/lorax/commit/2d4e6d38))
+
+  - now `-a` (generate ALL) functionality is implemented completely: lorax cycles through the tags from old to young and builds up the CHANGELOG file as it goes.
+  ([ab9d9057](https://github.com/adrianlee44/lorax/commit/ab9d9057))
+
+  - added getAllTags() internal API as a first step towards proper `-a` = generate complete ChangeLog file functionality, which MAY span multiple tags = releases.
+  ([7a1b8f05](https://github.com/adrianlee44/lorax/commit/7a1b8f05))
+
+  - add support for arbitrary commits, not just strict conventional-changelog / angular format. (kill the `git log` grep clause, for starters)
+  - fix sections[type] --> null object access crash when encountering commits which are pure chore or other 'misc' work
+  - cope properly with multiline commit messages: DO NOT nuke those newlines in the commit message
+  - cope with arbitrary section types, e.g. 'chore'.
+  ([735d9683](https://github.com/adrianlee44/lorax/commit/735d9683))
+
+  - make sure headings are surrounded by empty lines: the more strict markdown renderers require this for headings to be properly recognized.
+    ([d4694cdf](https://github.com/adrianlee44/lorax/commit/d4694cdf))
 
 ## Bug Fixes
 
@@ -66,30 +88,13 @@
     - fix npm scripts to run on Windows as well as other (unix) platforms
     ([7272b931](https://github.com/adrianlee44/lorax/commit/7272b931))
 
-## Features
-
-- **any:** Changes:
-  - added code to strip off conflict reports of merge commits
-  - also strip off sign-off lines, etc.
-  ([2d4e6d38](https://github.com/adrianlee44/lorax/commit/2d4e6d38))
-
-  - now `-a` (generate ALL) functionality is implemented completely: lorax cycles through the tags from old to young and builds up the CHANGELOG file as it goes.
-  ([ab9d9057](https://github.com/adrianlee44/lorax/commit/ab9d9057))
-
-  - added getAllTags() internal API as a first step towards proper `-a` = generate complete ChangeLog file functionality, which MAY span multiple tags = releases.
-  ([7a1b8f05](https://github.com/adrianlee44/lorax/commit/7a1b8f05))
-
-  - add support for arbitrary commits, not just strict conventional-changelog / angular format. (kill the `git log` grep clause, for starters)
-  - fix sections[type] --> null object access crash when encountering commits which are pure chore or other 'misc' work
-  - cope properly with multiline commit messages: DO NOT nuke those newlines in the commit message
-  - cope with arbitrary section types, e.g. 'chore'.
-  ([735d9683](https://github.com/adrianlee44/lorax/commit/735d9683))
-
-  - make sure headings are surrounded by empty lines: the more strict markdown renderers require this for headings to be properly recognized.
-    ([d4694cdf](https://github.com/adrianlee44/lorax/commit/d4694cdf))
-
 
 # v3.0.0 (2020/4/27)
+
+## Features
+
+- **lorax:** Add doc and test to default
+  ([f9620729](https://github.com/adrianlee44/lorax/commit/f9620729))
 
 ## Bug Fixes
 
@@ -98,11 +103,6 @@
     ([9721c520](https://github.com/adrianlee44/lorax/commit/9721c520))
   - Allow space before component
     ([7c8d0e39](https://github.com/adrianlee44/lorax/commit/7c8d0e39))
-
-## Features
-
-- **lorax:** Add doc and test to default
-  ([f9620729](https://github.com/adrianlee44/lorax/commit/f9620729))
 
 ## Optimizations
 
@@ -163,6 +163,17 @@
 
 # v1.0.0 (2015/12/14)
 
+## Features
+
+- **config:**
+  - Find lorax.json up the directory tree
+    ([4bbce1df](https://github.com/adrianlee44/lorax/commit/4bbce1df))
+  - Add reset to config module
+    ([68be8a86](https://github.com/adrianlee44/lorax/commit/68be8a86))
+- **lorax:** Add starting tag option
+  ([fc182b40](https://github.com/adrianlee44/lorax/commit/fc182b40),
+   [#3](https://github.com/adrianlee44/lorax/issues/3))
+
 ## Bug Fixes
 
 - **lorax:**
@@ -174,17 +185,6 @@
     Line breaks were removed before to form a one line message
     Changes allow for creating markdown lists or code blocks
     ([a15c1769](https://github.com/adrianlee44/lorax/commit/a15c1769))
-
-## Features
-
-- **config:**
-  - Find lorax.json up the directory tree
-    ([4bbce1df](https://github.com/adrianlee44/lorax/commit/4bbce1df))
-  - Add reset to config module
-    ([68be8a86](https://github.com/adrianlee44/lorax/commit/68be8a86))
-- **lorax:** Add starting tag option
-  ([fc182b40](https://github.com/adrianlee44/lorax/commit/fc182b40),
-   [#3](https://github.com/adrianlee44/lorax/issues/3))
 
 ## Optimizations
 
@@ -219,6 +219,13 @@
 
 # v0.1.2 (2014/1/5)
 
+## Features
+
+- **config:** Allow setting with an object
+  ([84ae8ae7](https://github.com/adrianlee44/lorax/commit/84ae8ae7))
+- **lorax:** Updated API to include git and Config module
+  ([72e47af9](https://github.com/adrianlee44/lorax/commit/72e47af9))
+
 ## Bug Fixes
 
 - **lorax:**
@@ -226,13 +233,6 @@
     ([0d3a6e5c](https://github.com/adrianlee44/lorax/commit/0d3a6e5c))
   - Fixed not parsing special characters in component name
     ([8911a1cf](https://github.com/adrianlee44/lorax/commit/8911a1cf))
-
-## Features
-
-- **config:** Allow setting with an object
-  ([84ae8ae7](https://github.com/adrianlee44/lorax/commit/84ae8ae7))
-- **lorax:** Updated API to include git and Config module
-  ([72e47af9](https://github.com/adrianlee44/lorax/commit/72e47af9))
 
 ## Optimizations
 
