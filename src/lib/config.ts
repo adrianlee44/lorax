@@ -45,14 +45,8 @@ class Config {
         /\b(?:is|was|(?:has been)) implemented\b/i,
       ],
       fix: /\bfix\w*/i,
-      refactor: [
-        /\brefactor\w*/i,
-        /\bredesign\w*/i,
-      ],
-      doc: [
-        /\bdoc\w*/i,
-        /\bREADME/,
-      ],
+      refactor: [/\brefactor\w*/i, /\bredesign\w*/i],
+      doc: [/\bdoc\w*/i, /\bREADME/],
       test: /\btest\w*/i,
       chore: [
         /bump build (?:revision|version)/i,

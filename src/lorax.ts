@@ -108,19 +108,20 @@ export class Lorax {
             git
               .getLog(prevTag, untilTag)
               .then((commits: Array<string>): void => {
-                let targetTag = untilTag || toTag;
+                const targetTag = untilTag || toTag;
 
-                git.getTagTimestamp(targetTag)
-                .then((timestamp: Date) => {
-                  options.timestamp = timestamp;
-                  oneRound_Stage2(targetTag, commits, prevTag, untilTag);
-                })
-                .catch((error) => {
-                  // when we have no timestamp, use the default one:
-                  options.timestamp = lastTimestamp;
-                  oneRound_Stage2(targetTag, commits, prevTag, untilTag);
-                })
-               })
+                git
+                  .getTagTimestamp(targetTag)
+                  .then((timestamp: Date) => {
+                    options.timestamp = timestamp;
+                    oneRound_Stage2(targetTag, commits, prevTag, untilTag);
+                  })
+                  .catch((error) => {
+                    // when we have no timestamp, use the default one:
+                    options.timestamp = lastTimestamp;
+                    oneRound_Stage2(targetTag, commits, prevTag, untilTag);
+                  });
+              })
               .catch((error) => {
                 console.error('Failure during changelog generation:', error);
               });
@@ -132,12 +133,7 @@ export class Lorax {
             prevTag: Nullable<string>,
             untilTag: Nullable<string>
           ): void {
-            self.__processCommits(
-              targetTag,
-              file,
-              options,
-              commits
-            );
+            self.__processCommits(targetTag, file, options, commits);
 
             if (tags.length === 0 && !untilTag) {
               return;

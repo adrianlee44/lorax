@@ -73,9 +73,11 @@ class Parser {
 
     // does it match conventional-changelog format:
     //   type(group): message
-    const titleMatch = commitObj.title.trim().match(
-      /^(\w+)\s*(?:\(([^\r\n\s\(\)](?:[^\r\n\(\)]*[^\r\n\s\(\)])?)\))?:\s+(.+)/
-    );
+    const titleMatch = commitObj.title
+      .trim()
+      .match(
+        /^(\w+)\s*(?:\(([^\r\n\s()](?:[^\r\n()]*[^\r\n\s()])?)\))?:\s+(.+)/
+      );
     if (titleMatch) {
       commitObj.type = titleMatch[1];
       commitObj.component = titleMatch[2] || '?';
@@ -108,7 +110,7 @@ class Parser {
           });
         }
       }
-      console.log('reCheckList:', reCheckList)
+      console.log('reCheckList:', reCheckList);
 
       for (const j in reCheckList) {
         const spec = reCheckList[j];
