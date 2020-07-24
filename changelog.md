@@ -1,3 +1,23 @@
+# 3.1.0-6 (2020/7/24)
+
+## Documentation
+
+- **any:**
+  - Update README.md
+    ([4fc04a38](https://github.com/adrianlee44/lorax/commit/4fc04a38))
+    ([48d513f8](https://github.com/adrianlee44/lorax/commit/48d513f8))
+    ([8f2d0687](https://github.com/adrianlee44/lorax/commit/8f2d0687))
+    ([534419a9](https://github.com/adrianlee44/lorax/commit/534419a9))
+    ([b02609b8](https://github.com/adrianlee44/lorax/commit/b02609b8))
+    ([c401aaab](https://github.com/adrianlee44/lorax/commit/c401aaab))
+    ([78fb0c94](https://github.com/adrianlee44/lorax/commit/78fb0c94))
+    ([7a78e5e7](https://github.com/adrianlee44/lorax/commit/7a78e5e7))
+    ([acc8d140](https://github.com/adrianlee44/lorax/commit/acc8d140))
+    ([c8b45b4b](https://github.com/adrianlee44/lorax/commit/c8b45b4b))
+    ([bb353bb5](https://github.com/adrianlee44/lorax/commit/bb353bb5))
+    ([adfdfe7d](https://github.com/adrianlee44/lorax/commit/adfdfe7d))
+
+
 # 3.1.0-5 (2020/7/24)
 
 ## Features
@@ -5,6 +25,8 @@
 - **any:** Changes:
   - implement the 'do not print this commit type' functionality described in the readme (when display type title map value is `false`)
   ([c58e44ed](https://github.com/adrianlee44/lorax/commit/c58e44ed))
+  - default filename is now CHANGELOG.md instead of changelog.md --> CHANGELOG in all-caps as is usual in most other projects.
+  ([30eb2e21](https://github.com/adrianlee44/lorax/commit/30eb2e21))
 
 ## Bug Fixes
 
