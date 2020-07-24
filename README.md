@@ -262,3 +262,5 @@ misc | Miscellaneous
   ```
 
   which will NOT print any `test`, `misc` or `chore` type commits in the CHANGELOG.
+  
+- *message types* discovered in the git log are automatically added to the display list, with the capitalized *message type* as their default display name, e.g. `chore` will display as `Chore`.
