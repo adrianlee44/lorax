@@ -15,7 +15,7 @@ test('print header', (t) => {
   });
 
   t.truthy(output);
-  t.is(output, '# 0.1.0 (2015/1/1)\n\n');
+  t.is(output, '# 0.1.0 (2015/1/1)\n\n\n');
 });
 
 test('print one section with two issues', (t) => {

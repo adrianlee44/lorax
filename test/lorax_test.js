@@ -5,14 +5,15 @@ const {Lorax} = require('../build/lorax');
 const fs = require('fs');
 const child = require('child_process');
 
-let secondTag;
+let secondTag = 'v2.0.0';
 
 test.before.cb((t) => {
   t.context.lorax = new Lorax();
   const last2Tags =
-    "git for-each-ref refs/tags --sort=-creatordate --format='%(refname:short)' --count=2";
+    'git for-each-ref refs/tags --sort=-creatordate "--format=%(refname:short)" --count=2';
   child.exec(last2Tags, (error, stdout) => {
-    secondTag = stdout.split('\n')[1];
+    //t.log('tags:', stdout);
+    //secondTag = stdout.split('\n')[1];
     t.end();
   });
 });
@@ -37,15 +38,21 @@ test.serial('get logs since a certain tag', (t) => {
   const grepString = '^fix|^feature|^refactor|BREAKING';
   const grepRegex = new RegExp(grepString);
 
-  return t.context.lorax.get(grepString, secondTag).then((data) => {
-    t.plan(data.length - 1);
+  return t.context.lorax.get({
+    since: secondTag
+  }).then((data) => {
+    t.plan(1);
 
+    let mostDoMatch = 0;
     data.forEach((commit) => {
       if (!commit) return;
 
       const lines = commit.split('\n');
-      t.truthy(grepRegex.test(lines[1]));
+      if (grepRegex.test(lines[1])) {
+        mostDoMatch++;
+      }
     });
+    t.truthy(mostDoMatch >= 10);
   });
 });
 

@@ -17,6 +17,7 @@
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "test": "npm run coverage",
+    "test-debug": "npm run compile && npx ava --color=false --fail-fast --serial --verbose",
     "coverage": "nyc ava",
     "report": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rm -rf coverage/ build/",

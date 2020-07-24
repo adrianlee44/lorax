@@ -16,26 +16,56 @@ test.serial('failed to get last tag', (t) => {
   };
 
   return getLastTag().then((result) => {
-    t.truthy(!result);
+    t.truthy(!"should never get here");
+    child.exec = tmpExec;
+  })
+  .catch((error) => {
+    t.is(error, 'failed');
     child.exec = tmpExec;
   });
 });
 
 test('get all repo log', (t) => {
-  return getLog('^fix|^refactor').then((result) => {
+  return getLog().then((result) => {
     t.truthy(result.length);
   });
 });
 
+test('get log from tag onwards', (t) => {
+  return getLog('v2.0.0').then((result) => {
+    t.truthy(result.length);
+  });
+});
+
+test('get log between two tags', (t) => {
+  return getLog('v1.1.0', 'v2.0.0').then((result) => {
+    t.is(result.length, 27);
+  });
+});
+
+test('get log from start until tag', (t) => {
+  return getLog(null, 'v2.0.0').then((result) => {
+    t.is(result.length, 112);
+  });
+});
+
 test('return empty array when given invalid tag', (t) => {
-  return getLog('^fix|^refactor', 'doesNotExist').then((result) => {
+  return getLog('doesNotExist').then((result) => {
     t.is(result.length, 0);
+    t.truthy(!"should never get here");
+  })
+  .catch((error) => {
+    t.truthy(error.message.includes('failed to obtain git log output'));
   });
 });
 
 test('get no commit', (t) => {
   return getLog('^doesNotExist').then((result) => {
     t.is(result.length, 0);
+    t.truthy(!"should never get here");
+  })
+  .catch((error) => {
+    t.truthy(error.message.includes('failed to obtain git log output'));
   });
 });
 
@@ -48,6 +78,11 @@ test.serial('has no stdout', (t) => {
 
   return getLog('^doesNotExist').then((result) => {
     t.is(result.length, 0);
+    t.truthy(!"should never get here");
+    child.exec = tmpExec;
+  })
+  .catch((error) => {
+    t.truthy(error.message.includes('failed to obtain git log output'));
     child.exec = tmpExec;
   });
 });

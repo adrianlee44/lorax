@@ -48,6 +48,39 @@ function strToRe(str: string | null): RegExp | null {
   return re;
 }
 
+function extractProjectBaseUriFromPackageJson(): string | null {
+  // load repository URL from package.json
+  const packagePath = findup('package.json') || '';
+
+  try {
+    if (fs.existsSync(packagePath)) {
+      const rawData: string = fs.readFileSync(packagePath, {
+        encoding: 'utf-8',
+      });
+
+      let url;
+      const jsonData = JSON.parse(rawData);
+      if (typeof jsonData.repository === 'string') {
+        url = 'https://github.com/' + jsonData.repository;
+      } else if (typeof jsonData.bugs?.url === 'string') {
+        url = jsonData.bugs.url;
+        url = url.replace(/[/\\]issues.*$/, '');
+      } else if (typeof jsonData.repository?.url === 'string') {
+        url = jsonData.repository.url;
+        if (url) {
+          url = url
+            .replace(/\.git$/, '')
+            .replace(/^git@github\.com:/, 'https://github.com/');
+        }
+      }
+      return url;
+    }
+  } catch (e) {
+    console.error(`Invalid ${basename(packagePath)}`);
+  }
+  return null;
+}
+
 class Config {
   config: Configuration;
   custom: boolean;
@@ -144,40 +177,13 @@ class Config {
     // TODO: support forked repositories where bugs are filed in the main repo or other website than the commit diff view pages.
 
     if (!this.config.url) {
-      // load repository URL from package.json
-      const packagePath = findup('package.json') || '';
+      let url = extractProjectBaseUriFromPackageJson();
 
-      try {
-        if (fs.existsSync(packagePath)) {
-          const rawData: string = fs.readFileSync(packagePath, {
-            encoding: 'utf-8',
-          });
-
-          let url;
-          const jsonData = JSON.parse(rawData);
-          if (typeof jsonData.repository === 'string') {
-            url = 'https://github.com/' + jsonData.repository;
-          } else if (typeof jsonData.bugs?.url === 'string') {
-            url = jsonData.bugs.url;
-            url = url.replace(/[/\\]issues.*$/, '');
-          } else if (typeof jsonData.repository?.url === 'string') {
-            url = jsonData.repository.url;
-            if (url) {
-              url = url
-                .replace(/\.git$/, '')
-                .replace(/^git@github\.com:/, 'https://github.com/');
-            }
-          }
-
-          if (url) {
-            console.info(
-              `project URL inferred from package.json:\n\n  ${url}\n\n`
-            );
-            this.config.url = url;
-          }
-        }
-      } catch (e) {
-        console.error(`Invalid ${basename(packagePath)}`);
+      if (url) {
+        console.info(
+          `project URL inferred from package.json:\n\n  ${url}\n\n`
+        );
+        this.config.url = url;
       }
     }
 
@@ -250,6 +256,17 @@ class Config {
       Config.default,
       this.jsonData
     ) as Configuration;
+
+    if (!this.config.url) {
+      let url = extractProjectBaseUriFromPackageJson();
+
+      if (url) {
+        console.info(
+          `project URL inferred from package.json:\n\n  ${url}\n\n`
+        );
+        this.config.url = url;
+      }
+    }
   }
 }
 

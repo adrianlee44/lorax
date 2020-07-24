@@ -6,8 +6,9 @@ const {Config} = require('../build/lib/config');
 
 test('default', (t) => {
   const configObj = new Config('random.json');
-  t.is(configObj.config.type.length, 6);
-  t.falsy(configObj.config.url);
+  t.is(configObj.config.parse.feature.length, 4);
+  t.is(configObj.config.url, 'https://github.com/adrianlee44/lorax');
+  t.falsy(configObj.config.parse.misc);
 });
 
 test('invalid file', (t) => {

@@ -9,7 +9,7 @@ import {Config} from './config';
 const GITHUB_ISSUE_WORK_DONE_REGEX = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?implement(?:s|ed)?)\s+#(\d+)/i; // match[1]: issue number
 const COMMIT_MESSAGE_SURPLUS_TAIL = /^\s*(?:(?:# Conflicts:)|(?:Signed-off-by:)|(?:Co-authored-by:))/;
 const BREAKING_CHANGES_REGEX = /^BREAKING CHANGE[S]?:?([\s\S]*)/; // match[1]: message
-const ANGULAR_COMMIT_MESSAGE_EXTRACTOR_REGEX = /^(\w+)\s*(?:\(([^\r\n\s()](?:[^\r\n()]*[^\r\n\s()])?)\))?:\s+(.+)/; // match[1]: type, match[2], optional category, match[3]: message
+const ANGULAR_COMMIT_MESSAGE_EXTRACTOR_REGEX = /^(\w+)\s*(?:\(([^\r\n\s()](?:[^\r\n()]*[^\r\n\s()])?)\):?|:)\s+(.+)/; // match[1]: type, match[2], optional category, match[3]: message
 
 interface Commit {
   type: string;
