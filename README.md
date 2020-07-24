@@ -215,7 +215,7 @@ and load `lorax.json` in the current working directory.
 
 key | description | Default
 --- | --- | ---
-issue | Partial URL for issues | `issues/%s`
+issue | Partial URL for issues | `/issues/%s`
 commit | Partial URL for commits | `/commit/%s`
 parse | A map of types of commit messages to parse and the regexes which match if the commit is not formatted in the conventional-changelog / angular format.
 
