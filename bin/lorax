@@ -18,8 +18,8 @@ program
   .usage('-t [tag] [options]')
   .option(
     '-F, --file [FILE]',
-    'Name of the file to write to [changelog.md]',
-    'changelog.md'
+    'Name of the file to write to [CHANGELOG.md]',
+    'CHANGELOG.md'
   )
   .option('-p, --prepend', 'Prepend to the file')
   .option('-a, --all', 'Gnerate a full ChangeLog, i.e. ALL git commits')

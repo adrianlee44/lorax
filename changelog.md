@@ -6,6 +6,14 @@
   - implement the 'do not print this commit type' functionality described in the readme (when display type title map value is `false`)
   ([c58e44ed](https://github.com/adrianlee44/lorax/commit/c58e44ed))
 
+## Bug Fixes
+
+- **any:** Changes:
+  - warn (only once!) about missing URL in config file.
+  - extract default URL from package.json in active directory.
+  - fix config.write() API: properly encode regexes when JSON-stringify-ing the config data.
+  ([43744aee](https://github.com/adrianlee44/lorax/commit/43744aee))
+
 ## Optimizations
 
 - **any:** refactor parser to have all important heuristic regexes as constants at the top of the file.
