@@ -236,8 +236,29 @@ test | Testing
 doc | Documentation
 misc | Miscellaneous
 
-**NOTE**: the *order* in which the keys are listed is important as the types are printed in this order.
+**NOTES**: 
 
-If the git log commits adhere to the angular / conventional-changelog format (`type(category): message`), then any detected type will be added at the end of this list.
+- The *order* in which the keys are listed is important as the types are printed in this order.
 
-If you DO NOT want a specific type to be printed in the generated output, you can set the display name to `false` in the `lorax.json` configuration file.
+- If the git log commits adhere to the angular / conventional-changelog format (`type(category): message`), then any detected type will be added at the end of this list.
+
+  Example: `chore(lorax): drudgery` will be parsed as an entry with type `chore` (display name: `Chore`), category `lorax` and message `drudgery`.
+  
+- If you DO NOT want a specific type to be printed in the generated output, you can set the display name to `false` in the `lorax.json` configuration file.
+
+  Example `lorax.json` snippet:
+  
+  ```js
+    display: {
+      breaking: "Breaking Changes",
+      feature: "Features",
+      fix: "Bug Fixes",
+      refactor: "Optimizations",
+      test: false,
+      doc: "Documentation",
+      misc: false,
+      chore: false
+    },
+  ```
+
+  which will NOT print any `test`, `misc` or `chore` type commits in the CHANGELOG.
