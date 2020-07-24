@@ -4,6 +4,9 @@
 
 - **any:**
   - Changes:
+    - tweak parser to recognize all fix commits (reverts a recent change of a match regex)
+    ([c85df558](https://github.com/adrianlee44/lorax/commit/c85df558))
+  - Changes:
     - fix output for commit messages which are formatted as a plain markdown list ("Mother Of All" commits)
     ([2d4e6d38](https://github.com/adrianlee44/lorax/commit/2d4e6d38))
   - Changes:
@@ -46,7 +49,7 @@
     ([d4694cdf](https://github.com/adrianlee44/lorax/commit/d4694cdf))
 
 
-# v3.0.0 (2020/4/26)
+# v3.0.0 (2020/4/27)
 
 ## Bug Fixes
 
@@ -74,7 +77,7 @@
   ([f70b2660](https://github.com/adrianlee44/lorax/commit/f70b2660))
 
 
-# v2.1.0 (2017/5/6)
+# v2.1.0 (2017/5/7)
 
 ## Features
 
@@ -92,7 +95,7 @@
   ([78d5ef7b](https://github.com/adrianlee44/lorax/commit/78d5ef7b))
 
 
-# v2.0.0 (2016/11/17)
+# v2.0.0 (2016/11/16)
 
 ## Breaking Changes
 
@@ -105,7 +108,7 @@
   ([9eabf1f6](https://github.com/adrianlee44/lorax/commit/9eabf1f6))
 
 
-# v1.1.0 (2016/3/12)
+# v1.1.0 (2016/3/13)
 
 ## Bug Fixes
 
@@ -118,7 +121,7 @@
   ([8f0ffa60](https://github.com/adrianlee44/lorax/commit/8f0ffa60))
 
 
-# v1.0.0 (2015/12/13)
+# v1.0.0 (2015/12/14)
 
 ## Bug Fixes
 
@@ -166,7 +169,7 @@
     ([c9063335](https://github.com/adrianlee44/lorax/commit/c9063335))
 
 
-# v0.1.3 (2014/1/5)
+# v0.1.3 (2014/1/6)
 
 ## Features
 

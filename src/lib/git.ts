@@ -12,6 +12,7 @@ import {exec, ExecException} from 'child_process';
 const GIT_LOG = 'git log -E --format=%s "%s" "^%s" --';
 const GIT_LOG_ALL = 'git log -E --format=%s "%s"';
 const GIT_TAG = 'git tag --list --merged HEAD --sort "-committerdate"';
+const GIT_TAG_DATE = 'git log -1 --format=%%aI %s --';        // deliver date in ISO8601 format
 const GIT_LOG_FORMAT = '%H%n%B%n==END==';
 
 /**
@@ -58,6 +59,23 @@ function getAllTags(): Promise<Array<string>> {
 // TODO: get commit date for given tag API
 
 /**
+ * @name getTagTimestamp
+ * @description
+ * Get the timestamp for the given tag.
+ */
+function getTagTimestamp(tag: string): Promise<Date> {
+  return new Promise<Date>((resolve, reject) => {
+    let cmd = util.format(GIT_TAG_DATE, tag);
+    exec(cmd, {}, (error: Nullable<ExecException>, stdout: string) => {
+      if (error) return reject(error);
+
+      let t = new Date(stdout.trim());
+      resolve(t);
+    });
+  });
+}
+
+/**
  * @name getLog
  * @description
  * Read all commits watching match pattern since a certain tag
@@ -88,4 +106,4 @@ function getLog(
   });
 }
 
-export {getLastTag, getAllTags, getLog};
+export {getLastTag, getAllTags, getTagTimestamp, getLog};

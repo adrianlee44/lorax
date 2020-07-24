@@ -38,11 +38,22 @@ class Config {
     parse: {
       // specify these keys in order of decreasing importance!
       breaking: /\bBREAKING\b/,
-      feature: /(?:\bfeature\\w*)|(?:\badd(?:ed|ing)?\s+support\b)|(?:\baugmented\b)/,
-      fix: /\bfix\\w*/,
-      refactor: /(?:\brefactor\\w*)|(?:\bredesign\\w*)/,
-      doc: /\bdoc\\w*/,
-      test: /\btest\\w*/,
+      feature: [
+        /\bfeature\w*/i,
+        /\badd(?:ed|ing)?\s+support\b/i,
+        /\baugmented\b/i,
+        /\b(?:is|was|(?:has been)) implemented\b/i,
+      ],
+      fix: /\bfix\w*/i,
+      refactor: [
+        /\brefactor\w*/i,
+        /\bredesign\w*/i,
+      ],
+      doc: [
+        /\bdoc\w*/i,
+        /\bREADME/,
+      ],
+      test: /\btest\w*/i,
       chore: [
         /bump build (?:revision|version)/i,
         /updated npm packages/i,

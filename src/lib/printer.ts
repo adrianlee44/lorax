@@ -135,7 +135,7 @@ class Printer {
 
         const title = util.format(
           template.COMPONENT_TITLE,
-          componentName === '?' ? 'any' : componentName
+          componentName === '?' ? 'any' : componentName === '*' ? 'all' : componentName
         );
         const hasOneItem = componentList.length == 1;
         componentList.forEach((item, index) => {
