@@ -82,7 +82,7 @@ class Printer {
     const commitTmpl: Configuration['commit'] = this.config.get('commit');
 
     checkAndWarnAboutMissingUrl(url);
-    
+
     let commitLink = template.COMMIT;
     const shortenHash = hash.substr(0, 8);
     if (url && commitTmpl) {

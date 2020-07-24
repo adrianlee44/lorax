@@ -145,7 +145,7 @@ class Config {
 
     if (!this.config.url) {
       // load repository URL from package.json
-      let packagePath = findup('package.json') || '';
+      const packagePath = findup('package.json') || '';
 
       try {
         if (fs.existsSync(packagePath)) {
@@ -154,21 +154,25 @@ class Config {
           });
 
           let url;
-          let jsonData = JSON.parse(rawData);
-          if (typeof jsonData.repository === "string") {
-            url = "https://github.com/" + jsonData.repository;
-          } else if (typeof jsonData.bugs?.url === "string") {
+          const jsonData = JSON.parse(rawData);
+          if (typeof jsonData.repository === 'string') {
+            url = 'https://github.com/' + jsonData.repository;
+          } else if (typeof jsonData.bugs?.url === 'string') {
             url = jsonData.bugs.url;
-            url = url.replace(/[\/\\]issues.*$/, '');
-          } else if (typeof jsonData.repository?.url === "string") {
+            url = url.replace(/[/\\]issues.*$/, '');
+          } else if (typeof jsonData.repository?.url === 'string') {
             url = jsonData.repository.url;
             if (url) {
-              url = url.replace(/\.git$/, '').replace(/^git@github\.com:/, 'https://github.com/');
+              url = url
+                .replace(/\.git$/, '')
+                .replace(/^git@github\.com:/, 'https://github.com/');
             }
           }
 
           if (url) {
-            console.info(`project URL inferred from package.json:\n\n  ${url}\n\n`);
+            console.info(
+              `project URL inferred from package.json:\n\n  ${url}\n\n`
+            );
             this.config.url = url;
           }
         }
@@ -209,31 +213,31 @@ class Config {
   write(force: boolean): string | void {
     if (this.custom || !!force) {
       const rawData = JSON.stringify(
-          this.config,
-          (key, value) => {
-            if (key === 'parse') {
-              const rv: {[key: string]: string | Array<string> | null} = {};
-              for (const k in value) {
-                const re = value[k];
-                if (Array.isArray(re)) {
-                  const a: Array<string> = [];
-                  for (let i = 0; i < re.length; i++) {
-                    const r2 = re[i];
-                    a[i] = r2.toString();
-                  }
-                  rv[k] = a;
-                } else if (re) {
-                  rv[k] = re.toString();
-                } else {
-                  rv[k] = null;
+        this.config,
+        (key, value) => {
+          if (key === 'parse') {
+            const rv: {[key: string]: string | Array<string> | null} = {};
+            for (const k in value) {
+              const re = value[k];
+              if (Array.isArray(re)) {
+                const a: Array<string> = [];
+                for (let i = 0; i < re.length; i++) {
+                  const r2 = re[i];
+                  a[i] = r2.toString();
                 }
+                rv[k] = a;
+              } else if (re) {
+                rv[k] = re.toString();
+              } else {
+                rv[k] = null;
               }
-              return rv;
             }
-            return value;
-          },
-          2
-        );
+            return rv;
+          }
+          return value;
+        },
+        2
+      );
       return fs.writeFileSync(this.path, rawData, {
         encoding: 'utf-8',
       });
