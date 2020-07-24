@@ -255,10 +255,10 @@ misc | Miscellaneous
 
 - The *order* in which the keys are listed is important as the types are printed in this order.
 
-- If the git log commits adhere to the angular / conventional-changelog format (`type(category): message`), then any detected type will be added at the end of this list.
+- Whether the git log commits adhere to the angular / conventional-changelog format (`type(category): message`) or when the git log messages have their *type* **infered** by the regex-based rule set in `config.parse`: the detected/infered type will be added at the end of this display name list if the type does not yet match any of the entries present in that list.
 
   Example: `chore(lorax): drudgery` will be parsed as an entry with type `chore` (display name: `Chore`), category `lorax` and message `drudgery`.
-  
+    
 - If you DO NOT want a specific type to be printed in the generated output, you can set the display name to `false` in the `lorax.json` configuration file.
 
   Example `lorax.json` snippet:
