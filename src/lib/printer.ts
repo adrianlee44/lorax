@@ -84,7 +84,7 @@ class Printer {
   print(options?: LoraxOptions): string {
     const lines: Array<string> = [];
     const sections = {} as PrintSection;
-    const display = this.config.get('display');
+    const display: DisplayConfiguration = this.config.get('display');
 
     options = options || {};
 
@@ -121,6 +121,11 @@ class Printer {
       const list = sections[sectionType];
       const components = Object.getOwnPropertyNames(list).sort();
       if (!components.length) {
+        continue;
+      }
+
+      // skip type?
+      if (display[sectionType] === false) {
         continue;
       }
 

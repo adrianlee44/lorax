@@ -1,17 +1,43 @@
 {
   "issue": "/issues/%s",
   "commit": "/commit/%s",
-  "type": [
-    "^fix",
-    "^feature",
-    "^refactor",
-    "BREAKING"
-  ],
-  "display": {
-    "fix": "Bug Fixes",
-    "feature": "Features",
-    "breaking": "Breaking Changes",
-    "refactor": "Optimizations"
+  "parse": {
+    "breaking": "/\\bBREAKING\\b/",
+    "feature": [
+      "/\\bfeature\\w*/i",
+      "/\\badd(?:ed|ing)?\\s+support\\b/i",
+      "/\\baugmented\\b/i",
+      "/\\b(?:is|was|(?:has been)) implemented\\b/i"
+    ],
+    "fix": "/\\bfix\\w*/i",
+    "refactor": [
+      "/\\brefactor\\w*/i",
+      "/\\bredesign\\w*/i"
+    ],
+    "doc": [
+      "/\\bdoc\\w*/i",
+      "/\\bREADME/"
+    ],
+    "test": "/\\btest\\w*/i",
+    "chore": [
+      "/bump build (?:revision|version)/i",
+      "/updated npm packages/i",
+      "/regenerate .*files/i",
+      "/lint fixes/i",
+      "/Merge .* branch/i",
+      "/Merge tag/i",
+      "/(?:es)?lint/i"
+    ],
+    "misc": null
   },
-  "url": "https://github.com/adrianlee44/lorax"
+  "display": {
+    "breaking": "Breaking Changes",
+    "feature": "Features",
+    "fix": "Bug Fixes",
+    "refactor": "Optimizations",
+    "test": "Testing",
+    "doc": "Documentation",
+    "misc": "Miscellaneous",
+	"chore": false
+  }
 }
