@@ -1,3 +1,23 @@
+# 3.1.0-4 (2020/7/24)
+
+## Misc
+
+- **any:**
+  - remove debug statements
+    ([d54a2a5e](https://github.com/adrianlee44/lorax/commit/d54a2a5e))
+
+
+# 3.1.0-3 (2020/7/24)
+
+## Bug Fixes
+
+- **any:** Changes:
+  - fix timestamps for tags in `-a` generator mode: when we can obtain the timestamp for a tag from git, we use that one. For the HEAD version, we use the current date (or options/user-specified date).
+  - correct regexes for fix, feature, etc.: `\\w` was still in there from back when we started this as *strings* instead of ready regexes.
+  - made the conventional-changelog regex a little more lenient, so it will, once again, accept stuff like `chore(*): yada yada`
+  ([0c858058](https://github.com/adrianlee44/lorax/commit/0c858058))
+
+
 # 3.1.0-2 (2020/7/24)
 
 ## Bug Fixes
