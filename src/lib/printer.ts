@@ -21,6 +21,23 @@ type PrintSection = {
   };
 };
 
+let hasWarnedAboutMissingUrl = false;
+
+function checkAndWarnAboutMissingUrl(url: string | null | undefined) {
+  if (!url && !hasWarnedAboutMissingUrl) {
+    console.error(`
+
+###########################################################################
+#                            WARNING                                      #
+# The project URL is unknown/unidentifiable.                              #
+# Please provide a base URL in your lorax.json configuration file!        #
+###########################################################################
+    
+    `);
+    hasWarnedAboutMissingUrl = true;
+  }
+}
+
 class Printer {
   private commits: Array<Commit>;
   private version: string;
@@ -42,6 +59,8 @@ class Printer {
     const url: Configuration['url'] = this.config.get('url');
     const issueTmpl: Configuration['issue'] = this.config.get('issue');
 
+    checkAndWarnAboutMissingUrl(url);
+
     let issueLink = template.ISSUE;
     if (url && issueTmpl) {
       issueLink = util.format(template.LINK_TO_ISSUE, issue, url, issueTmpl);
@@ -59,9 +78,11 @@ class Printer {
   linkToCommit(hash: string): string {
     if (!hash) return '';
 
-    const url = this.config.get('url');
-    const commitTmpl = this.config.get('commit');
+    const url: Configuration['url'] = this.config.get('url');
+    const commitTmpl: Configuration['commit'] = this.config.get('commit');
 
+    checkAndWarnAboutMissingUrl(url);
+    
     let commitLink = template.COMMIT;
     const shortenHash = hash.substr(0, 8);
     if (url && commitTmpl) {

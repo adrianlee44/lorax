@@ -141,44 +141,49 @@ class Config {
       this.jsonData
     ) as Configuration;
 
+    // TODO: support forked repositories where bugs are filed in the main repo or other website than the commit diff view pages.
+
+    if (!this.config.url) {
+      // load repository URL from package.json
+      let packagePath = findup('package.json') || '';
+
+      try {
+        if (fs.existsSync(packagePath)) {
+          const rawData: string = fs.readFileSync(packagePath, {
+            encoding: 'utf-8',
+          });
+
+          let url;
+          let jsonData = JSON.parse(rawData);
+          if (typeof jsonData.repository === "string") {
+            url = "https://github.com/" + jsonData.repository;
+          } else if (typeof jsonData.bugs?.url === "string") {
+            url = jsonData.bugs.url;
+            url = url.replace(/[\/\\]issues.*$/, '');
+          } else if (typeof jsonData.repository?.url === "string") {
+            url = jsonData.repository.url;
+            if (url) {
+              url = url.replace(/\.git$/, '').replace(/^git@github\.com:/, 'https://github.com/');
+            }
+          }
+
+          if (url) {
+            console.info(`project URL inferred from package.json:\n\n  ${url}\n\n`);
+            this.config.url = url;
+          }
+        }
+      } catch (e) {
+        console.error(`Invalid ${basename(packagePath)}`);
+      }
+    }
+
     /* eslint no-constant-condition: 0 */
     //
     // edit condition to `true` when you want to regenerate
     // the default/complete lorax.json file for documentation or verification purposes
     if (false) {
-      console.log('write lorax.sample.json');
-      fs.writeFileSync(
-        'lorax.sample.json',
-        JSON.stringify(
-          this.config,
-          (key, value) => {
-            if (key === 'parse') {
-              const rv: {[key: string]: string | Array<string> | null} = {};
-              for (const k in value) {
-                const re = value[k];
-                if (Array.isArray(re)) {
-                  const a: Array<string> = [];
-                  for (let i = 0; i < re.length; i++) {
-                    const r2 = re[i];
-                    a[i] = r2.toString();
-                  }
-                  rv[k] = a;
-                } else if (re) {
-                  rv[k] = re.toString();
-                } else {
-                  rv[k] = null;
-                }
-              }
-              return rv;
-            }
-            return value;
-          },
-          2
-        ),
-        {
-          encoding: 'utf-8',
-        }
-      );
+      console.log(`write ${this.path}`);
+      this.write(true);
     }
   }
 
@@ -203,7 +208,32 @@ class Config {
 
   write(force: boolean): string | void {
     if (this.custom || !!force) {
-      const rawData = JSON.stringify(this.config, null, '  ');
+      const rawData = JSON.stringify(
+          this.config,
+          (key, value) => {
+            if (key === 'parse') {
+              const rv: {[key: string]: string | Array<string> | null} = {};
+              for (const k in value) {
+                const re = value[k];
+                if (Array.isArray(re)) {
+                  const a: Array<string> = [];
+                  for (let i = 0; i < re.length; i++) {
+                    const r2 = re[i];
+                    a[i] = r2.toString();
+                  }
+                  rv[k] = a;
+                } else if (re) {
+                  rv[k] = re.toString();
+                } else {
+                  rv[k] = null;
+                }
+              }
+              return rv;
+            }
+            return value;
+          },
+          2
+        );
       return fs.writeFileSync(this.path, rawData, {
         encoding: 'utf-8',
       });
