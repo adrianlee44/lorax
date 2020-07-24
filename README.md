@@ -19,7 +19,8 @@ Lorax tries to solve this problem by automating the changelog generation process
 ## Key differences with other packages
 
 - Many other tools do not use the local git repository but require github or gitlab access, thus not allowing for off-line work (plus being dependent on the stability of the relevant website's API and information desity of data produced by said API).
-- **Infers** metadata where necessary. (While the original `lorax` was very strict, this derivative tool approaches the problem from the *other* direction: every commit has value and should be categorized. It's up to the user and their lorax configuration to decide which of those parts should make it into the CHANGELOG)
+- **Infers metadata where necessary**. 
+  While the original `lorax` was very strict, this derivative tool approaches the problem from the *other* direction: every commit has value and should be categorized. It's up to the user and their lorax configuration to decide which of those parts should make it into the CHANGELOG.
 - Auto-detects github issue references in any commit and links CHANGELOG entries to issues for fast drill-down.
 - All CHANGELOG entries are linked to their github diff view pages for easy access to the actual code changes. Every entry has a corresponding set of code changes which you can see immediately if you want to.
 - It *helps* to use a commit convention like angular's, but you DO NOT loose anything when you stumble or otherwise happen to have non-conforming git commits & messages.
