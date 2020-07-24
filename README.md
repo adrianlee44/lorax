@@ -142,7 +142,7 @@ Every git commit message ...
    
    When no type could be infered, the message will be filed under the `misc` a.k.a. 'miscellaneous' *type*.
 
-   The default heuristic rules' regexes are listed below in the [Configuration](#Configuration) section as the `.parse` object/map. 
+   The default heuristic rules' regexes are listed below in the [Configuration section](#configuration) as the `.parse` object/map. 
 
    Heuristic rule regexes are executed in order of appearance and the first match decides the *message type* for the given commit message.
 
