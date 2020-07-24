@@ -220,7 +220,7 @@ issue | Partial URL for issues | `/issues/%s`
 commit | Partial URL for commits | `/commit/%s`
 parse | A map of types of commit messages to parse and the regexes which match if the commit is not formatted in the conventional-changelog / angular format. <br><br> The key of each item in this object identifies the commit message **type**, which will be checked against the `display` list for outputting into CHANGELOG.md later. <br><br> The *value* of the item is either a single *regex string* or an array of *regex strings*, where a *regex string* is the string representation of a literal JavaScript regex, e.g. `"/match_me_\\w+/i"` -- note that regex escape character `\\` must be duplicated so `\w` must be written as `\\w`. <br><br> **NOTE**: the *order* in which the keys and regexes are listed is important as **the first match will determine the commit message type**. | See code block above
 display | Display name for each commit message type. | See next section
-url | URL of the Github repo | ''
+url | URL of the Github repo | Extracted from the `package.json` file in the active directory, via the `bugs` or `repository` fields.
 
 
 
