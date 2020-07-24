@@ -1,3 +1,26 @@
+# 3.1.0-7 (2020/7/24)
+
+## Bug Fixes
+
+- **any:**
+  - Changes:
+    - minimal change to the conventional-changelog format regex: we had made it too strict to pass the `type(category) message` test, which we wanted to pass, so we had to (minimally) adjust the regex.
+    - fixed Config.reset() following the tests.
+    ([4bf56323](https://github.com/adrianlee44/lorax/commit/4bf56323))
+
+## Miscellaneous
+
+- **any:**
+  - Changes:
+    - added two npm tasks to regenerate / update the CHANGELOG: `npm run full-changelog` and `npm run update-changelog`. These can also be used during development to quickly test the code (that's what I used before going in an fixing all the unit tests :-) )
+    ([f8e7e339](https://github.com/adrianlee44/lorax/commit/f8e7e339))
+  - Changes:
+    - added npm `test-debug` task to help us debug the tests.
+    - fixed the tests after the plethora of edits since v3.0.0: all tests PASS once again.
+    - added a few tests for git log while we were at it.
+    ([4bf56323](https://github.com/adrianlee44/lorax/commit/4bf56323))
+
+
 # 3.1.0-6 (2020/7/24)
 
 ## Documentation
