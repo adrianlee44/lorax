@@ -110,7 +110,6 @@ class Parser {
           });
         }
       }
-      console.log('reCheckList:', reCheckList);
 
       for (const j in reCheckList) {
         const spec = reCheckList[j];
