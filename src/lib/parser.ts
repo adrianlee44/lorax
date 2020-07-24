@@ -6,7 +6,10 @@ import {Config} from './config';
  * @name parser
  */
 
-const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
+const GITHUB_ISSUE_WORK_DONE_REGEX = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?implement(?:s|ed)?)\s+#(\d+)/i; // match[1]: issue number
+const COMMIT_MESSAGE_SURPLUS_TAIL = /^\s*(?:(?:# Conflicts:)|(?:Signed-off-by:)|(?:Co-authored-by:))/;
+const BREAKING_CHANGES_REGEX = /^BREAKING CHANGE[S]?:?([\s\S]*)/; // match[1]: message
+const ANGULAR_COMMIT_MESSAGE_EXTRACTOR_REGEX = /^(\w+)\s*(?:\(([^\r\n\s()](?:[^\r\n()]*[^\r\n\s()])?)\))?:\s+(.+)/; // match[1]: type, match[2], optional category, match[3]: message
 
 interface Commit {
   type: string;
@@ -37,9 +40,7 @@ class Parser {
     let keep = true;
     lines = lines.filter((l: string): boolean => {
       if (keep) {
-        keep = !l.match(
-          /^\s*(?:(?:# Conflicts:)|(?:Signed-off-by:)|(?:Co-authored-by:))/
-        );
+        keep = !l.match(COMMIT_MESSAGE_SURPLUS_TAIL);
       }
       return keep;
     });
@@ -59,7 +60,7 @@ class Parser {
     // Get all related commits
     const newLines = [] as Array<string>;
     lines.forEach((line) => {
-      const match = line.match(closeRegex);
+      const match = line.match(GITHUB_ISSUE_WORK_DONE_REGEX);
       if (match) {
         commitObj.issues.push(parseInt(match[1]));
       } else {
@@ -75,9 +76,7 @@ class Parser {
     //   type(group): message
     const titleMatch = commitObj.title
       .trim()
-      .match(
-        /^(\w+)\s*(?:\(([^\r\n\s()](?:[^\r\n()]*[^\r\n\s()])?)\))?:\s+(.+)/
-      );
+      .match(ANGULAR_COMMIT_MESSAGE_EXTRACTOR_REGEX);
     if (titleMatch) {
       commitObj.type = titleMatch[1];
       commitObj.component = titleMatch[2] || '?';
@@ -92,7 +91,7 @@ class Parser {
       commitObj.title = '';
       commitObj.component = '?';
 
-      const deflist = (config.config as any).parse;
+      const deflist = config.config.parse;
       const reCheckList = [];
       for (const key in deflist) {
         const reArr = deflist[key];
@@ -131,7 +130,7 @@ class Parser {
 
     // Check for breaking change commit
     // Replace commit description with breaking changes
-    const breakingMatch = message.match(/^BREAKING CHANGE[S]?:?([\s\S]*)/);
+    const breakingMatch = message.match(BREAKING_CHANGES_REGEX);
     if (breakingMatch) {
       commitObj.type = 'breaking';
       commitObj.message = breakingMatch[1];
