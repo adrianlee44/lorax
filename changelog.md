@@ -1,3 +1,23 @@
+# 3.1.0-5 (2020/7/24)
+
+## Features
+
+- **any:** Changes:
+  - implement the 'do not print this commit type' functionality described in the readme (when display type title map value is `false`)
+  (c58e44ed)
+
+## Optimizations
+
+- **any:** refactor parser to have all important heuristic regexes as constants at the top of the file.
+  (a23bc026)
+
+## Documentation
+
+- **any:** Changes:
+  - update & augment the documentation in the README page
+  (c58e44ed)
+
+
 # 3.1.0-4 (2020/7/24)
 
 ## Misc
