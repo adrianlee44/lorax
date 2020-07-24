@@ -2,6 +2,8 @@ const test = require('ava');
 const {getLastTag, getLog} = require('../build/lib/git');
 let child = require('child_process');
 
+/* eslint no-unused-vars: 0 */
+
 test('get the last tag', (t) => {
   return getLastTag().then((result) => {
     t.truthy(result);
@@ -15,14 +17,15 @@ test.serial('failed to get last tag', (t) => {
     fn('failed', 'some stdout lines');
   };
 
-  return getLastTag().then((result) => {
-    t.truthy(!"should never get here");
-    child.exec = tmpExec;
-  })
-  .catch((error) => {
-    t.is(error, 'failed');
-    child.exec = tmpExec;
-  });
+  return getLastTag()
+    .then((result) => {
+      t.truthy(!'should never get here');
+      child.exec = tmpExec;
+    })
+    .catch((error) => {
+      t.is(error, 'failed');
+      child.exec = tmpExec;
+    });
 });
 
 test('get all repo log', (t) => {
@@ -50,23 +53,25 @@ test('get log from start until tag', (t) => {
 });
 
 test('return empty array when given invalid tag', (t) => {
-  return getLog('doesNotExist').then((result) => {
-    t.is(result.length, 0);
-    t.truthy(!"should never get here");
-  })
-  .catch((error) => {
-    t.truthy(error.message.includes('failed to obtain git log output'));
-  });
+  return getLog('doesNotExist')
+    .then((result) => {
+      t.is(result.length, 0);
+      t.truthy(!'should never get here');
+    })
+    .catch((error) => {
+      t.truthy(error.message.includes('failed to obtain git log output'));
+    });
 });
 
 test('get no commit', (t) => {
-  return getLog('^doesNotExist').then((result) => {
-    t.is(result.length, 0);
-    t.truthy(!"should never get here");
-  })
-  .catch((error) => {
-    t.truthy(error.message.includes('failed to obtain git log output'));
-  });
+  return getLog('^doesNotExist')
+    .then((result) => {
+      t.is(result.length, 0);
+      t.truthy(!'should never get here');
+    })
+    .catch((error) => {
+      t.truthy(error.message.includes('failed to obtain git log output'));
+    });
 });
 
 test.serial('has no stdout', (t) => {
@@ -76,13 +81,14 @@ test.serial('has no stdout', (t) => {
     fn('failed');
   };
 
-  return getLog('^doesNotExist').then((result) => {
-    t.is(result.length, 0);
-    t.truthy(!"should never get here");
-    child.exec = tmpExec;
-  })
-  .catch((error) => {
-    t.truthy(error.message.includes('failed to obtain git log output'));
-    child.exec = tmpExec;
-  });
+  return getLog('^doesNotExist')
+    .then((result) => {
+      t.is(result.length, 0);
+      t.truthy(!'should never get here');
+      child.exec = tmpExec;
+    })
+    .catch((error) => {
+      t.truthy(error.message.includes('failed to obtain git log output'));
+      child.exec = tmpExec;
+    });
 });

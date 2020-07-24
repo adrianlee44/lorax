@@ -5,6 +5,8 @@ const {Lorax} = require('../build/lorax');
 const fs = require('fs');
 const child = require('child_process');
 
+/* eslint no-unused-vars: 0 */
+
 let secondTag = 'v2.0.0';
 
 test.before.cb((t) => {
@@ -38,22 +40,24 @@ test.serial('get logs since a certain tag', (t) => {
   const grepString = '^fix|^feature|^refactor|BREAKING';
   const grepRegex = new RegExp(grepString);
 
-  return t.context.lorax.get({
-    since: secondTag
-  }).then((data) => {
-    t.plan(1);
+  return t.context.lorax
+    .get({
+      since: secondTag,
+    })
+    .then((data) => {
+      t.plan(1);
 
-    let mostDoMatch = 0;
-    data.forEach((commit) => {
-      if (!commit) return;
+      let mostDoMatch = 0;
+      data.forEach((commit) => {
+        if (!commit) return;
 
-      const lines = commit.split('\n');
-      if (grepRegex.test(lines[1])) {
-        mostDoMatch++;
-      }
+        const lines = commit.split('\n');
+        if (grepRegex.test(lines[1])) {
+          mostDoMatch++;
+        }
+      });
+      t.truthy(mostDoMatch >= 10);
     });
-    t.truthy(mostDoMatch >= 10);
-  });
 });
 
 test.cb('should write to file', (t) => {

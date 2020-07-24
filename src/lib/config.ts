@@ -177,12 +177,10 @@ class Config {
     // TODO: support forked repositories where bugs are filed in the main repo or other website than the commit diff view pages.
 
     if (!this.config.url) {
-      let url = extractProjectBaseUriFromPackageJson();
+      const url = extractProjectBaseUriFromPackageJson();
 
       if (url) {
-        console.info(
-          `project URL inferred from package.json:\n\n  ${url}\n\n`
-        );
+        console.info(`project URL inferred from package.json:\n\n  ${url}\n\n`);
         this.config.url = url;
       }
     }
@@ -258,12 +256,10 @@ class Config {
     ) as Configuration;
 
     if (!this.config.url) {
-      let url = extractProjectBaseUriFromPackageJson();
+      const url = extractProjectBaseUriFromPackageJson();
 
       if (url) {
-        console.info(
-          `project URL inferred from package.json:\n\n  ${url}\n\n`
-        );
+        console.info(`project URL inferred from package.json:\n\n  ${url}\n\n`);
         this.config.url = url;
       }
     }
