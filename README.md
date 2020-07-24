@@ -114,7 +114,7 @@ Closed #321
  
 Every git commit message ...
 
-1. is cleaned up by stripping off any trailing surplus such as \# hash-prefixed merge conflict file collision reports and author ssign-off lines
+1. is cleaned up by stripping off any trailing surplus such as `#` hash-prefixed merge conflict file collision reports and author sign-off lines
    
    > `COMMIT_MESSAGE_SURPLUS_TAIL = /^\s*(?:(?:# Conflicts:)|(?:Signed-off-by:)|(?:Co-authored-by:))/`
    > 
