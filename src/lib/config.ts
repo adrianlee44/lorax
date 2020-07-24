@@ -11,19 +11,41 @@ import findup from 'findup-sync';
 import {isAbsolute, basename} from 'path';
 
 interface DisplayConfiguration {
-  [key: string]: string;
-  breaking: string;
-  feature: string;
-  fix: string;
-  refactor: string;
+  [key: string]: string | boolean | null;
+  breaking: string | boolean | null;
+  feature: string | boolean | null;
+  fix: string | boolean | null;
+  refactor: string | boolean | null;
+  doc: string | boolean | null;
+  test: string | boolean | null;
+  misc: string | boolean | null;
+}
+
+interface ParseConfiguration {
+  [key: string]: RegExp | Array<RegExp> | null;
+  breaking: RegExp | Array<RegExp>;
+  feature: RegExp | Array<RegExp>;
+  fix: RegExp | Array<RegExp>;
+  refactor: RegExp | Array<RegExp>;
+  doc: RegExp | Array<RegExp>;
+  test: RegExp | Array<RegExp>;
+  misc: RegExp | Array<RegExp> | null;
 }
 
 interface Configuration {
   commit: string;
   display: DisplayConfiguration;
+  parse: ParseConfiguration;
   issue: string;
-  type: Array<string>;
   url?: string;
+}
+
+function strToRe(str: string | null): RegExp | null {
+  if (!str) return null;
+  const m = /^\/(.+)\/([a-z]*)$/.exec(str);
+  if (!m) return null;
+  const re = RegExp(m[1], m[2]);
+  return re;
 }
 
 class Config {
@@ -32,7 +54,7 @@ class Config {
   jsonData: Configuration | any;
   readonly path: string;
 
-  static default = {
+  static default: Configuration = {
     issue: '/issues/%s',
     commit: '/commit/%s',
     parse: {
@@ -60,9 +82,9 @@ class Config {
       misc: null,
     },
     display: {
-      fix: 'Bug Fixes',
-      feature: 'Features',
       breaking: 'Breaking Changes',
+      feature: 'Features',
+      fix: 'Bug Fixes',
       refactor: 'Optimizations',
       test: 'Testing',
       doc: 'Documentation',
@@ -86,7 +108,28 @@ class Config {
           encoding: 'utf-8',
         });
 
-        this.jsonData = JSON.parse(rawData);
+        this.jsonData = JSON.parse(rawData, (key, value) => {
+          if (key === 'parse') {
+            const rv: {[key: string]: RegExp | Array<RegExp> | null} = {};
+            for (const k in value) {
+              const re = value[k];
+              if (Array.isArray(re)) {
+                const a: Array<RegExp> = [];
+                for (let i = 0; i < re.length; i++) {
+                  const r2 = re[i];
+                  a[i] = strToRe(r2) as RegExp;
+                }
+                rv[k] = a;
+              } else if (re) {
+                rv[k] = strToRe(re);
+              } else {
+                rv[k] = null;
+              }
+            }
+            return rv;
+          }
+          return value;
+        });
       } catch (e) {
         console.error(`Invalid ${basename(this.path)}`);
       }
@@ -97,6 +140,46 @@ class Config {
       Config.default,
       this.jsonData
     ) as Configuration;
+
+    /* eslint no-constant-condition: 0 */
+    //
+    // edit condition to `true` when you want to regenerate
+    // the default/complete lorax.json file for documentation or verification purposes
+    if (false) {
+      console.log('write lorax.sample.json');
+      fs.writeFileSync(
+        'lorax.sample.json',
+        JSON.stringify(
+          this.config,
+          (key, value) => {
+            if (key === 'parse') {
+              const rv: {[key: string]: string | Array<string> | null} = {};
+              for (const k in value) {
+                const re = value[k];
+                if (Array.isArray(re)) {
+                  const a: Array<string> = [];
+                  for (let i = 0; i < re.length; i++) {
+                    const r2 = re[i];
+                    a[i] = r2.toString();
+                  }
+                  rv[k] = a;
+                } else if (re) {
+                  rv[k] = re.toString();
+                } else {
+                  rv[k] = null;
+                }
+              }
+              return rv;
+            }
+            return value;
+          },
+          2
+        ),
+        {
+          encoding: 'utf-8',
+        }
+      );
+    }
   }
 
   get<K extends keyof Configuration>(key: K): Configuration[K] {
