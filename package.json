@@ -1,6 +1,6 @@
 {
   "name": "@gerhobbelt/lorax",
-  "version": "3.1.0-8",
+  "version": "3.1.0-9",
   "description": "A node module which reads the git log and create a human readable changelog",
   "main": "lib/lorax.js",
   "bin": "bin/lorax",
