@@ -10,7 +10,8 @@
 
 const path = require('path'),
   dir = path.join(__dirname, '../'),
-  pkg = require(dir + 'package.json'),
+  pkg = require(path.join(dir, 'package.json')),
+  projectPkg = require(path.join(process.cwd(), 'package.json')),
   {program} = require('commander');
 
 program
@@ -26,8 +27,8 @@ program
   .option('-s, --since [tag]', 'Starting tag version')
   .option(
     '-t, --tag [tag]',
-    'Tag of the upcoming release [' + pkg.version + ']',
-    pkg.version
+    'Tag of the upcoming release [' + projectPkg.version + ']',
+    projectPkg.version
   )
   .parse(process.argv);
 

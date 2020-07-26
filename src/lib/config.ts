@@ -7,6 +7,7 @@
  */
 
 import * as fs from 'fs';
+import * as path from 'path';
 import findup from 'findup-sync';
 import {isAbsolute, basename} from 'path';
 
@@ -50,7 +51,7 @@ function strToRe(str: string | null): RegExp | null {
 
 function extractProjectBaseUriFromPackageJson(): string | null {
   // load repository URL from package.json
-  const packagePath = findup('package.json') || '';
+  const packagePath = findup(path.join(process.cwd(), 'package.json')) || '';
 
   try {
     if (fs.existsSync(packagePath)) {
