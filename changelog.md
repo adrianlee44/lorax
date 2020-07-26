@@ -1,14 +1,21 @@
-# 3.1.0-7 (2020/7/24)
+# 3.1.0-9 (2020/7/26)
+
+## Miscellaneous
+
+- updated CHANGELOG
+
+
+# 3.1.0-8 (2020/7/26)
 
 ## Bug Fixes
 
-- **any:**
-  - Changes:
-    - minimal change to the conventional-changelog format regex: we had made it too strict to pass the `type(category) message` test, which we wanted to pass, so we had to (minimally) adjust the regex.
-    - fixed Config.reset() following the tests.
-    ([4bf56323](https://github.com/adrianlee44/lorax/commit/4bf56323))
+- **any:** fix bug where default/new version of the project you're generating the CHANGELOG for is not taken from the project but from lorax itself. (Result was every project would have an edge version of 3.1.0-x, which is the current lorax edge version.)
+  ([0a40aa72](https://github.com/adrianlee44/lorax/commit/0a40aa72))
 
-## Miscellaneous
+
+# 3.1.0-7 (2020/7/24)
+
+## Bug Fixes
 
 - **any:**
   - Changes:
@@ -18,6 +25,8 @@
     - added npm `test-debug` task to help us debug the tests.
     - fixed the tests after the plethora of edits since v3.0.0: all tests PASS once again.
     - added a few tests for git log while we were at it.
+    - minimal change to the conventional-changelog format regex: we had made it too strict to pass the `type(category) message` test, which we wanted to pass, so we had to (minimally) adjust the regex.
+    - fixed Config.reset() following the tests.
     ([4bf56323](https://github.com/adrianlee44/lorax/commit/4bf56323))
 
 
