@@ -2,7 +2,12 @@
 
 ## Miscellaneous
 
-- updated CHANGELOG
+- **any:**
+  - rename changelog.md -> CHANGELOG.md (done in a way that it'll work on Windows dev boxes too! -- those won't otherwise pick up the lowercase to uppercase filename change)
+    ([28a36c33](https://github.com/adrianlee44/lorax/commit/28a36c33))
+    ([641d2681](https://github.com/adrianlee44/lorax/commit/641d2681))
+  - updated CHANGELOG
+    ([b4c50d0c](https://github.com/adrianlee44/lorax/commit/b4c50d0c))
 
 
 # 3.1.0-8 (2020/7/26)
