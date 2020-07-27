@@ -15,10 +15,16 @@ test.serial('failed to get last tag', (t) => {
     fn('failed', 'some stdout lines');
   };
 
-  return getLastTag().then((result) => {
-    t.truthy(!result);
-    child.exec = tmpExec;
-  });
+  return getLastTag()
+    .then(() => {
+      t.fail('Should not have succeeded');
+    })
+    .catch((error) => {
+      t.is(error, 'failed');
+    })
+    .finally(() => {
+      child.exec = tmpExec;
+    });
 });
 
 test('get all repo log', (t) => {
@@ -28,9 +34,17 @@ test('get all repo log', (t) => {
 });
 
 test('return empty array when given invalid tag', (t) => {
-  return getLog('^fix|^refactor', 'doesNotExist').then((result) => {
-    t.is(result.length, 0);
-  });
+  return getLog('^fix|^refactor', 'doesNotExist')
+    .then(() => {
+      t.fail('Should not have succeeded');
+    })
+    .catch((error) => {
+      t.truthy(
+        error.message.includes(
+          "Command failed: git log --grep='^fix|^refactor'"
+        )
+      );
+    });
 });
 
 test('get no commit', (t) => {
@@ -46,8 +60,14 @@ test.serial('has no stdout', (t) => {
     fn('failed');
   };
 
-  return getLog('^doesNotExist').then((result) => {
-    t.is(result.length, 0);
-    child.exec = tmpExec;
-  });
+  return getLog('^doesNotExist')
+    .then(() => {
+      t.fail('Should not have succeeded');
+    })
+    .catch((error) => {
+      t.is(error, 'failed');
+    })
+    .finally(() => {
+      child.exec = tmpExec;
+    });
 });
