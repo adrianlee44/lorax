@@ -8,7 +8,7 @@ test('get the last tag', (t) => {
   });
 });
 
-test.serial('failed to get last tag', (t) => {
+test.serial('reject the promise when failed to get last tag', (t) => {
   let tmpExec = child.exec;
 
   child.exec = function (cmd, opt, fn) {
@@ -33,7 +33,7 @@ test('get all repo log', (t) => {
   });
 });
 
-test('return empty array when given invalid tag', (t) => {
+test('rejects the promise given invalid tag', (t) => {
   return getLog({grep: '^fix|^refactor', tag: 'doesNotExist'})
     .then(() => {
       t.fail('Should not have succeeded');
@@ -49,7 +49,7 @@ test('get no commit', (t) => {
   });
 });
 
-test.serial('has no stdout', (t) => {
+test.serial('reject the promise when the command fails', (t) => {
   let tmpExec = child.exec;
 
   child.exec = function (cmd, opt, fn) {
