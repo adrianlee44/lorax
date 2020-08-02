@@ -52,7 +52,7 @@ export class Lorax {
             msg += ' since ' + tag;
           }
           console.log(msg);
-          return git.getLog(grep, tag);
+          return git.getLog({grep, tag});
         }
       )
       .catch((error) => {

@@ -28,27 +28,23 @@ test.serial('failed to get last tag', (t) => {
 });
 
 test('get all repo log', (t) => {
-  return getLog('^fix|^refactor').then((result) => {
+  return getLog({grep: '^fix|^refactor'}).then((result) => {
     t.truthy(result.length);
   });
 });
 
 test('return empty array when given invalid tag', (t) => {
-  return getLog('^fix|^refactor', 'doesNotExist')
+  return getLog({grep: '^fix|^refactor', tag: 'doesNotExist'})
     .then(() => {
       t.fail('Should not have succeeded');
     })
     .catch((error) => {
-      t.truthy(
-        error.message.includes(
-          "Command failed: git log --grep='^fix|^refactor'"
-        )
-      );
+      t.truthy(error.message.includes('Command failed:'));
     });
 });
 
 test('get no commit', (t) => {
-  return getLog('^doesNotExist').then((result) => {
+  return getLog({grep: '^doesNotExist'}).then((result) => {
     t.is(result.length, 0);
   });
 });
@@ -60,7 +56,7 @@ test.serial('has no stdout', (t) => {
     fn('failed');
   };
 
-  return getLog('^doesNotExist')
+  return getLog({grep: '^doesNotExist'})
     .then(() => {
       t.fail('Should not have succeeded');
     })
