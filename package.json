@@ -15,7 +15,7 @@
     "prepublishOnly": "tsc",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "test": "npm run clean; npm run lint; tsc; npm run coverage; npm run report",
+    "test": "npm run clean; npm run lint; tsc; npm run coverage",
     "unit-test": "tsc; ava",
     "coverage": "nyc ava",
     "report": "nyc report --reporter=lcov",
