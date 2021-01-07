@@ -15,10 +15,10 @@
     "prepublishOnly": "tsc",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "test": "npm run clean; npm run lint; tsc; npm run coverage",
+    "test": "npm run clean; npm run lint; tsc; npm run coverage; npm run report",
     "unit-test": "tsc; ava",
     "coverage": "nyc ava",
-    "report": "nyc report --reporter=text-lcov | coveralls",
+    "report": "nyc report --reporter=lcov",
     "clean": "rm -rf coverage/ build/"
   },
   "repository": {
