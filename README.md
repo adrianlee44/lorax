@@ -1,6 +1,6 @@
 # Lorax
 
-[![Build Status](https://img.shields.io/travis/adrianlee44/lorax/master.svg?style=flat-square)](https://travis-ci.org/adrianlee44/lorax)
+![Tests](https://github.com/adrianlee44/lorax/workflows/Tests/badge.svg)
 [![Coverage Status](https://img.shields.io/coveralls/adrianlee44/lorax/master.svg?style=flat-square)](https://coveralls.io/github/adrianlee44/lorax?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](https://github.com/adrianlee44/lorax/blob/master/LICENSE-MIT)
 [![NPM](https://img.shields.io/npm/v/lorax.svg?style=flat-square)](https://www.npmjs.org/package/lorax)
