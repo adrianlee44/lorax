@@ -30,7 +30,7 @@ class Config {
   config: Configuration;
   custom: boolean;
   jsonData: Configuration | Record<string, unknown>;
-  readonly path: string;
+  private path: string;
 
   static default = {
     issue: '/issues/%s',
@@ -94,13 +94,18 @@ class Config {
     return this.config;
   }
 
-  write(force: boolean): string | void {
+  write(force?: boolean): string | void {
     if (this.custom || !!force) {
       const rawData = JSON.stringify(this.config, null, '  ');
       return fs.writeFileSync(this.path, rawData, {
         encoding: 'utf-8',
       });
     }
+  }
+
+  updatePath(path: string): this {
+    this.path = path;
+    return this;
   }
 
   reset(): void {

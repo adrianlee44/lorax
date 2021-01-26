@@ -1,8 +1,6 @@
-'use strict';
-
-const test = require('ava');
-const fs = require('fs');
-const {Config} = require('../build/lib/config');
+import * as fs from 'fs';
+import {Config} from '../src/lib/config';
+import test from 'ava';
 
 test('default', (t) => {
   const configObj = new Config('random.json');
@@ -19,7 +17,7 @@ test.serial('bad data in valid file', (t) => {
   let oldConsoleError = console.error;
   let errorMsg;
 
-  console.error = function (message) {
+  console.error = function (message: string) {
     errorMsg = message;
   };
 
@@ -73,8 +71,7 @@ test.cb('write back to config', (t) => {
     commit: '/commit/test/%s',
   });
 
-  configObj.path = 'test-config.json';
-
+  configObj.updatePath('test-config.json');
   configObj.write();
   fs.readFileSync('test-config.json');
 

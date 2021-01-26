@@ -1,34 +1,31 @@
-'use strict';
+import {Printer} from '../src/lib/printer';
+import {Config} from '../src/lib/config';
 
-const test = require('ava');
-const {Printer} = require('../build/lib/printer');
-const {Config} = require('../build/lib/config');
+import anyTest, {TestInterface} from 'ava';
+
+const test = anyTest as TestInterface<{config: Config; printer: Printer}>;
 
 test.beforeEach((t) => {
   t.context.config = new Config();
   t.context.printer = new Printer([], 'v0.1.0', t.context.config);
 });
 
-test.afterEach((t) => {
-  t.context = {};
-});
-
 test('basicTest', (t) => {
-  const output = t.context.printer.linkToIssue('123');
+  const output = t.context.printer.linkToIssue(123);
   t.is(output, '[#123](https://github.com/adrianlee44/lorax/issues/123)');
 });
 
 test('noUrlTest', (t) => {
   t.context.config.set('url', '');
 
-  const output = t.context.printer.linkToIssue('123');
+  const output = t.context.printer.linkToIssue(123);
   t.is(output, '#123');
 });
 
 test('noIssueTemplateTest', (t) => {
   t.context.config.set('issue', '');
 
-  const output = t.context.printer.linkToIssue('123');
+  const output = t.context.printer.linkToIssue(123);
   t.is(output, '#123');
 });
 

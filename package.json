@@ -53,6 +53,7 @@
     "matchdep": "^2.0.0",
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",
+    "ts-node": "^9.1.1",
     "typescript": "^3.9.7"
   },
   "dependencies": {
@@ -60,8 +61,11 @@
     "findup-sync": "^4.0.0"
   },
   "ava": {
-    "files": [
-      "test/**/*_test.js"
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
     ]
   }
 }

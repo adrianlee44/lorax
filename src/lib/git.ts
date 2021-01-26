@@ -29,7 +29,7 @@ interface GetLogOptions {
  */
 function getLastTag(): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    exec(GIT_TAG, {}, (error: Nullable<ExecException>, stdout: string) => {
+    exec(GIT_TAG, {}, (error: ExecException | null, stdout: string) => {
       if (error) return reject(error);
 
       resolve(stdout);
@@ -59,7 +59,7 @@ function getLog(options = {} as GetLogOptions): Promise<Array<string>> {
   const cmd = `${GIT_LOG} ${cmdArgs.join(' ')}`;
 
   return new Promise<Array<string>>((resolve, reject) => {
-    exec(cmd, {}, (error: Nullable<ExecException>, stdout = '') => {
+    exec(cmd, {}, (error: ExecException | null, stdout = '') => {
       let output: Array<string> = [];
       if (error) {
         reject(error);

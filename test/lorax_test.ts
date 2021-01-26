@@ -1,11 +1,12 @@
-'use strict';
+import {Lorax} from '../src/lorax';
+import * as fs from 'fs';
+import * as child from 'child_process';
 
-const test = require('ava');
-const {Lorax} = require('../build/lorax');
-const fs = require('fs');
-const child = require('child_process');
+import anyTest, {TestInterface} from 'ava';
 
-let secondTag;
+const test = anyTest as TestInterface<{lorax: Lorax}>;
+
+let secondTag: string;
 
 test.before.cb((t) => {
   t.context.lorax = new Lorax();

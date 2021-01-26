@@ -22,7 +22,7 @@ class Parser {
    * Given a string of commits in a special format, parse string and creates an array of
    * commit objects with information
    */
-  parse(commit: Nullable<string>): Nullable<Commit> {
+  parse(commit: string | null): Commit | null {
     if (!commit) return null;
 
     let lines = commit.split('\n') as Array<string>;

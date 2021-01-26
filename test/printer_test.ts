@@ -1,8 +1,9 @@
-'use strict';
+import {Printer} from '../src/lib/printer';
+import {Config} from '../src/lib/config';
 
-const test = require('ava');
-const {Config} = require('../build/lib/config');
-const {Printer} = require('../build/lib/printer');
+import anyTest, {TestInterface} from 'ava';
+
+const test = anyTest as TestInterface<{config: Config}>;
 
 test.beforeEach((t) => {
   t.context.config = new Config();
@@ -26,7 +27,7 @@ test('print one section with two issues', (t) => {
         component: 'lorax',
         message: 'This is a test',
         hash: '123456',
-        issues: ['321', '123'],
+        issues: [321, 123],
         title: 'Some random title',
       },
     ],
@@ -48,7 +49,7 @@ test('print one section with one issue', (t) => {
         component: 'lorax',
         message: 'This is a test',
         hash: '123456',
-        issues: ['321'],
+        issues: [321],
         title: 'Some random title',
       },
     ],
@@ -93,6 +94,7 @@ test('print two sections', (t) => {
         message: 'This is a test',
         hash: '123456',
         issues: [],
+        title: '',
       },
       {
         type: 'refactor',
@@ -100,6 +102,7 @@ test('print two sections', (t) => {
         message: 'This is a refactor',
         hash: '2351',
         issues: [],
+        title: '',
       },
     ],
     '0.1.0',
@@ -121,6 +124,7 @@ test('print two components in one section', (t) => {
         message: 'This is a test',
         hash: '123456',
         issues: [],
+        title: '',
       },
       {
         type: 'fix',
@@ -128,6 +132,7 @@ test('print two components in one section', (t) => {
         message: 'This is my second test',
         hash: '92749a8',
         issues: [],
+        title: '',
       },
       {
         type: 'fix',
@@ -135,6 +140,7 @@ test('print two components in one section', (t) => {
         message: 'Trying to fix config',
         hash: '321',
         issues: [],
+        title: '',
       },
     ],
     '0.1.0',
@@ -157,6 +163,7 @@ test('print without url', (t) => {
         message: 'This is a test',
         hash: '123456',
         issues: [],
+        title: '',
       },
     ],
     '0.1.0',

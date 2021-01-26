@@ -1,6 +1,7 @@
-const test = require('ava');
-const {getLastTag, getLog} = require('../build/lib/git');
-let child = require('child_process');
+import {getLastTag, getLog} from '../src/lib/git';
+const child = require('child_process');
+
+import test from 'ava';
 
 test('get the last tag', (t) => {
   return getLastTag().then((result) => {
@@ -11,6 +12,7 @@ test('get the last tag', (t) => {
 test.serial('reject the promise when failed to get last tag', (t) => {
   let tmpExec = child.exec;
 
+  // @ts-ignore
   child.exec = function (cmd, opt, fn) {
     fn('failed', 'some stdout lines');
   };
@@ -23,6 +25,7 @@ test.serial('reject the promise when failed to get last tag', (t) => {
       t.is(error, 'failed');
     })
     .finally(() => {
+      // @ts-ignore
       child.exec = tmpExec;
     });
 });
@@ -52,11 +55,14 @@ test('get no commit', (t) => {
 test.serial('reject the promise when the command fails', (t) => {
   let tmpExec = child.exec;
 
+  // @ts-ignore
   child.exec = function (cmd, opt, fn) {
     fn('failed');
   };
 
-  return getLog({grep: '^doesNotExist'})
+  return getLog({
+    grep: '^doesNotExist',
+  })
     .then(() => {
       t.fail('Should not have succeeded');
     })
@@ -64,6 +70,7 @@ test.serial('reject the promise when the command fails', (t) => {
       t.is(error, 'failed');
     })
     .finally(() => {
+      // @ts-ignore
       child.exec = tmpExec;
     });
 });

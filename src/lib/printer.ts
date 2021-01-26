@@ -36,7 +36,7 @@ class Printer {
    * @description
    * Create a markdown link to issue page with issue number as text
    */
-  linkToIssue(issue: number): string {
+  linkToIssue(issue?: number): string {
     if (!issue) return '';
 
     const url: Configuration['url'] = this.config.get('url');
@@ -56,7 +56,7 @@ class Printer {
    * @description
    * Create a markdown link to commit page with commit hash as text
    */
-  linkToCommit(hash: string): string {
+  linkToCommit(hash?: string): string {
     if (!hash) return '';
 
     const url = this.config.get('url');

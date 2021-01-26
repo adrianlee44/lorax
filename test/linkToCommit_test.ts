@@ -1,16 +1,13 @@
-'use strict';
+import {Printer} from '../src/lib/printer';
+import {Config} from '../src/lib/config';
 
-const test = require('ava');
-const {Printer} = require('../build/lib/printer');
-const {Config} = require('../build/lib/config');
+import anyTest, {TestInterface} from 'ava';
+
+const test = anyTest as TestInterface<{config: Config; printer: Printer}>;
 
 test.beforeEach((t) => {
   t.context.config = new Config();
   t.context.printer = new Printer([], 'v0.1.0', t.context.config);
-});
-
-test.afterEach((t) => {
-  t.context = {};
 });
 
 test('basicTest', (t) => {
