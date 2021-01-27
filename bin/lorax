@@ -36,7 +36,9 @@ if (!process.argv.slice(2).length) {
 
 const {Lorax} = require(dir + 'build/lorax.js');
 const lorax = new Lorax();
-lorax.generate(program.tag, program.file, {
-  since: program.since,
-  prepend: !!program.prepend,
+
+const options = program.opts();
+lorax.generate(options.tag, options.file, {
+  since: options.since,
+  prepend: !!options.prepend,
 });
