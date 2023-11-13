@@ -45,16 +45,14 @@ export class Lorax {
   get(grep: string, tag?: string): Promise<Array<string>> {
     const promise = tag ? Promise.resolve<string>(tag) : git.getLastTag();
     return promise
-      .then(
-        (tag: string): Promise<Array<string>> => {
-          let msg = 'Reading commits';
-          if (tag) {
-            msg += ' since ' + tag;
-          }
-          console.log(msg);
-          return git.getLog({grep, tag});
+      .then((tag: string): Promise<Array<string>> => {
+        let msg = 'Reading commits';
+        if (tag) {
+          msg += ' since ' + tag;
         }
-      )
+        console.log(msg);
+        return git.getLog({grep, tag});
+      })
       .catch((error) => {
         console.error('Unable to retrieve commits');
         return Promise.reject(error);

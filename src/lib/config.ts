@@ -81,14 +81,18 @@ class Config {
 
   set<K extends keyof Configuration | Partial<Configuration>>(
     key: K,
-    value?: any
+    value?: Configuration[keyof Configuration]
   ): Configuration {
     if (typeof key === 'object') {
-      for (const hashKey in key) {
-        this.set(hashKey as keyof Configuration, key[hashKey]);
-      }
-    } else {
-      this.config[key as keyof Configuration] = value;
+      this.config = {
+        ...this.config,
+        ...key,
+      };
+    } else if (typeof key === 'string') {
+      this.config = {
+        ...this.config,
+        [key]: value,
+      };
     }
 
     return this.config;
