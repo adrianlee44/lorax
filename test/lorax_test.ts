@@ -1,31 +1,27 @@
 import {Lorax} from '../src/lorax';
-import * as fs from 'fs';
-import * as child from 'child_process';
+import fs from 'node:fs/promises';
+import {$} from 'execa';
 
-import anyTest, {TestInterface} from 'ava';
+import anyTest, {TestFn} from 'ava';
 
-const test = anyTest as TestInterface<{lorax: Lorax}>;
+const test = anyTest as TestFn<{lorax: Lorax}>;
 
 let secondTag: string;
 
-test.before.cb((t) => {
+test.before(async (t) => {
   t.context.lorax = new Lorax();
-  const last2Tags =
-    "git for-each-ref refs/tags --sort=-creatordate --format='%(refname:short)' --count=2";
-  child.exec(last2Tags, (error, stdout) => {
-    secondTag = stdout.split('\n')[1];
-    t.end();
-  });
+  const {stdout} =
+    await $`git for-each-ref refs/tags --sort=-creatordate --format='%(refname:short)' --count=2`;
+  secondTag = stdout.split('\n')[1];
 });
 
-test.afterEach.cb((t) => {
-  fs.access('test.md', (err) => {
-    if (err) {
-      t.end();
-    } else {
-      fs.unlink('test.md', t.end);
-    }
-  });
+test.afterEach(async (t) => {
+  try {
+    await fs.access('test.md');
+    await fs.unlink('test.md');
+  } catch (e) {
+    // do nothing
+  }
 });
 
 test.serial('get logs', (t) => {
@@ -50,25 +46,25 @@ test.serial('get logs since a certain tag', (t) => {
   });
 });
 
-test.cb('should write to file', (t) => {
-  t.context.lorax.generate('vtest', 'test.md', {since: secondTag}).then(() => {
-    fs.readFile('test.md', t.end);
-  });
+test('should write to file', async (t) => {
+  await t.context.lorax.generate('vtest', 'test.md', {since: secondTag});
+  const data = await fs.readFile('test.md');
+  t.truthy(data);
 });
 
-test('should prepend to file', (t) => {
+test('should prepend to file', async (t) => {
   let testFile = 'test/prepend_test.md';
-  let originalData = fs.readFileSync(testFile);
-  return t.context.lorax
-    .generate('vtest', testFile, {since: secondTag, prepend: true})
-    .then(() => {
-      let data = fs.readFileSync(testFile);
+  let originalData = await fs.readFile(testFile);
+  await t.context.lorax.generate('vtest', testFile, {
+    since: secondTag,
+    prepend: true,
+  });
 
-      t.truthy(data.indexOf('existing data') > -1);
-      t.truthy(data.indexOf('vtest') > -1);
+  let data = await fs.readFile(testFile);
+  t.truthy(data.indexOf('existing data') > -1);
+  t.truthy(data.indexOf('vtest') > -1);
 
-      fs.writeFileSync(testFile, originalData, {
-        encoding: 'utf-8',
-      });
-    });
+  await fs.writeFile(testFile, originalData, {
+    encoding: 'utf-8',
+  });
 });

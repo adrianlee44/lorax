@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import {readFile, unlink} from 'node:fs/promises';
 import {Config} from '../src/lib/config';
 import test from 'ava';
 
@@ -64,7 +64,7 @@ test('custom property false', (t) => {
   t.is(configObj.custom, false);
 });
 
-test.cb('write back to config', (t) => {
+test('write back to config', async (t) => {
   const configObj = new Config();
   configObj.set({
     issue: '/issues/test/%s',
@@ -73,9 +73,11 @@ test.cb('write back to config', (t) => {
 
   configObj.updatePath('test-config.json');
   configObj.write();
-  fs.readFileSync('test-config.json');
 
-  fs.unlink('test-config.json', t.end);
+  const data = await readFile('test-config.json');
+  t.truthy(data);
+
+  await unlink('test-config.json');
 });
 
 test('reset', (t) => {
