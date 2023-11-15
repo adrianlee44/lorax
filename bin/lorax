@@ -8,10 +8,11 @@
  * Licensed under the MIT license.
  */
 
-const path = require('path'),
-  dir = path.join(__dirname, '../'),
-  pkg = require(dir + 'package.json'),
-  {program} = require('commander');
+const dir = path.join(__dirname, '../');
+const pkg = require(dir + 'package.json');
+
+import path from 'node:path';
+import {program} from 'commander';
 
 program
   .version(pkg.version)
