@@ -26,7 +26,7 @@ export interface LoraxOptions {
   timestamp?: Date;
 }
 
-export class Lorax {
+export default class Lorax {
   _config: Config;
   _parser: Parser;
 

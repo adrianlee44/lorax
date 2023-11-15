@@ -1,4 +1,4 @@
-import {Lorax} from '../src/lorax.js';
+import Lorax from '../src/lorax.js';
 import fs from 'node:fs/promises';
 import {$} from 'execa';
 

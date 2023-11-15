@@ -35,7 +35,7 @@ if (!process.argv.slice(2).length) {
   program.help();
 }
 
-const {Lorax} = require(dir + 'build/lorax.js');
+const Lorax = require(dir + 'build/lorax.js');
 const lorax = new Lorax();
 
 const options = program.opts();
