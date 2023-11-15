@@ -15,7 +15,7 @@ test.before(async (t) => {
   secondTag = stdout.split('\n')[1];
 });
 
-test.afterEach(async (t) => {
+test.afterEach(async () => {
   try {
     await fs.access('test.md');
     await fs.unlink('test.md');
@@ -51,14 +51,14 @@ test('should write to file', async (t) => {
 });
 
 test('should prepend to file', async (t) => {
-  let testFile = 'test/prepend_test.md';
-  let originalData = await fs.readFile(testFile);
+  const testFile = 'test/prepend_test.md';
+  const originalData = await fs.readFile(testFile);
   await t.context.lorax.generate('vtest', testFile, {
     since: secondTag,
     prepend: true,
   });
 
-  let data = await fs.readFile(testFile);
+  const data = await fs.readFile(testFile);
   t.truthy(data.indexOf('existing data') > -1);
   t.truthy(data.indexOf('vtest') > -1);
 

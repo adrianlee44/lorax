@@ -1,5 +1,5 @@
 import {readFile, unlink} from 'node:fs/promises';
-import {Config} from '../src/lib/config.js';
+import Config from '../src/lib/config.js';
 import test from 'ava';
 
 test('default', (t) => {
@@ -14,7 +14,7 @@ test('invalid file', (t) => {
 });
 
 test.serial('bad data in valid file', (t) => {
-  let oldConsoleError = console.error;
+  const oldConsoleError = console.error;
   let errorMsg;
 
   console.error = function (message: string) {
