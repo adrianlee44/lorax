@@ -1,5 +1,5 @@
 import {readFile, unlink} from 'node:fs/promises';
-import {Config} from '../src/lib/config';
+import {Config} from '../src/lib/config.js';
 import test from 'ava';
 
 test('default', (t) => {

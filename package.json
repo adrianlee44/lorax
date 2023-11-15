@@ -2,21 +2,23 @@
   "name": "lorax",
   "version": "3.0.0",
   "description": "A node module which reads the git log and create a human readable changelog",
-  "main": "lib/lorax.js",
+  "exports": "./lib/lorax.js",
   "bin": "bin/lorax",
   "files": [
     "bin/lorax",
     "build/**/*"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=16"
   },
+  "type": "module",
   "scripts": {
+    "compile": "tsc",
     "prepublishOnly": "tsc",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "test": "npm run clean; npm run lint; tsc; npm run coverage",
-    "unit-test": "tsc; ava",
+    "unit-test": "ava",
     "coverage": "nyc ava",
     "report": "nyc report --reporter=lcov",
     "clean": "rm -rf coverage/ build/"

@@ -1,9 +1,9 @@
-import {Printer} from '../src/lib/printer';
-import {Config} from '../src/lib/config';
+import Printer from '../src/lib/printer.js';
+import Config from '../src/lib/config.js';
 
-import anyTest, {TestInterface} from 'ava';
+import anyTest, {TestFn} from 'ava';
 
-const test = anyTest as TestInterface<{config: Config}>;
+const test = anyTest as TestFn<{config: Config}>;
 
 test.beforeEach((t) => {
   t.context.config = new Config();

@@ -1,4 +1,4 @@
-import {Lorax} from '../src/lorax';
+import {Lorax} from '../src/lorax.js';
 import fs from 'node:fs/promises';
 import {$} from 'execa';
 
@@ -24,25 +24,23 @@ test.afterEach(async (t) => {
   }
 });
 
-test.serial('get logs', (t) => {
-  return t.context.lorax.get('^fix|^feature|^refactor|BREAKING').then((log) => {
-    t.truthy(log);
-  });
+test.serial('get logs', async (t) => {
+  const log = await t.context.lorax.get('^fix|^feature|^refactor|BREAKING');
+  t.truthy(log);
 });
 
-test.serial('get logs since a certain tag', (t) => {
+test.serial('get logs since a certain tag', async (t) => {
   const grepString = '^fix|^feature|^refactor|BREAKING';
   const grepRegex = new RegExp(grepString);
 
-  return t.context.lorax.get(grepString, secondTag).then((data) => {
-    t.plan(data.length - 1);
+  const data = await t.context.lorax.get(grepString, secondTag);
+  t.plan(data.length - 1);
 
-    data.forEach((commit) => {
-      if (!commit) return;
+  data.forEach((commit) => {
+    if (!commit) return;
 
-      const lines = commit.split('\n');
-      t.truthy(grepRegex.test(lines[1]));
-    });
+    const lines = commit.split('\n');
+    t.truthy(grepRegex.test(lines[1]));
   });
 });
 

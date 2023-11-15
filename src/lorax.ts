@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @name Lorax
  *
@@ -12,16 +10,15 @@
  *
  * @dependencies
  * - commander
- * - q
  */
 
-import {Config} from './lib/config';
-import * as fs from 'fs';
-import * as git from './lib/git';
-import {Printer} from './lib/printer';
-import {Parser} from './lib/parser';
+import fs from 'node:fs';
+import Config from './lib/config.js';
+import {getLastTag, getLog} from './lib/git.js';
+import Printer from './lib/printer.js';
+import Parser from './lib/parser.js';
 
-import type {Commit} from './lib/parser';
+import type {Commit} from './lib/parser.js';
 
 export interface LoraxOptions {
   since?: string;
@@ -42,58 +39,57 @@ export class Lorax {
    * @description
    * Get all commits or commits since last tag
    */
-  get(grep: string, tag?: string): Promise<Array<string>> {
-    const promise = tag ? Promise.resolve<string>(tag) : git.getLastTag();
-    return promise
-      .then((tag: string): Promise<Array<string>> => {
-        let msg = 'Reading commits';
-        if (tag) {
-          msg += ' since ' + tag;
-        }
-        console.log(msg);
-        return git.getLog({grep, tag});
-      })
-      .catch((error) => {
-        console.error('Unable to retrieve commits');
-        return Promise.reject(error);
-      });
+  async get(grep: string, tag?: string): Promise<Array<string>> {
+    try {
+      tag = tag ? tag : await getLastTag();
+      let msg = 'Reading commits';
+      if (tag) {
+        msg += ' since ' + tag;
+      }
+      console.log(msg);
+      return await getLog({grep, tag});
+    } catch (error) {
+      console.error('Unable to retrieve commits');
+      throw error;
+    }
   }
 
   /**
    * @description
    * A shortcut function to get the latest tag, parse all the commits and generate the changelog
    */
-  generate(toTag: string, file: string, options: LoraxOptions): Promise<void> {
+  async generate(
+    toTag: string,
+    file: string,
+    options: LoraxOptions
+  ): Promise<void> {
     const grep = this._config.get('type').join('|');
+    const commits = await this.get(grep, options.since);
 
-    return this.get(grep, options.since).then(
-      (commits: Array<string>): void => {
-        const parsedCommits: Array<Commit> = [];
-        commits.forEach((commit: string) => {
-          const parsedCommit = this._parser.parse(commit);
+    const parsedCommits: Array<Commit> = [];
+    commits.forEach((commit: string) => {
+      const parsedCommit = this._parser.parse(commit);
 
-          if (parsedCommit) {
-            parsedCommits.push(parsedCommit);
-          }
-        });
-
-        console.log(`Parsed ${parsedCommits.length} commit(s)`);
-        const printer = new Printer(parsedCommits, toTag, this._config);
-        let result = printer.print();
-
-        if (options.prepend) {
-          const existingData = fs.readFileSync(file, {
-            encoding: 'utf-8',
-          });
-
-          result += existingData;
-        }
-
-        fs.writeFileSync(file, result, {flag: 'w'});
-
-        console.log(`Generated changelog to ${file} (${toTag})`);
-        return;
+      if (parsedCommit) {
+        parsedCommits.push(parsedCommit);
       }
-    );
+    });
+
+    console.log(`Parsed ${parsedCommits.length} commit(s)`);
+    const printer = new Printer(parsedCommits, toTag, this._config);
+    let result = printer.print();
+
+    if (options.prepend) {
+      const existingData = fs.readFileSync(file, {
+        encoding: 'utf-8',
+      });
+
+      result += existingData;
+    }
+
+    fs.writeFileSync(file, result, {flag: 'w'});
+
+    console.log(`Generated changelog to ${file} (${toTag})`);
+    return;
   }
 }

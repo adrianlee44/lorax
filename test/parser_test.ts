@@ -1,4 +1,4 @@
-import {Parser} from '../src/lib/parser';
+import Parser from '../src/lib/parser.js';
 import test from 'ava';
 
 const commit =

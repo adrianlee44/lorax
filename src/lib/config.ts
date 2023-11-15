@@ -1,16 +1,14 @@
-'use strict';
-
 /**
  * @name config
  * @description
  * Managing lorax configuration
  */
 
-import * as fs from 'fs';
+import fs from 'node:fs';
 import findup from 'findup-sync';
-import {isAbsolute, basename} from 'path';
+import {isAbsolute, basename} from 'node:path';
 
-interface DisplayConfiguration {
+export interface DisplayConfiguration {
   [key: string]: string;
   breaking: string;
   feature: string;
@@ -18,7 +16,7 @@ interface DisplayConfiguration {
   refactor: string;
 }
 
-interface Configuration {
+export interface Configuration {
   commit: string;
   display: DisplayConfiguration;
   issue: string;
@@ -26,7 +24,7 @@ interface Configuration {
   url?: string;
 }
 
-class Config {
+export default class Config {
   config: Configuration;
   custom: boolean;
   jsonData: Configuration | Record<string, unknown>;
@@ -120,5 +118,3 @@ class Config {
     ) as Configuration;
   }
 }
-
-export {Config, Configuration, DisplayConfiguration};

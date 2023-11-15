@@ -1,19 +1,17 @@
-'use strict';
-
 /**
  * @name printer
  * @description
  * Printing parsed data back into readable format
  */
 
-import * as util from 'util';
-import {template} from './template';
+import util from 'node:util';
+import {template} from './template.js';
 
-import {Config} from './config';
+import Config from './config.js';
 
-import type {Configuration, DisplayConfiguration} from './config';
-import type {Commit} from './parser';
-import type {LoraxOptions} from '../lorax';
+import type {Configuration, DisplayConfiguration} from './config.js';
+import type {Commit} from './parser.js';
+import type {LoraxOptions} from '../lorax.js';
 
 type PrintSection = {
   [P in keyof DisplayConfiguration]: {
@@ -21,7 +19,7 @@ type PrintSection = {
   };
 };
 
-class Printer {
+export default class Printer {
   private commits: Array<Commit>;
   private version: string;
   private config: Config;
@@ -158,5 +156,3 @@ class Printer {
     return lines.join('\n');
   }
 }
-
-export {Printer};

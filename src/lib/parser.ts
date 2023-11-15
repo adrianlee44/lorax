@@ -1,12 +1,10 @@
-'use strict';
-
 /**
  * @name parser
  */
 
 const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
 
-interface Commit {
+export interface Commit {
   type: string;
   component: string;
   message: string;
@@ -15,7 +13,7 @@ interface Commit {
   title: string;
 }
 
-class Parser {
+export default class Parser {
   /**
    * @name parse
    * @description
@@ -71,5 +69,3 @@ class Parser {
     return commitObj;
   }
 }
-
-export {Commit, Parser};
