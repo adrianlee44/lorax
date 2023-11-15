@@ -1,2 +1,4 @@
+bin/lorax
+
 build/
 .nyc_output/
