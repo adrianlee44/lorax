@@ -59,8 +59,8 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "commander": "^7.0.0",
-    "findup-sync": "^4.0.0"
+    "commander": "^11.1.0",
+    "findup-sync": "^5.0.0"
   },
   "ava": {
     "extensions": {
