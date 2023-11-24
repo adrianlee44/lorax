@@ -19,8 +19,8 @@
     "lint-fix": "eslint . --fix",
     "test": "npm run clean; npm run lint; tsc; npm run coverage",
     "unit-test": "ava",
-    "coverage": "nyc ava",
-    "report": "nyc report --reporter=lcov",
+    "coverage": "c8 ava",
+    "report": "c8 report",
     "clean": "rm -rf coverage/ build/"
   },
   "repository": {
@@ -49,11 +49,11 @@
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "ava": "^5.3.1",
+    "c8": "^8.0.1",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "execa": "^8.0.1",
-    "nyc": "^15.1.0",
     "prettier": "^3.1.0",
     "tsx": "^4.1.2",
     "typescript": "^5.2.2"
