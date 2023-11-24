@@ -1,7 +1,7 @@
 # Lorax
 
 ![Tests](https://github.com/adrianlee44/lorax/workflows/Tests/badge.svg)
-[![Coverage Status](https://img.shields.io/coveralls/adrianlee44/lorax/master.svg?style=flat-square)](https://coveralls.io/github/adrianlee44/lorax?branch=master)
+[![codecov](https://codecov.io/gh/adrianlee44/lorax/graph/badge.svg?token=REISFTOVEW)](https://codecov.io/gh/adrianlee44/lorax)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](https://github.com/adrianlee44/lorax/blob/master/LICENSE-MIT)
 [![NPM](https://img.shields.io/npm/v/lorax.svg?style=flat-square)](https://www.npmjs.org/package/lorax)
 
