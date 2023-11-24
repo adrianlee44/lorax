@@ -2,7 +2,12 @@
  * @name parser
  */
 
-const closeRegex = /(?:close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s+#(\d+)/i;
+import {
+  BREAKING_CHANGE_REGEX,
+  CLOSE_REGEX,
+  NEW_LINE,
+  TITLE_REGEX,
+} from './constants.js';
 
 export interface Commit {
   type: string;
@@ -23,7 +28,7 @@ export default class Parser {
   parse(commit: string | null): Commit | null {
     if (!commit) return null;
 
-    let lines = commit.split('\n') as Array<string>;
+    let lines = commit.split(NEW_LINE) as Array<string>;
     const commitObj: Commit = {
       type: '',
       component: '',
@@ -36,7 +41,7 @@ export default class Parser {
     // Get all related commits
     const newLines = [] as Array<string>;
     lines.forEach((line) => {
-      const match = line.match(closeRegex);
+      const match = line.match(CLOSE_REGEX);
       if (match) {
         commitObj.issues.push(parseInt(match[1]));
       } else {
@@ -46,21 +51,21 @@ export default class Parser {
     lines = newLines;
 
     // Rejoin the rest of the lines after stripping out certain information
-    const message = lines.join('\n');
+    const message = lines.join(NEW_LINE);
 
-    const titleMatch = commitObj.title.match(/^([^(]+)\s*\(([^)]+)\):?\s+(.+)/);
+    const titleMatch = commitObj.title.match(TITLE_REGEX);
     if (titleMatch) {
       commitObj.type = titleMatch[1];
       commitObj.component = titleMatch[2];
       commitObj.message = titleMatch[3];
       if (message) {
-        commitObj.message += '\n' + message;
+        commitObj.message += NEW_LINE + message;
       }
     }
 
     // Check for breaking change commit
     // Replace commit description with breaking changes
-    const breakingMatch = message.match(/BREAKING CHANGE[S]?:?([\s\S]*)/);
+    const breakingMatch = message.match(BREAKING_CHANGE_REGEX);
     if (breakingMatch) {
       commitObj.type = 'breaking';
       commitObj.message = breakingMatch[1];

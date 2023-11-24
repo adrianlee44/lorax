@@ -8,6 +8,7 @@ import util from 'node:util';
 import {template} from './template.js';
 
 import Config from './config.js';
+import {NEW_LINE} from './constants.js';
 
 import type {Configuration, DisplayConfiguration} from './config.js';
 import type {Commit} from './parser.js';
@@ -142,7 +143,7 @@ export default class Printer {
           lines.push(
             util.format(
               template.COMMIT_ADDITIONAL_INFO,
-              additionalInfo.join(',\n   ')
+              additionalInfo.join(`,${NEW_LINE}   `)
             )
           );
         });
@@ -153,6 +154,6 @@ export default class Printer {
 
     // Add 2 new lines
     lines.push('', '');
-    return lines.join('\n');
+    return lines.join(NEW_LINE);
   }
 }
