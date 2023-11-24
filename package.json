@@ -20,7 +20,7 @@
     "test": "npm run clean; npm run lint; tsc; npm run coverage",
     "unit-test": "ava",
     "coverage": "c8 ava",
-    "report": "c8 report",
+    "report": "c8 report --reporter=lcov",
     "clean": "rm -rf coverage/ build/"
   },
   "repository": {
