@@ -62,7 +62,7 @@ export default class Printer {
     const commitTmpl = this.config.get('commit');
 
     let commitLink = template.COMMIT;
-    const shortenHash = hash.substr(0, 8);
+    const shortenHash = hash.substring(0, 8);
     if (url && commitTmpl) {
       commitLink = util.format(
         template.LINK_TO_COMMIT,
