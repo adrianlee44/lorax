@@ -4,7 +4,7 @@ import test from 'ava';
 
 test('default', (t) => {
   const configObj = new Config('random.json');
-  t.is(configObj.config.type.length, 6);
+  t.is(Object.keys(configObj.config.types).length, 6);
   t.falsy(configObj.config.url);
 });
 

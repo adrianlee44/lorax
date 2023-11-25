@@ -8,19 +8,16 @@ import fs from 'node:fs';
 import findup from 'findup-sync';
 import {isAbsolute, basename} from 'node:path';
 
-export interface DisplayConfiguration {
-  [key: string]: string;
-  breaking: string;
-  feature: string;
-  fix: string;
-  refactor: string;
-}
-
 export interface Configuration {
+  version: number;
   commit: string;
-  display: DisplayConfiguration;
   issue: string;
-  type: Array<string>;
+  types: {
+    [key: string]: {
+      title: string;
+      regex: string;
+    };
+  };
   url?: string;
 }
 
@@ -30,17 +27,37 @@ export default class Config {
   jsonData: Configuration | Record<string, unknown>;
   private path: string;
 
+  static VERSION = 2;
+
   static default = {
+    version: Config.VERSION,
     issue: '/issues/%s',
     commit: '/commit/%s',
-    type: ['^fix', '^feature', '^refactor', 'BREAKING', '^test', '^doc'],
-    display: {
-      fix: 'Bug Fixes',
-      feature: 'Features',
-      breaking: 'Breaking Changes',
-      refactor: 'Optimizations',
-      test: 'Testing',
-      doc: 'Documentation',
+    types: {
+      fix: {
+        title: 'Bug Fixes',
+        regex: '^fix',
+      },
+      feature: {
+        title: 'Features',
+        regex: '^feature',
+      },
+      breaking: {
+        title: 'Breaking Changes',
+        regex: 'BREAKING',
+      },
+      refactor: {
+        title: 'Optimizations',
+        regex: '^refactor',
+      },
+      test: {
+        title: 'Testing',
+        regex: '^test',
+      },
+      doc: {
+        title: 'Documentation',
+        regex: '^doc',
+      },
     },
   };
 
@@ -60,7 +77,18 @@ export default class Config {
           encoding: 'utf-8',
         });
 
-        this.jsonData = JSON.parse(rawData);
+        const parsedRawData = JSON.parse(rawData);
+
+        if (parsedRawData.version !== Config.VERSION) {
+          console.error(
+            `Invalid version of ${basename(
+              this.path
+            )}. Please update to version ${Config.VERSION}`
+          );
+          this.jsonData = {};
+        } else {
+          this.jsonData = parsedRawData;
+        }
       } catch (e) {
         console.error(`Invalid ${basename(this.path)}`);
       }

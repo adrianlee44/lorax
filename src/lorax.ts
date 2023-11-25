@@ -63,7 +63,8 @@ export default class Lorax {
     file: string,
     options: LoraxOptions
   ): Promise<void> {
-    const grep = this._config.get('type').join('|');
+    const types = Object.values(this._config.get('types'));
+    const grep = types.map((type) => type.regex).join('|');
     const commits = await this.get(grep, options.since);
 
     const parsedCommits: Array<Commit> = [];

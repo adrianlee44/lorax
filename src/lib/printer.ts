@@ -10,12 +10,12 @@ import {template} from './template.js';
 import Config from './config.js';
 import {NEW_LINE} from './constants.js';
 
-import type {Configuration, DisplayConfiguration} from './config.js';
+import type {Configuration} from './config.js';
 import type {Commit} from './parser.js';
 import type {LoraxOptions} from '../lorax.js';
 
 type PrintSection = {
-  [P in keyof DisplayConfiguration]: {
+  [P in string]: {
     [component: string]: Array<Commit>;
   };
 };
@@ -83,7 +83,7 @@ export default class Printer {
   print(options?: LoraxOptions): string {
     const lines: Array<string> = [];
     const sections = {} as PrintSection;
-    const display = this.config.get('display');
+    const types = this.config.get('types');
 
     options = options || {};
 
@@ -99,7 +99,7 @@ export default class Printer {
       )
     );
 
-    for (const key in display) {
+    for (const key in types) {
       sections[key] = {};
     }
 
@@ -120,7 +120,9 @@ export default class Printer {
         continue;
       }
 
-      lines.push(util.format(template.SECTION_HEADER, display[sectionType]));
+      lines.push(
+        util.format(template.SECTION_HEADER, types[sectionType].title)
+      );
 
       components.forEach((componentName: string) => {
         const componentList = list[componentName] || [];

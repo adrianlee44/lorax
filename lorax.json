@@ -1,17 +1,24 @@
 {
+  "version": 2,
   "issue": "/issues/%s",
   "commit": "/commit/%s",
-  "type": [
-    "^fix",
-    "^feature",
-    "^refactor",
-    "BREAKING"
-  ],
-  "display": {
-    "fix": "Bug Fixes",
-    "feature": "Features",
-    "breaking": "Breaking Changes",
-    "refactor": "Optimizations"
+  "types": {
+    "fix": {
+      "title": "Bug Fixes",
+      "regex": "^fix"
+    },
+    "feature": {
+      "title": "Features",
+      "regex": "^feature"
+    },
+    "refactor": {
+      "title": "Optimizations",
+      "regex": "^refactor"
+    },
+    "breaking": {
+      "title": "Breaking Changes",
+      "regex": "BREAKING"
+    }
   },
   "url": "https://github.com/adrianlee44/lorax"
 }
