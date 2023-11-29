@@ -102,32 +102,39 @@ Project can add `lorax.json` in root directory to override default settings
 {
   issue: "/issues/%s",
   commit: "/commit/%s",
-  type: ["^fix", "^feature", "^refactor", "BREAKING"],
-  display: {
-    fix: "Bug Fixes",
-    feature: "Features",
-    breaking: "Breaking Changes",
-    refactor: "Optimizations"
+  types: {
+    fix: {
+      title: 'Bug Fixes',
+      regex: '^fix',
+    },
+    feature: {
+      title: 'Features',
+      regex: '^feat(ure)?',
+    },
+    breaking: {
+      title: 'Breaking Changes',
+      regex: 'BREAKING',
+    },
+    refactor: {
+      title: 'Optimizations',
+      regex: '^refactor',
+    },
+    test: {
+      title: 'Testing',
+      regex: '^test',
+    },
+    doc: {
+      title: 'Documentation',
+      regex: '^doc',
+    },
   },
   url: "https://github.com/adrianlee44/lorax"
 }
 ```
 
-| key     | description                                                                                                          | Default                                         |
-| ------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| issue   | Partial URL for issues                                                                                               | `issues/%s`                                     |
-| commit  | Partial URL for commits                                                                                              | `/commit/%s`                                    |
-| type    | Type of commit message to parse. Items in this array are joined into a string and used for searching commit messages | `["^fix", "^feature", "^refactor", "BREAKING"]` |
-| display | Display name for each commit message type                                                                            | See next section                                |
-| url     | URL of the Github repo                                                                                               | ''                                              |
-
-### Display name default
-
-| key      | display name     |
-| -------- | ---------------- |
-| breaking | Breaking Changes |
-| doc      | Documentation    |
-| feature  | Features         |
-| fix      | Bug Fixes        |
-| refactor | Optimizations    |
-| test     | Testing          |
+| key    | description                                                                | Default      |
+| ------ | -------------------------------------------------------------------------- | ------------ |
+| issue  | Partial URL for issues                                                     | `/issues/%s` |
+| commit | Partial URL for commits                                                    | `/commit/%s` |
+| types  | Configuration including display title and regex for type of commit message | See above    |
+| url    | URL of the repo                                                            | ''           |
