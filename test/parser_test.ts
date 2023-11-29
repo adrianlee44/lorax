@@ -20,6 +20,14 @@ test('type parse', (t) => {
   t.is(obj && obj.type, 'feature');
 });
 
+test('type parse with regex not matching type name', (t) => {
+  const featCommit =
+    '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeat(lorax): Basic testing\n\nFixes #123';
+  const obj = parser.parse(featCommit);
+  t.assert(obj);
+  t.is(obj && obj.type, 'feature');
+});
+
 test('component parse', (t) => {
   const obj = parser.parse(commit);
   t.assert(obj);

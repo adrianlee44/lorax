@@ -9,7 +9,7 @@
     },
     "feature": {
       "title": "Features",
-      "regex": "^feature"
+      "regex": "^feat(ure)?"
     },
     "refactor": {
       "title": "Optimizations",

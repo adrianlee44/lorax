@@ -40,7 +40,7 @@ export default class Config {
       },
       feature: {
         title: 'Features',
-        regex: '^feature',
+        regex: '^feat(ure)?',
       },
       breaking: {
         title: 'Breaking Changes',

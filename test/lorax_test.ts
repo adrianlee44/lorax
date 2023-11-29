@@ -25,12 +25,12 @@ test.afterEach(async () => {
 });
 
 test('get logs', async (t) => {
-  const log = await t.context.lorax.get('^fix|^feature|^refactor|BREAKING');
+  const log = await t.context.lorax.get('^fix|^feat(ure)?|^refactor|BREAKING');
   t.truthy(log);
 });
 
 test('get logs since a certain tag', async (t) => {
-  const grepString = '^fix|^feature|^refactor|BREAKING';
+  const grepString = '^fix|^feat(ure)?|^refactor|BREAKING';
   const grepRegex = new RegExp(grepString, 'm');
 
   const data = await t.context.lorax.get(grepString, secondTag);
