@@ -1,3 +1,5 @@
+import type Config from './config.js';
+
 /**
  * @name parser
  */
@@ -19,6 +21,12 @@ export interface Commit {
 }
 
 export default class Parser {
+  _config: Config;
+
+  constructor(config: Config) {
+    this._config = config;
+  }
+
   /**
    * @name parse
    * @description
@@ -55,7 +63,7 @@ export default class Parser {
 
     const titleMatch = commitObj.title.match(TITLE_REGEX);
     if (titleMatch) {
-      commitObj.type = titleMatch[1];
+      commitObj.type = this._config.getTypeByInput(titleMatch[1]);
       commitObj.component = titleMatch[2];
       commitObj.message = titleMatch[3];
       if (message) {

@@ -32,7 +32,7 @@ export default class Lorax {
 
   constructor() {
     this._config = new Config();
-    this._parser = new Parser();
+    this._parser = new Parser(this._config);
   }
 
   /**

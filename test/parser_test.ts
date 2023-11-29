@@ -1,10 +1,12 @@
 import Parser from '../src/lib/parser.js';
+import Config from '../src/lib/config.js';
 import test from 'ava';
 
 const commit =
   '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n\nFixes #123';
 
-const parser = new Parser();
+const config = new Config('./test/test_config.json');
+const parser = new Parser(config);
 
 test('hash parse', (t) => {
   const obj = parser.parse(commit);

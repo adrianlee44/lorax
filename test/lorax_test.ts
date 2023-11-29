@@ -24,23 +24,21 @@ test.afterEach(async () => {
   }
 });
 
-test.serial('get logs', async (t) => {
+test('get logs', async (t) => {
   const log = await t.context.lorax.get('^fix|^feature|^refactor|BREAKING');
   t.truthy(log);
 });
 
-test.serial('get logs since a certain tag', async (t) => {
+test('get logs since a certain tag', async (t) => {
   const grepString = '^fix|^feature|^refactor|BREAKING';
-  const grepRegex = new RegExp(grepString);
+  const grepRegex = new RegExp(grepString, 'm');
 
   const data = await t.context.lorax.get(grepString, secondTag);
   t.plan(data.length - 1);
 
   data.forEach((commit) => {
     if (!commit) return;
-
-    const lines = commit.split('\n');
-    t.truthy(grepRegex.test(lines[1]));
+    t.truthy(grepRegex.test(commit));
   });
 });
 

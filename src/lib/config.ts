@@ -101,6 +101,17 @@ export default class Config {
     ) as Configuration;
   }
 
+  getTypeByInput(input: string): string {
+    const types = this.config.types;
+    for (const [key, value] of Object.entries(types)) {
+      const regex = new RegExp(value.regex, 'i');
+      if (regex.test(input)) {
+        return key;
+      }
+    }
+    return '';
+  }
+
   get<K extends keyof Configuration>(key: K): Configuration[K] {
     return this.config[key];
   }

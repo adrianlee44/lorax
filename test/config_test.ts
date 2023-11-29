@@ -1,6 +1,16 @@
 import {readFile, unlink} from 'node:fs/promises';
 import Config from '../src/lib/config.js';
-import test from 'ava';
+import anyTest, {TestFn} from 'ava';
+
+const test = anyTest as TestFn<{config: Config}>;
+
+test.before((t) => {
+  t.context.config = new Config('./test/test_config.json');
+});
+
+test.afterEach((t) => {
+  t.context.config.reset();
+});
 
 test('default', (t) => {
   const configObj = new Config('random.json');
@@ -29,23 +39,24 @@ test.serial('bad data in valid file', (t) => {
 });
 
 test('load lorax json', (t) => {
-  const configObj = new Config();
-  t.is(configObj.config.url, 'https://github.com/adrianlee44/lorax');
+  t.is(t.context.config.config.url, 'https://example.com/repo');
 });
 
 test('get', (t) => {
-  const configObj = new Config();
-  t.is(configObj.get('url'), 'https://github.com/adrianlee44/lorax');
+  t.is(t.context.config.get('url'), 'https://example.com/repo');
+});
+
+test('getTypeByInput', (t) => {
+  t.is(t.context.config.getTypeByInput('fix'), 'fix');
 });
 
 test('set', (t) => {
-  const configObj = new Config();
-  configObj.set('issue', '/issues/test/%s');
-  t.is(configObj.get('issue'), '/issues/test/%s');
+  t.context.config.set('issue', '/issues/test/%s');
+  t.is(t.context.config.get('issue'), '/issues/test/%s');
 });
 
 test('set object', (t) => {
-  const configObj = new Config();
+  const configObj = new Config('./test/test_config.json');
   configObj.set({
     issue: '/issues/test/%s',
     commit: '/commit/test/%s',
@@ -55,8 +66,7 @@ test('set object', (t) => {
 });
 
 test('custom property', (t) => {
-  const configObj = new Config();
-  t.truthy(configObj.custom);
+  t.truthy(t.context.config.custom);
 });
 
 test('custom property false', (t) => {
@@ -65,28 +75,25 @@ test('custom property false', (t) => {
 });
 
 test('write back to config', async (t) => {
-  const configObj = new Config();
-  configObj.set({
+  t.context.config.set({
     issue: '/issues/test/%s',
     commit: '/commit/test/%s',
   });
 
-  configObj.updatePath('test-config.json');
-  configObj.write();
+  t.context.config.updatePath('test_config_output.json');
+  t.context.config.write();
 
-  const data = await readFile('test-config.json');
+  const data = await readFile('test_config_output.json');
   t.truthy(data);
 
-  await unlink('test-config.json');
+  await unlink('test_config_output.json');
 });
 
 test('reset', (t) => {
-  const configObj = new Config();
+  t.context.config.set('url', 'https://github.com/');
+  t.not(t.context.config.get('url'), 'https://example.com/repo');
 
-  configObj.set('url', 'https://github.com/');
-  t.not(configObj.get('url'), 'https://github.com/adrianlee44/lorax');
+  t.context.config.reset();
 
-  configObj.reset();
-
-  t.is(configObj.get('url'), 'https://github.com/adrianlee44/lorax');
+  t.is(t.context.config.get('url'), 'https://example.com/repo');
 });
