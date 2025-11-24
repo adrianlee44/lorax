@@ -8,11 +8,16 @@
  * Licensed under the MIT license.
  */
 
-const dir = path.join(__dirname, '../');
-const pkg = require(dir + 'package.json');
-
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
 import {program} from 'commander';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const dir = path.join(__dirname, '../');
+const pkg = JSON.parse(readFileSync(path.join(dir, 'package.json'), 'utf8'));
 
 program
   .version(pkg.version)
@@ -35,7 +40,7 @@ if (!process.argv.slice(2).length) {
   program.help();
 }
 
-const Lorax = require(dir + 'build/lorax.js');
+const { default: Lorax } = await import(path.join(dir, 'build/lorax.js'));
 const lorax = new Lorax();
 
 const options = program.opts();
