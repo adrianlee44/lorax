@@ -19,7 +19,7 @@ test.afterEach(async () => {
   try {
     await fs.access('test.md');
     await fs.unlink('test.md');
-  } catch (e) {
+  } catch (_) {
     // do nothing
   }
 });

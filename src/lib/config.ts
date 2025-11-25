@@ -89,7 +89,7 @@ export default class Config {
         } else {
           this.jsonData = parsedRawData;
         }
-      } catch (e) {
+      } catch (_) {
         console.error(`Invalid ${basename(this.path)}`);
       }
     }
