@@ -25,7 +25,7 @@ test('invalid file', (t) => {
 
 test.serial('bad data in valid file', (t) => {
   const oldConsoleError = console.error;
-  let errorMsg;
+  let errorMsg: string | undefined;
 
   console.error = function (message: string) {
     errorMsg = message;

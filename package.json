@@ -48,14 +48,14 @@
     "@types/node": "^20.9.0",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
-    "ava": "^5.3.1",
+    "ava": "^6.4.1",
     "c8": "^8.0.1",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "execa": "^8.0.1",
     "prettier": "^3.1.0",
-    "tsx": "^4.1.2",
+    "tsimp": "^2.0.12",
     "typescript": "^5.2.2"
   },
   "dependencies": {
@@ -67,7 +67,10 @@
       "ts": "module"
     },
     "nodeArguments": [
-      "--loader=tsx"
+      "--import=tsimp/import"
+    ],
+    "files": [
+      "test/**/*_test.ts"
     ]
   }
 }

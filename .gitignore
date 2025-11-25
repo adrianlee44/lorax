@@ -1,5 +1,6 @@
 node_modules/
 coverage/
+.tsimp/
 
 # Editor folder
 .c9
