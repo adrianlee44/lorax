@@ -3,7 +3,7 @@ import Config from '../src/lib/config.js';
 
 import anyTest, {TestFn} from 'ava';
 
-const test = anyTest as TestFn<{config: Config}>;
+const test = anyTest as unknown as TestFn<{config: Config}>;
 
 test.beforeEach((t) => {
   t.context.config = new Config();

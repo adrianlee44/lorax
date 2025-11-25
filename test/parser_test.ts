@@ -1,6 +1,8 @@
 import Parser from '../src/lib/parser.js';
 import Config from '../src/lib/config.js';
-import test from 'ava';
+import anyTest, {TestFn, ExecutionContext} from 'ava';
+
+const test = anyTest as unknown as TestFn<ExecutionContext>;
 
 const commit =
   '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n\nFixes #123';
@@ -8,19 +10,19 @@ const commit =
 const config = new Config('./test/test_config.json');
 const parser = new Parser(config);
 
-test('hash parse', (t) => {
+test('hash parse', (t: ExecutionContext) => {
   const obj = parser.parse(commit);
   t.assert(obj);
   t.is(obj && obj.hash, '7e7ac8957953e1686113f8086dc5b67246e5d3fa');
 });
 
-test('type parse', (t) => {
+test('type parse', (t: ExecutionContext) => {
   const obj = parser.parse(commit);
   t.assert(obj);
   t.is(obj && obj.type, 'feature');
 });
 
-test('type parse with regex not matching type name', (t) => {
+test('type parse with regex not matching type name', (t: ExecutionContext) => {
   const featCommit =
     '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeat(lorax): Basic testing\n\nFixes #123';
   const obj = parser.parse(featCommit);
@@ -28,13 +30,13 @@ test('type parse with regex not matching type name', (t) => {
   t.is(obj && obj.type, 'feature');
 });
 
-test('component parse', (t) => {
+test('component parse', (t: ExecutionContext) => {
   const obj = parser.parse(commit);
   t.assert(obj);
   t.is(obj && obj.component, 'lorax');
 });
 
-test('parsing component with whitespace', (t) => {
+test('parsing component with whitespace', (t: ExecutionContext) => {
   const commitWithWhitespace =
     '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature (lorax): Basic testing\n\nFixes #123';
   const obj = parser.parse(commitWithWhitespace);
@@ -42,7 +44,7 @@ test('parsing component with whitespace', (t) => {
   t.is(obj && obj.component, 'lorax');
 });
 
-test('component special character parse', (t) => {
+test('component special character parse', (t: ExecutionContext) => {
   const specialCommit =
     '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax-test!): Basic testing';
   const obj = parser.parse(specialCommit);
@@ -50,13 +52,13 @@ test('component special character parse', (t) => {
   t.is(obj && obj.component, 'lorax-test!');
 });
 
-test('message parse', (t) => {
+test('message parse', (t: ExecutionContext) => {
   const obj = parser.parse(commit);
   t.assert(obj);
   t.is(obj && obj.message, 'Basic testing');
 });
 
-test('parsing message without :', (t) => {
+test('parsing message without :', (t: ExecutionContext) => {
   const commitWithoutColon =
     '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax-test) Basic testing';
   const obj = parser.parse(commitWithoutColon);
@@ -64,19 +66,19 @@ test('parsing message without :', (t) => {
   t.is(obj && obj.message, 'Basic testing');
 });
 
-test('title parse', (t) => {
+test('title parse', (t: ExecutionContext) => {
   const obj = parser.parse(commit);
   t.assert(obj);
   t.is(obj && obj.title, 'feature(lorax): Basic testing');
 });
 
-test('issue parse', (t) => {
+test('issue parse', (t: ExecutionContext) => {
   const obj = parser.parse(commit);
   t.assert(obj);
   t.is(obj && obj.issues[0], 123);
 });
 
-test('issues parse', (t) => {
+test('issues parse', (t: ExecutionContext) => {
   const issuesCommit =
     '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n\nFixes #123\nFixes #124';
   const obj = parser.parse(issuesCommit);
@@ -85,7 +87,7 @@ test('issues parse', (t) => {
   t.is(obj && obj.issues[1], 124);
 });
 
-test('breaking change parse', (t) => {
+test('breaking change parse', (t: ExecutionContext) => {
   const breakingCommit =
     '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n\nBREAKING CHANGE: Testing';
   const obj = parser.parse(breakingCommit);
@@ -94,7 +96,7 @@ test('breaking change parse', (t) => {
   t.is(obj && obj.message, ' Testing');
 });
 
-test('long message parse', (t) => {
+test('long message parse', (t: ExecutionContext) => {
   let longMessage;
   longMessage =
     '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n';
@@ -107,7 +109,7 @@ test('long message parse', (t) => {
   t.is(obj && obj.message, 'Basic testing\nAdditional features:\n-foo\n-bar');
 });
 
-test('code example in commit parse', (t) => {
+test('code example in commit parse', (t: ExecutionContext) => {
   let codeMessage =
     '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n';
   codeMessage += 'Example:\n';

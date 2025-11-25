@@ -2,7 +2,7 @@ import {readFile, unlink} from 'node:fs/promises';
 import Config from '../src/lib/config.js';
 import anyTest, {TestFn} from 'ava';
 
-const test = anyTest as TestFn<{config: Config}>;
+const test = anyTest as unknown as TestFn<{config: Config}>;
 
 test.before((t) => {
   t.context.config = new Config('./test/test_config.json');

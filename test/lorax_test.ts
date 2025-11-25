@@ -4,7 +4,7 @@ import {$} from 'execa';
 
 import anyTest, {TestFn} from 'ava';
 
-const test = anyTest as TestFn<{lorax: Lorax}>;
+const test = anyTest as unknown as TestFn<{lorax: Lorax}>;
 
 let secondTag: string;
 

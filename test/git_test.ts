@@ -1,6 +1,8 @@
 import {getLastTag, getLog} from '../src/lib/git.js';
 
-import test from 'ava';
+import anyTest, {TestFn, ExecutionContext} from 'ava';
+
+const test = anyTest as unknown as TestFn<ExecutionContext>;
 
 test('get the last tag', async (t) => {
   const result = await getLastTag();
