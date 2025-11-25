@@ -10,7 +10,7 @@
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import {program} from 'commander';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,31 +20,74 @@ const dir = path.join(__dirname, '../');
 const pkg = JSON.parse(readFileSync(path.join(dir, 'package.json'), 'utf8'));
 
 program
-  .version(pkg.version)
-  .usage('-t [tag] [options]')
+  .name('lorax')
+  .description('Generate changelog by parsing formatted git commits')
+  .version(pkg.version, '-V, --version', 'display version number')
+  .usage('[options]')
+  .addHelpText('after', `
+Examples:
+  $ lorax                                   # Generate changelog for current version to changelog.md
+  $ lorax -t v2.0.0                         # Generate changelog for v2.0.0 release
+  $ lorax -t v1.5.0 -s v1.4.0 -f HISTORY.md # Generate changelog from v1.4.0 to v1.5.0 in HISTORY.md
+  $ lorax -p -t v1.1.0                      # Prepend new changelog to existing file
+
+Configuration:
+  Create a lorax.json file in your project root to customize settings.
+  See: https://github.com/adrianlee44/lorax#configurations
+  `)
   .option(
-    '-F, --file [FILE]',
-    'Name of the file to write to [changelog.md]',
+    '-t, --tag <tag>',
+    'tag of the upcoming release',
+    pkg.version
+  )
+  .option(
+    '-f, --file <file>',
+    'output file name',
     'changelog.md'
   )
-  .option('-p, --prepend', 'Prepend to the file')
-  .option('-s, --since [tag]', 'Starting tag version')
   .option(
-    '-t, --tag [tag]',
-    'Tag of the upcoming release [' + pkg.version + ']',
-    pkg.version
+    '-s, --since [tag]',
+    'starting tag version (if not specified, uses all commits since last tag)'
+  )
+  .option(
+    '-p, --prepend',
+    'prepend changelog to existing file instead of overwriting'
+  )
+  .option(
+    '-c, --config <file>',
+    'path to configuration file',
+    'lorax.json'
   )
   .parse(process.argv);
 
+const options = program.opts();
+
+// Validate file path
+if (options.file && !path.isAbsolute(options.file)) {
+  // Ensure we're working with a relative path from current directory
+  options.file = path.resolve(process.cwd(), options.file);
+}
+
+// Validate config file exists if specified and not default
+if (options.config !== 'lorax.json' && !existsSync(options.config)) {
+  console.error(`Configuration file not found: ${options.config}`);
+  process.exit(1);
+}
+
+// Show help if no arguments provided
 if (!process.argv.slice(2).length) {
   program.help();
 }
 
-const { default: Lorax } = await import(path.join(dir, 'build/lorax.js'));
-const lorax = new Lorax();
+try {
+  const { default: Lorax } = await import(path.join(dir, 'build/lorax.js'));
+  const lorax = new Lorax();
 
-const options = program.opts();
-lorax.generate(options.tag, options.file, {
-  since: options.since,
-  prepend: !!options.prepend,
-});
+  await lorax.generate(options.tag, options.file, {
+    since: options.since,
+    prepend: !!options.prepend,
+  });
+} catch (error) {
+  console.error('Error generating changelog:', error.message);
+  process.exit(1);
+}
