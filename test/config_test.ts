@@ -1,11 +1,56 @@
-import {readFile, unlink} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import Config from '../src/lib/config.js';
 import anyTest, {TestFn} from 'ava';
+import mock from 'mock-fs';
 
 const test = anyTest as unknown as TestFn<{config: Config}>;
 
+const validConfigData = {
+  version: 2,
+  issue: '/issues/%s',
+  commit: '/commit/%s',
+  types: {
+    fix: {
+      title: 'Bug Fixes',
+      regex: '^fix',
+    },
+    feature: {
+      title: 'Features',
+      regex: '^feat(ure)?',
+    },
+    breaking: {
+      title: 'Breaking Changes',
+      regex: 'BREAKING',
+    },
+    refactor: {
+      title: 'Optimizations',
+      regex: '^refactor',
+    },
+    test: {
+      title: 'Testing',
+      regex: '^test',
+    },
+    doc: {
+      title: 'Documentation',
+      regex: '^doc',
+    },
+  },
+  url: 'https://example.com/repo',
+};
+
 test.before((t) => {
+  // Set up the mock file system
+  mock({
+    'test/test_config.json': JSON.stringify(validConfigData, null, '  '),
+    'test/invalid.json': '{\n  "invalid"\n}',
+  });
+
   t.context.config = new Config('./test/test_config.json');
+});
+
+test.after(() => {
+  // Restore the real file system after all tests
+  mock.restore();
 });
 
 test.afterEach((t) => {
@@ -13,7 +58,7 @@ test.afterEach((t) => {
 });
 
 test('default', (t) => {
-  const configObj = new Config('random.json');
+  const configObj = new Config('/random.json');
   t.is(Object.keys(configObj.config.types).length, 6);
   t.falsy(configObj.config.url);
 });
@@ -70,7 +115,7 @@ test('custom property', (t) => {
 });
 
 test('custom property false', (t) => {
-  const configObj = new Config('random.json');
+  const configObj = new Config('/random.json');
   t.is(configObj.custom, false);
 });
 
@@ -85,8 +130,6 @@ test('write back to config', async (t) => {
 
   const data = await readFile('test_config_output.json');
   t.truthy(data);
-
-  await unlink('test_config_output.json');
 });
 
 test('reset', (t) => {
