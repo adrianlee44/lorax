@@ -35,5 +35,13 @@ export default [
       ],
     },
   },
+  {
+    files: ['test/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
   prettierPlugin,
 ];

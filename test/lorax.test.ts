@@ -1,21 +1,18 @@
-import Lorax from '../src/lorax.js';
+import Lorax from '../src/lorax';
 import fs from 'node:fs/promises';
 import {$} from 'execa';
 
-import anyTest, {TestFn} from 'ava';
-
-const test = anyTest as unknown as TestFn<{lorax: Lorax}>;
-
+let lorax: Lorax;
 let secondTag: string;
 
-test.before(async (t) => {
-  t.context.lorax = new Lorax();
+beforeAll(async () => {
+  lorax = new Lorax();
   const {stdout} =
     await $`git for-each-ref refs/tags --sort=-creatordate --format='%(refname:short)' --count=2`;
   secondTag = stdout.split('\n')[1];
 });
 
-test.afterEach(async () => {
+afterEach(async () => {
   try {
     await fs.access('test.md');
     await fs.unlink('test.md');
@@ -24,41 +21,41 @@ test.afterEach(async () => {
   }
 });
 
-test('get logs', async (t) => {
-  const log = await t.context.lorax.get('^fix|^feat(ure)?|^refactor|BREAKING');
-  t.truthy(log);
+test('get logs', async () => {
+  const log = await lorax.get('^fix|^feat(ure)?|^refactor|BREAKING');
+  expect(log).toBeTruthy();
 });
 
-test('get logs since a certain tag', async (t) => {
+test('get logs since a certain tag', async () => {
   const grepString = '^fix|^feat(ure)?|^refactor|BREAKING';
   const grepRegex = new RegExp(grepString, 'm');
 
-  const data = await t.context.lorax.get(grepString, secondTag);
-  t.plan(data.length - 1);
+  const data = await lorax.get(grepString, secondTag);
+  expect.assertions(data.length - 1);
 
   data.forEach((commit) => {
     if (!commit) return;
-    t.truthy(grepRegex.test(commit));
+    expect(grepRegex.test(commit)).toBeTruthy();
   });
 });
 
-test('should write to file', async (t) => {
-  await t.context.lorax.generate('vtest', 'test.md', {since: secondTag});
+test('should write to file', async () => {
+  await lorax.generate('vtest', 'test.md', {since: secondTag});
   const data = await fs.readFile('test.md');
-  t.truthy(data);
+  expect(data).toBeTruthy();
 });
 
-test('should prepend to file', async (t) => {
+test('should prepend to file', async () => {
   const testFile = 'test/prepend_test.md';
   const originalData = await fs.readFile(testFile);
-  await t.context.lorax.generate('vtest', testFile, {
+  await lorax.generate('vtest', testFile, {
     since: secondTag,
     prepend: true,
   });
 
   const data = await fs.readFile(testFile);
-  t.truthy(data.indexOf('existing data') > -1);
-  t.truthy(data.indexOf('vtest') > -1);
+  expect(data.indexOf('existing data') > -1).toBeTruthy();
+  expect(data.indexOf('vtest') > -1).toBeTruthy();
 
   await fs.writeFile(testFile, originalData, {
     encoding: 'utf-8',

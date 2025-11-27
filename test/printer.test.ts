@@ -1,25 +1,23 @@
-import Printer from '../src/lib/printer.js';
-import Config from '../src/lib/config.js';
+import Printer from '../src/lib/printer';
+import Config from '../src/lib/config';
 
-import anyTest, {TestFn} from 'ava';
+let config: Config;
 
-const test = anyTest as unknown as TestFn<{config: Config}>;
-
-test.beforeEach((t) => {
-  t.context.config = new Config();
+beforeEach(() => {
+  config = new Config();
 });
 
-test('print header', (t) => {
-  const printer = new Printer([], '0.1.0', t.context.config);
+test('print header', () => {
+  const printer = new Printer([], '0.1.0', config);
   const output = printer.print({
     timestamp: new Date('2015/01/01'),
   });
 
-  t.truthy(output);
-  t.is(output, '# 0.1.0 (2015/1/1)\n\n');
+  expect(output).toBeTruthy();
+  expect(output).toBe('# 0.1.0 (2015/1/1)\n\n');
 });
 
-test('print one section with two issues', (t) => {
+test('print one section with two issues', () => {
   const printer = new Printer(
     [
       {
@@ -32,16 +30,16 @@ test('print one section with two issues', (t) => {
       },
     ],
     '0.1.0',
-    t.context.config
+    config
   );
   const output = printer.print({
     timestamp: new Date('2015/01/01'),
   });
 
-  t.snapshot(output);
+  expect(output).toMatchSnapshot();
 });
 
-test('print one section with one issue', (t) => {
+test('print one section with one issue', () => {
   const printer = new Printer(
     [
       {
@@ -54,16 +52,16 @@ test('print one section with one issue', (t) => {
       },
     ],
     '0.1.0',
-    t.context.config
+    config
   );
   const output = printer.print({
     timestamp: new Date('2015/01/01'),
   });
 
-  t.snapshot(output);
+  expect(output).toMatchSnapshot();
 });
 
-test('print one section with no issue', (t) => {
+test('print one section with no issue', () => {
   const printer = new Printer(
     [
       {
@@ -76,16 +74,16 @@ test('print one section with no issue', (t) => {
       },
     ],
     '0.1.0',
-    t.context.config
+    config
   );
   const output = printer.print({
     timestamp: new Date('2015/01/01'),
   });
 
-  t.snapshot(output);
+  expect(output).toMatchSnapshot();
 });
 
-test('print two sections', (t) => {
+test('print two sections', () => {
   const printer = new Printer(
     [
       {
@@ -106,16 +104,16 @@ test('print two sections', (t) => {
       },
     ],
     '0.1.0',
-    t.context.config
+    config
   );
   const output = printer.print({
     timestamp: new Date('2015/01/01'),
   });
 
-  t.snapshot(output);
+  expect(output).toMatchSnapshot();
 });
 
-test('print two components in one section', (t) => {
+test('print two components in one section', () => {
   const printer = new Printer(
     [
       {
@@ -144,17 +142,17 @@ test('print two components in one section', (t) => {
       },
     ],
     '0.1.0',
-    t.context.config
+    config
   );
   const output = printer.print({
     timestamp: new Date('2015/01/01'),
   });
 
-  t.snapshot(output);
+  expect(output).toMatchSnapshot();
 });
 
-test('print without url', (t) => {
-  t.context.config.set('url', '');
+test('print without url', () => {
+  config.set('url', '');
   const printer = new Printer(
     [
       {
@@ -167,12 +165,12 @@ test('print without url', (t) => {
       },
     ],
     '0.1.0',
-    t.context.config
+    config
   );
 
   const output = printer.print({
     timestamp: new Date('2015/01/01'),
   });
 
-  t.snapshot(output);
+  expect(output).toMatchSnapshot();
 });

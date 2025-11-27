@@ -13,12 +13,12 @@
  */
 
 import fs from 'node:fs';
-import Config from './lib/config.js';
-import {getLastTag, getLog} from './lib/git.js';
-import Printer from './lib/printer.js';
-import Parser from './lib/parser.js';
+import Config from './lib/config';
+import {getLastTag, getLog} from './lib/git';
+import Printer from './lib/printer';
+import Parser from './lib/parser';
 
-import type {Commit} from './lib/parser.js';
+import type {Commit} from './lib/parser';
 
 export interface LoraxOptions {
   since?: string;

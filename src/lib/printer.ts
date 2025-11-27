@@ -5,14 +5,14 @@
  */
 
 import util from 'node:util';
-import {template} from './template.js';
+import {template} from './template';
 
-import Config from './config.js';
-import {NEW_LINE} from './constants.js';
+import Config from './config';
+import {NEW_LINE} from './constants';
 
-import type {Configuration} from './config.js';
-import type {Commit} from './parser.js';
-import type {LoraxOptions} from '../lorax.js';
+import type {Configuration} from './config';
+import type {Commit} from './parser';
+import type {LoraxOptions} from '../lorax';
 
 type PrintSection = {
   [P in string]: {

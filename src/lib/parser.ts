@@ -1,4 +1,4 @@
-import type Config from './config.js';
+import type Config from './config';
 
 /**
  * @name parser
@@ -9,7 +9,7 @@ import {
   CLOSE_REGEX,
   NEW_LINE,
   TITLE_REGEX,
-} from './constants.js';
+} from './constants';
 
 export interface Commit {
   type: string;

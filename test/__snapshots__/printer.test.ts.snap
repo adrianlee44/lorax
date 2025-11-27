@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`print one section with no issue 1`] = `
+"# 0.1.0 (2015/1/1)
+## Bug Fixes
+- **lorax:** This is a test
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))
+
+
+"
+`;
+
+exports[`print one section with one issue 1`] = `
+"# 0.1.0 (2015/1/1)
+## Bug Fixes
+- **lorax:** This is a test
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456),
+   [#321](https://github.com/adrianlee44/lorax/issues/321))
+
+
+"
+`;
+
+exports[`print one section with two issues 1`] = `
+"# 0.1.0 (2015/1/1)
+## Bug Fixes
+- **lorax:** This is a test
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456),
+   [#321](https://github.com/adrianlee44/lorax/issues/321),
+   [#123](https://github.com/adrianlee44/lorax/issues/123))
+
+
+"
+`;
+
+exports[`print two components in one section 1`] = `
+"# 0.1.0 (2015/1/1)
+## Bug Fixes
+- **config:** Trying to fix config
+  ([321](https://github.com/adrianlee44/lorax/commit/321))
+- **lorax:**
+  - This is a test
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))
+  - This is my second test
+  ([92749a8](https://github.com/adrianlee44/lorax/commit/92749a8))
+
+
+"
+`;
+
+exports[`print two sections 1`] = `
+"# 0.1.0 (2015/1/1)
+## Bug Fixes
+- **lorax:** This is a test
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))
+
+## Optimizations
+- **lorax:** This is a refactor
+  ([2351](https://github.com/adrianlee44/lorax/commit/2351))
+
+
+"
+`;
+
+exports[`print without url 1`] = `
+"# 0.1.0 (2015/1/1)
+## Bug Fixes
+- **lorax:** This is a test
+  (123456)
+
+
+"
+`;
