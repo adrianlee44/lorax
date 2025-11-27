@@ -57,21 +57,28 @@ $ npm install -g lorax
 ## Usage
 
 ```bash
-Usage: lorax -t [tag] [options]
+Usage: lorax [options]
 
-  Options:
-    -V, --version      output the version number
-    -F, --file [FILE]  Name of the file to write to [changelog.md] (default: "changelog.md")
-    -p, --prepend      Prepend to the file
-    -s, --since [tag]  Starting tag version
-    -t, --tag [tag]    Tag of the upcoming release [2.1.0] (default: "2.1.0")
-    -h, --help         display help for command
-```
+Generate changelog by parsing formatted git commits
 
-To generate the changelog
+Options:
+  -V, --version        display version number
+  -t, --tag <tag>      tag of the upcoming release (default: "3.0.0")
+  -f, --file <file>    output file name (default: "changelog.md")
+  -s, --since [tag]    starting tag version (if not specified, uses all commits since last tag)
+  -p, --prepend        prepend changelog to existing file instead of overwriting
+  -c, --config <file>  path to configuration file (default: "lorax.json")
+  -h, --help           display help for command
 
-```bash
-$ lorax -t v0.1.0 -F changelog.md
+Examples:
+  $ lorax                                   # Generate changelog for current version to changelog.md
+  $ lorax -t v2.0.0                         # Generate changelog for v2.0.0 release
+  $ lorax -t v1.5.0 -s v1.4.0 -f HISTORY.md # Generate changelog from v1.4.0 to v1.5.0 in HISTORY.md
+  $ lorax -p -t v1.1.0                      # Prepend new changelog to existing file
+
+Configuration:
+  Create a lorax.json file in your project root to customize settings.
+  See: https://github.com/adrianlee44/lorax#configurations
 ```
 
 ## Git commit format
