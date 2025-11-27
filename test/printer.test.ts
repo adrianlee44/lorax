@@ -1,5 +1,5 @@
-import Printer from '../src/lib/printer';
-import Config from '../src/lib/config';
+import Printer from '../src/lib/printer.js';
+import Config from '../src/lib/config.js';
 
 let config: Config;
 

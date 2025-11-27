@@ -1,5 +1,5 @@
 import {readFile} from 'node:fs/promises';
-import Config from '../src/lib/config';
+import Config from '../src/lib/config.js';
 import mock from 'mock-fs';
 
 let config: Config;

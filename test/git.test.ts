@@ -1,4 +1,4 @@
-import {getLastTag, getLog} from '../src/lib/git';
+import {getLastTag, getLog} from '../src/lib/git.js';
 
 test('get the last tag', async () => {
   const result = await getLastTag();

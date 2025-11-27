@@ -1,5 +1,5 @@
-import Parser from '../src/lib/parser';
-import Config from '../src/lib/config';
+import Parser from '../src/lib/parser.js';
+import Config from '../src/lib/config.js';
 
 const commit =
   '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature(lorax): Basic testing\n\nFixes #123';

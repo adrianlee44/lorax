@@ -18,6 +18,14 @@
     "breaking": {
       "title": "Breaking Changes",
       "regex": "BREAKING"
+    },
+    "docs": {
+      "title": "Documentation",
+      "regex": "^docs?"
+    },
+    "test": {
+      "title": "Tests",
+      "regex": "^test"
     }
   },
   "url": "https://github.com/adrianlee44/lorax"
