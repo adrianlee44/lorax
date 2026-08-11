@@ -8,5 +8,5 @@
     "isolatedModules": true,
     "types": ["jest", "node"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "test/**/*", "jest.config.ts"],
 }
