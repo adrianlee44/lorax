@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`print commits without component above other components 1`] = `
+"# 0.1.0 (2015/1/1)
+## Bug Fixes
+- This has no component
+  ([92749a8](https://github.com/adrianlee44/lorax/commit/92749a8))
+- **lorax:** This is a test
+  ([123456](https://github.com/adrianlee44/lorax/commit/123456))
+
+
+"
+`;
+
 exports[`print one section with no issue 1`] = `
 "# 0.1.0 (2015/1/1)
 ## Bug Fixes

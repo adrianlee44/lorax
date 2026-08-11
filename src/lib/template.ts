@@ -9,6 +9,7 @@ type TemplateType = {
   COMPONENT_ITEM: string;
   COMPONENT_LINE: string;
   COMMIT_ADDITIONAL_INFO: string;
+  GENERIC_ITEM: string;
 };
 
 export const template: TemplateType = {
@@ -22,4 +23,5 @@ export const template: TemplateType = {
   COMPONENT_ITEM: '  -',
   COMPONENT_LINE: '%s %s',
   COMMIT_ADDITIONAL_INFO: '  (%s)',
+  GENERIC_ITEM: '-',
 };

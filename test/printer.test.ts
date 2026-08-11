@@ -151,6 +151,36 @@ test('print two components in one section', () => {
   expect(output).toMatchSnapshot();
 });
 
+test('print commits without component above other components', () => {
+  const printer = new Printer(
+    [
+      {
+        type: 'fix',
+        component: 'lorax',
+        message: 'This is a test',
+        hash: '123456',
+        issues: [],
+        title: '',
+      },
+      {
+        type: 'fix',
+        component: '',
+        message: 'This has no component',
+        hash: '92749a8',
+        issues: [],
+        title: '',
+      },
+    ],
+    '0.1.0',
+    config
+  );
+  const output = printer.print({
+    timestamp: new Date('2015/01/01'),
+  });
+
+  expect(output).toMatchSnapshot();
+});
+
 test('print without url', () => {
   config.set('url', '');
   const printer = new Printer(

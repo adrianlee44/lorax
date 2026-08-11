@@ -77,6 +77,29 @@ export default class Printer {
 
   /**
    * @description
+   * Render a single commit as a formatted line plus its additional info
+   * (commit link and issue links) into the given lines array
+   */
+  private printCommitLine(
+    lines: Array<string>,
+    prefix: string,
+    item: Commit
+  ): void {
+    lines.push(util.format(template.COMPONENT_LINE, prefix, item.message));
+
+    const additionalInfo = item.issues.map((issue) => this.linkToIssue(issue));
+    additionalInfo.unshift(this.linkToCommit(item.hash));
+
+    lines.push(
+      util.format(
+        template.COMMIT_ADDITIONAL_INFO,
+        additionalInfo.join(`,${NEW_LINE}   `)
+      )
+    );
+  }
+
+  /**
+   * @description
    * Using preprocessed array of commits, render a changelog in markdown format with version
    * and today's date as the header
    */
@@ -127,27 +150,20 @@ export default class Printer {
       components.forEach((componentName: string) => {
         const componentList = list[componentName] || [];
 
+        if (!componentName) {
+          componentList.forEach((item) => {
+            this.printCommitLine(lines, template.GENERIC_ITEM, item);
+          });
+          return;
+        }
+
         const title = util.format(template.COMPONENT_TITLE, componentName);
         const hasOneItem = componentList.length == 1;
         componentList.forEach((item, index) => {
           if (!hasOneItem && !index) lines.push(title);
 
           const prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
-          lines.push(
-            util.format(template.COMPONENT_LINE, prefix, item.message)
-          );
-
-          const additionalInfo = item.issues.map((issue) =>
-            this.linkToIssue(issue)
-          );
-          additionalInfo.unshift(this.linkToCommit(item.hash));
-
-          lines.push(
-            util.format(
-              template.COMMIT_ADDITIONAL_INFO,
-              additionalInfo.join(`,${NEW_LINE}   `)
-            )
-          );
+          this.printCommitLine(lines, prefix, item);
         });
       });
 
