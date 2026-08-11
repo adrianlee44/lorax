@@ -64,7 +64,7 @@ export default class Parser {
     const titleMatch = commitObj.title.match(TITLE_REGEX);
     if (titleMatch) {
       commitObj.type = this._config.getTypeByInput(titleMatch[1]);
-      commitObj.component = titleMatch[2];
+      commitObj.component = titleMatch[2] || '';
       commitObj.message = titleMatch[3];
       if (message) {
         commitObj.message += NEW_LINE + message;

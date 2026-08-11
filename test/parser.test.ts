@@ -49,6 +49,16 @@ test('component special character parse', () => {
   expect(obj && obj.component).toBe('lorax-test!');
 });
 
+test('component parse without parentheses', () => {
+  const commitWithoutComponent =
+    '7e7ac8957953e1686113f8086dc5b67246e5d3fa\nfeature: Basic testing\n\nFixes #123';
+  const obj = parser.parse(commitWithoutComponent);
+  expect(obj).toBeTruthy();
+  expect(obj && obj.type).toBe('feature');
+  expect(obj && obj.component).toBe('');
+  expect(obj && obj.message).toBe('Basic testing');
+});
+
 test('message parse', () => {
   const obj = parser.parse(commit);
   expect(obj).toBeTruthy();
