@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "nodenext",
+    "rootDir": ".",
     "outDir": "./build",
     "strict": true,
     "isolatedModules": true,
