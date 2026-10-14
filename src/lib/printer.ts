@@ -126,7 +126,7 @@ export default class Printer {
       sections[key] = {};
     }
 
-    this.commits.forEach((commit: Commit) => {
+    for (const commit of this.commits) {
       const {component, type} = commit;
 
       const section = sections[type];
@@ -134,11 +134,11 @@ export default class Printer {
         section[component] = [];
       }
       section[component].push(commit);
-    });
+    }
 
     for (const sectionType in sections) {
       const list = sections[sectionType];
-      const components = Object.getOwnPropertyNames(list).sort();
+      const components = Object.keys(list).sort();
       if (!components.length) {
         continue;
       }
@@ -147,25 +147,25 @@ export default class Printer {
         util.format(template.SECTION_HEADER, types[sectionType].title)
       );
 
-      components.forEach((componentName: string) => {
+      for (const componentName of components) {
         const componentList = list[componentName] || [];
 
         if (!componentName) {
-          componentList.forEach((item) => {
+          for (const item of componentList) {
             this.printCommitLine(lines, template.GENERIC_ITEM, item);
-          });
-          return;
+          }
+          continue;
         }
 
         const title = util.format(template.COMPONENT_TITLE, componentName);
         const hasOneItem = componentList.length == 1;
-        componentList.forEach((item, index) => {
+        for (const [index, item] of componentList.entries()) {
           if (!hasOneItem && !index) lines.push(title);
 
           const prefix = hasOneItem && !index ? title : template.COMPONENT_ITEM;
           this.printCommitLine(lines, prefix, item);
-        });
-      });
+        }
+      }
 
       lines.push('');
     }

@@ -7,12 +7,9 @@
  * @author Adrian Lee
  * @url https://github.com/adrianlee44/lorax
  * @license MIT
- *
- * @dependencies
- * - commander
  */
 
-import fs from 'node:fs';
+import fs from 'node:fs/promises';
 import Config from './lib/config.js';
 import {getLastTag, getLog} from './lib/git.js';
 import Printer from './lib/printer.js';
@@ -67,28 +64,23 @@ export default class Lorax {
     const grep = types.map((type) => type.regex).join('|');
     const commits = await this.get(grep, options.since);
 
-    const parsedCommits: Array<Commit> = [];
-    commits.forEach((commit: string) => {
-      const parsedCommit = this._parser.parse(commit);
-
-      if (parsedCommit) {
-        parsedCommits.push(parsedCommit);
-      }
-    });
+    const parsedCommits = commits
+      .map((commit) => this._parser.parse(commit))
+      .filter((commit): commit is Commit => !!commit);
 
     console.log(`Parsed ${parsedCommits.length} commit(s)`);
     const printer = new Printer(parsedCommits, toTag, this._config);
     let result = printer.print();
 
     if (options.prepend) {
-      const existingData = fs.readFileSync(file, {
+      const existingData = await fs.readFile(file, {
         encoding: 'utf-8',
       });
 
       result += existingData;
     }
 
-    fs.writeFileSync(file, result, {flag: 'w'});
+    await fs.writeFile(file, result, {flag: 'w'});
 
     console.log(`Generated changelog to ${file} (${toTag})`);
     return;

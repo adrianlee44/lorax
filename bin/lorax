@@ -9,15 +9,11 @@
  */
 
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { readFileSync, existsSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import {program} from 'commander';
+import pkg from '../package.json' with {type: 'json'};
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const dir = path.join(__dirname, '../');
-const pkg = JSON.parse(readFileSync(path.join(dir, 'package.json'), 'utf8'));
+const dir = path.join(import.meta.dirname, '../');
 
 program
   .name('lorax')
