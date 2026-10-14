@@ -100,7 +100,7 @@ test('breaking change parse', () => {
   const obj = parser.parse(breakingCommit);
   expect(obj).toBeTruthy();
   expect(obj && obj.type).toBe('breaking');
-  expect(obj && obj.message).toBe(' Testing');
+  expect(obj && obj.message).toBe('Testing');
 });
 
 test('long message parse', () => {
@@ -131,6 +131,6 @@ test('code example in commit parse', () => {
   const obj = parser.parse(codeMessage);
   expect(obj).toBeTruthy();
   expect(obj && obj.message).toBe(
-    "Basic testing\nExample:\n```\nvar test='hello';\ntest = test.replace('ll', 'r');\nconsole.log(test);\n```\n"
+    "Basic testing\nExample:\n```\nvar test='hello';\ntest = test.replace('ll', 'r');\nconsole.log(test);\n```"
   );
 });

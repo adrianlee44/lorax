@@ -14,7 +14,7 @@ test('print header', () => {
   });
 
   expect(output).toBeTruthy();
-  expect(output).toBe('# 0.1.0 (2015/1/1)\n\n');
+  expect(output).toBe('# 0.1.0 (2015/1/1)\n\n\n');
 });
 
 test('print one section with two issues', () => {

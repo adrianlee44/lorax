@@ -59,7 +59,7 @@ export default class Parser {
     lines = newLines;
 
     // Rejoin the rest of the lines after stripping out certain information
-    const message = lines.join(NEW_LINE);
+    const message = lines.join(NEW_LINE).trim();
 
     const titleMatch = commitObj.title.match(TITLE_REGEX);
     if (titleMatch) {
@@ -78,6 +78,8 @@ export default class Parser {
       commitObj.type = 'breaking';
       commitObj.message = breakingMatch[1];
     }
+
+    commitObj.message = commitObj.message.trim();
 
     return commitObj;
   }

@@ -85,16 +85,26 @@ export default class Printer {
     prefix: string,
     item: Commit
   ): void {
-    lines.push(util.format(template.COMPONENT_LINE, prefix, item.message));
+    // Indent continuation lines to align with the list item's content so
+    // markdown treats them as part of the same item
+    const indent = ' '.repeat(prefix.length - prefix.trimStart().length + 2);
+    const [firstLine, ...rest] = item.message.split(NEW_LINE);
+    const message = [
+      firstLine,
+      ...rest.map((line) => (line.trim() ? indent + line : '')),
+    ].join(NEW_LINE);
+
+    lines.push(util.format(template.COMPONENT_LINE, prefix, message));
 
     const additionalInfo = item.issues.map((issue) => this.linkToIssue(issue));
     additionalInfo.unshift(this.linkToCommit(item.hash));
 
     lines.push(
-      util.format(
-        template.COMMIT_ADDITIONAL_INFO,
-        additionalInfo.join(`,${NEW_LINE}   `)
-      )
+      indent +
+        util.format(
+          template.COMMIT_ADDITIONAL_INFO,
+          additionalInfo.join(`,${NEW_LINE}${indent} `)
+        )
     );
   }
 
