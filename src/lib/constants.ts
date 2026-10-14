@@ -4,3 +4,5 @@ export const CLOSE_REGEX =
 export const TITLE_REGEX = /^([^\s(:]+)\s*(?:\(([^)]+)\))?:?\s+(.+)/;
 
 export const NEW_LINE = '\n';
+
+export const DEFAULT_CONFIG_NAME = 'lorax.json';

@@ -9,7 +9,6 @@
  */
 
 import path from 'node:path';
-import { existsSync } from 'node:fs';
 import {program} from 'commander';
 import pkg from '../package.json' with {type: 'json'};
 
@@ -20,7 +19,9 @@ program
   .description('Generate changelog by parsing formatted git commits')
   .version(pkg.version, '-V, --version', 'display version number')
   .usage('[options]')
-  .addHelpText('after', `
+  .addHelpText(
+    'after',
+    `
 Examples:
   $ lorax                                   # Generate changelog for current version to changelog.md
   $ lorax -t v2.0.0                         # Generate changelog for v2.0.0 release
@@ -30,17 +31,10 @@ Examples:
 Configuration:
   Create a lorax.json file in your project root to customize settings.
   See: https://github.com/adrianlee44/lorax#configurations
-  `)
-  .option(
-    '-t, --tag <tag>',
-    'tag of the upcoming release',
-    pkg.version
+  `
   )
-  .option(
-    '-f, --file <file>',
-    'output file name',
-    'changelog.md'
-  )
+  .option('-t, --tag <tag>', 'tag of the upcoming release', pkg.version)
+  .option('-f, --file <file>', 'output file name', 'changelog.md')
   .option(
     '-s, --since [tag]',
     'starting tag version (if not specified, uses all commits since last tag)'
@@ -49,11 +43,7 @@ Configuration:
     '-p, --prepend',
     'prepend changelog to existing file instead of overwriting'
   )
-  .option(
-    '-c, --config <file>',
-    'path to configuration file',
-    'lorax.json'
-  )
+  .option('-c, --config <file>', 'configuration file name or path')
   .parse(process.argv);
 
 const options = program.opts();
@@ -64,20 +54,14 @@ if (options.file && !path.isAbsolute(options.file)) {
   options.file = path.resolve(process.cwd(), options.file);
 }
 
-// Validate config file exists if specified and not default
-if (options.config !== 'lorax.json' && !existsSync(options.config)) {
-  console.error(`Configuration file not found: ${options.config}`);
-  process.exit(1);
-}
-
 // Show help if no arguments provided
 if (!process.argv.slice(2).length) {
   program.help();
 }
 
 try {
-  const { default: Lorax } = await import(path.join(dir, 'build/lorax.js'));
-  const lorax = new Lorax();
+  const {default: Lorax} = await import(path.join(dir, 'build/lorax.js'));
+  const lorax = new Lorax(options.config ?? null);
 
   await lorax.generate(options.tag, options.file, {
     since: options.since,

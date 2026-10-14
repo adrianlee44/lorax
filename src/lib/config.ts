@@ -5,8 +5,9 @@
  */
 
 import fs from 'node:fs';
-import {isAbsolute, basename} from 'node:path';
+import {basename, resolve} from 'node:path';
 import {findUp} from './find-up.js';
+import {DEFAULT_CONFIG_NAME} from './constants.js';
 
 export interface Configuration {
   version: number;
@@ -61,15 +62,29 @@ export default class Config {
     },
   };
 
-  constructor(configPath = 'lorax.json') {
-    this.path = configPath;
+  /**
+   * @param configPath Config file name or path. When null, or when it is only
+   * a file name, parent directories are searched for the file (lorax.json by
+   * default). Anything more than a file name is treated as a path (relative to
+   * the current directory, or absolute) and is not searched for. Throws if a
+   * configPath is given and does not resolve to an existing file.
+   */
+  constructor(configPath: string | null = null) {
     this.jsonData = {};
 
-    if (!isAbsolute(this.path)) {
-      this.path = findUp(this.path) ?? '';
+    if (configPath === null) {
+      this.path = findUp(DEFAULT_CONFIG_NAME) ?? '';
+    } else if (basename(configPath) === configPath) {
+      this.path = findUp(configPath) ?? '';
+    } else {
+      this.path = resolve(configPath);
     }
 
     this.custom = fs.existsSync(this.path);
+
+    if (configPath !== null && !this.custom) {
+      throw new Error(`Configuration file not found: ${configPath}`);
+    }
 
     if (this.custom) {
       try {

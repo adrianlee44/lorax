@@ -27,8 +27,8 @@ export default class Lorax {
   _config: Config;
   _parser: Parser;
 
-  constructor() {
-    this._config = new Config();
+  constructor(configPath: string | null = null) {
+    this._config = new Config(configPath);
     this._parser = new Parser(this._config);
   }
 

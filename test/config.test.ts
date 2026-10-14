@@ -55,15 +55,30 @@ afterEach(async () => {
   await rm(tmpDir, {recursive: true, force: true});
 });
 
-test('default', () => {
-  const configObj = new Config(join(tmpDir, 'random.json'));
+test('default', async () => {
+  const defaultPath = join(tmpDir, 'default.json');
+  await writeFile(defaultPath, JSON.stringify({version: Config.VERSION}));
+  const configObj = new Config(defaultPath);
   expect(Object.keys(configObj.config.types).length).toBe(6);
   expect(configObj.config.url).toBeFalsy();
 });
 
-test('invalid file', () => {
-  const configObj = new Config(join(tmpDir, 'null'));
-  expect(configObj.jsonData).toEqual({});
+test('missing file throws', () => {
+  expect(() => new Config(join(tmpDir, 'null'))).toThrow(
+    'Configuration file not found'
+  );
+});
+
+test('missing relative path throws', () => {
+  expect(() => new Config('./does/not/exist.json')).toThrow(
+    'Configuration file not found: ./does/not/exist.json'
+  );
+});
+
+test('missing file name throws', () => {
+  expect(() => new Config('does-not-exist.json')).toThrow(
+    'Configuration file not found: does-not-exist.json'
+  );
 });
 
 test('bad data in valid file', () => {
@@ -110,11 +125,6 @@ test('set object', () => {
 
 test('custom property', () => {
   expect(config.custom).toBeTruthy();
-});
-
-test('custom property false', () => {
-  const configObj = new Config(join(tmpDir, 'random.json'));
-  expect(configObj.custom).toBe(false);
 });
 
 test('write back to config', async () => {
