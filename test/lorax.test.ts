@@ -1,14 +1,22 @@
 import Lorax from '../src/lorax.js';
 import fs from 'node:fs/promises';
-import {$} from 'execa';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+
+const execFileAsync = promisify(execFile);
 
 let lorax: Lorax;
 let secondTag: string;
 
 beforeAll(async () => {
   lorax = new Lorax();
-  const {stdout} =
-    await $`git for-each-ref refs/tags --sort=-creatordate --format='%(refname:short)' --count=2`;
+  const {stdout} = await execFileAsync('git', [
+    'for-each-ref',
+    'refs/tags',
+    '--sort=-creatordate',
+    '--format=%(refname:short)',
+    '--count=2',
+  ]);
   secondTag = stdout.split('\n')[1];
 });
 

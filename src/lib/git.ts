@@ -4,15 +4,14 @@
  * Utility functions for interacting with git
  */
 
-import util from 'node:util';
-import {$, execaCommand} from 'execa';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
 
-const GIT_LOG = 'git log';
-const GIT_LOG_GREP_OPTION = "--grep='%s' -E";
-const GIT_LOG_TAG_OPTION = '%s..HEAD';
+const execFileAsync = promisify(execFile);
+
 const GIT_LOG_LINE_SEPARATOR = '==END==';
 const GIT_LOG_FORMAT = `%H%n%s%n%b%n${GIT_LOG_LINE_SEPARATOR}`;
-const GIT_LOG_FORMAT_OPTION = '--format=%s';
+const MAX_BUFFER = 1024 * 1024 * 100;
 
 interface GetLogOptions {
   grep?: string;
@@ -25,8 +24,12 @@ interface GetLogOptions {
  * Get the lastest tag
  */
 export async function getLastTag(): Promise<string> {
-  const {stdout} = await $`git describe --tags --abbrev=0`;
-  return stdout.replace('\n', '');
+  const {stdout} = await execFileAsync('git', [
+    'describe',
+    '--tags',
+    '--abbrev=0',
+  ]);
+  return stdout.trim();
 }
 
 /**
@@ -38,21 +41,22 @@ export async function getLog(
   options = {} as GetLogOptions
 ): Promise<Array<string>> {
   const {grep, tag} = options;
-  const cmdArgs = [util.format(GIT_LOG_FORMAT_OPTION, GIT_LOG_FORMAT)];
+  const cmdArgs = ['log', `--format=${GIT_LOG_FORMAT}`];
 
   if (grep) {
-    cmdArgs.push(util.format(GIT_LOG_GREP_OPTION, grep));
+    cmdArgs.push(`--grep=${grep}`, '-E');
   }
 
   if (tag) {
-    cmdArgs.push(util.format(GIT_LOG_TAG_OPTION, tag));
+    // A leading dash would be parsed by git as an option
+    if (tag.startsWith('-')) {
+      throw new Error(`Invalid tag: ${tag}`);
+    }
+    cmdArgs.push(`${tag}..HEAD`);
   }
 
-  const cmd = `${GIT_LOG} ${cmdArgs.join(' ')}`;
-
-  const {stdout} = await execaCommand(cmd, {
-    shell: true,
-    stripFinalNewline: false,
+  const {stdout} = await execFileAsync('git', cmdArgs, {
+    maxBuffer: MAX_BUFFER,
   });
   return stdout ? stdout.split(`\n${GIT_LOG_LINE_SEPARATOR}\n`) : [];
 }

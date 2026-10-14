@@ -16,6 +16,10 @@ test('rejects the promise given invalid tag', async () => {
   ).rejects.toThrow(/Command failed/);
 });
 
+test('rejects tags that look like git options', async () => {
+  await expect(getLog({tag: '--output=/tmp/x'})).rejects.toThrow(/Invalid tag/);
+});
+
 test('get no commit', async () => {
   const result = await getLog({grep: '^doesNotExist'});
   expect(result.length).toBe(0);
