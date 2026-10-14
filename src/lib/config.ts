@@ -5,8 +5,8 @@
  */
 
 import fs from 'node:fs';
-import findup from 'findup-sync';
 import {isAbsolute, basename} from 'node:path';
+import {findUp} from './find-up.js';
 
 export interface Configuration {
   version: number;
@@ -66,7 +66,7 @@ export default class Config {
     this.jsonData = {};
 
     if (!isAbsolute(this.path)) {
-      this.path = findup(this.path) || '';
+      this.path = findUp(this.path) ?? '';
     }
 
     this.custom = fs.existsSync(this.path);
