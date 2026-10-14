@@ -46,7 +46,6 @@
   "devDependencies": {
     "@types/findup-sync": "^4.0.5",
     "@types/jest": "^30.0.0",
-    "@types/mock-fs": "^4.13.4",
     "@types/node": "^26.2.0",
     "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.67.0",
@@ -55,7 +54,6 @@
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.5.0",
     "jest": "^30.4.2",
-    "mock-fs": "^5.5.0",
     "prettier": "^3.1.0",
     "ts-jest": "^29.4.12",
     "ts-node": "^10.9.2",

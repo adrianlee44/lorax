@@ -1,8 +1,11 @@
-import {readFile} from 'node:fs/promises';
+import {mkdtemp, readFile, rm, writeFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import Config from '../src/lib/config.js';
-import mock from 'mock-fs';
 
 let config: Config;
+let tmpDir: string;
+let configPath: string;
 
 const validConfigData = {
   version: 2,
@@ -37,33 +40,29 @@ const validConfigData = {
   url: 'https://example.com/repo',
 };
 
-beforeEach(() => {
-  // Set up the mock file system
-  mock({
-    'test/test_config.json': JSON.stringify(validConfigData, null, '  '),
-    'test/invalid.json': '{\n  "invalid"\n}',
-  });
+beforeEach(async () => {
+  tmpDir = await mkdtemp(join(tmpdir(), 'lorax-config-'));
+  configPath = join(tmpDir, 'test_config.json');
 
-  config = new Config('./test/test_config.json');
+  await writeFile(configPath, JSON.stringify(validConfigData, null, '  '));
+  await writeFile(join(tmpDir, 'invalid.json'), '{\n  "invalid"\n}');
+
+  config = new Config(configPath);
 });
 
-afterAll(() => {
-  // Restore the real file system after all tests
-  mock.restore();
-});
-
-afterEach(() => {
+afterEach(async () => {
   config.reset();
+  await rm(tmpDir, {recursive: true, force: true});
 });
 
 test('default', () => {
-  const configObj = new Config('/random.json');
+  const configObj = new Config(join(tmpDir, 'random.json'));
   expect(Object.keys(configObj.config.types).length).toBe(6);
   expect(configObj.config.url).toBeFalsy();
 });
 
 test('invalid file', () => {
-  const configObj = new Config('/null');
+  const configObj = new Config(join(tmpDir, 'null'));
   expect(configObj.jsonData).toEqual({});
 });
 
@@ -75,7 +74,7 @@ test('bad data in valid file', () => {
     errorMsg = message;
   };
 
-  const configObj = new Config('test/invalid.json');
+  const configObj = new Config(join(tmpDir, 'invalid.json'));
   expect(configObj.jsonData).toEqual({});
   expect(errorMsg).toBe('Invalid invalid.json');
 
@@ -100,7 +99,7 @@ test('set', () => {
 });
 
 test('set object', () => {
-  const configObj = new Config('./test/test_config.json');
+  const configObj = new Config(configPath);
   configObj.set({
     issue: '/issues/test/%s',
     commit: '/commit/test/%s',
@@ -114,7 +113,7 @@ test('custom property', () => {
 });
 
 test('custom property false', () => {
-  const configObj = new Config('/random.json');
+  const configObj = new Config(join(tmpDir, 'random.json'));
   expect(configObj.custom).toBe(false);
 });
 
@@ -124,11 +123,13 @@ test('write back to config', async () => {
     commit: '/commit/test/%s',
   });
 
-  config.updatePath('test_config_output.json');
+  const outputPath = join(tmpDir, 'test_config_output.json');
+  config.updatePath(outputPath);
   config.write();
 
-  const data = await readFile('test_config_output.json');
-  expect(data).toBeTruthy();
+  const data = JSON.parse(await readFile(outputPath, 'utf-8'));
+  expect(data.issue).toBe('/issues/test/%s');
+  expect(data.commit).toBe('/commit/test/%s');
 });
 
 test('reset', () => {
