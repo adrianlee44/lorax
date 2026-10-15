@@ -1,3 +1,164 @@
+# v4.0.0 (2026/10/14)
+
+## Bug Fixes
+
+- Fix package.json errors
+  ([3aa01005](https://github.com/adrianlee44/lorax/commit/3aa01005))
+- Fix eslint-config-prettier package missing
+  ([831184ef](https://github.com/adrianlee44/lorax/commit/831184ef))
+- Update packages to fix vulnerability
+  ([7f039070](https://github.com/adrianlee44/lorax/commit/7f039070))
+- **lorax:**
+  - Fix markdown formatting to use correct syntax
+    ([ba813e0b](https://github.com/adrianlee44/lorax/commit/ba813e0b))
+  - Fix config option not being passed to main module
+    Better handling of relative and absolute path
+    Better handling of filename and default back to lorax.json
+    ([fe0b27a4](https://github.com/adrianlee44/lorax/commit/fe0b27a4))
+  - Fix tsconfig and test setup
+    ([5258a07d](https://github.com/adrianlee44/lorax/commit/5258a07d))
+  - Fix bin to work with ES module
+    ([da9b3d56](https://github.com/adrianlee44/lorax/commit/da9b3d56))
+- **package:**
+  - Upgrade y18n to patch a security issue
+    ([a4d11184](https://github.com/adrianlee44/lorax/commit/a4d11184))
+  - Fix a vulnerability
+    ([857e1d8c](https://github.com/adrianlee44/lorax/commit/857e1d8c))
+
+## Features
+
+- Make scope optional
+  ([8217be01](https://github.com/adrianlee44/lorax/commit/8217be01))
+- **lorax:**
+  - Bump minimum Node requirement to v20
+    ([4ab86b3b](https://github.com/adrianlee44/lorax/commit/4ab86b3b))
+  - Add support for feat in default
+    ([dac5e9df](https://github.com/adrianlee44/lorax/commit/dac5e9df))
+  - Allow parser to be more flexible with type detection
+    ([981d43c7](https://github.com/adrianlee44/lorax/commit/981d43c7))
+- **printer:** Print non-scoped commits at the top
+  ([2a628ad6](https://github.com/adrianlee44/lorax/commit/2a628ad6))
+
+## Optimizations
+
+- **git:**
+  - Remove execa requirement and use execFile on child_process
+    ([f7de88d7](https://github.com/adrianlee44/lorax/commit/f7de88d7))
+  - Update getLog to make grep and tag optional
+    ([bd2d014f](https://github.com/adrianlee44/lorax/commit/bd2d014f))
+  - Reject promise when git commands error out
+    ([306da4f3](https://github.com/adrianlee44/lorax/commit/306da4f3))
+- **lorax:**
+  - Remove findup-sync and implement custom solution
+    The custom solution only try to find a lorax.json up the directory tree.
+    It also errors out when traversed to a directory without proper permission.
+    Fallback to default when no custom config is found.
+    ([a998cc55](https://github.com/adrianlee44/lorax/commit/a998cc55))
+  - Replace string substr with substring
+    ([8ac568b9](https://github.com/adrianlee44/lorax/commit/8ac568b9))
+  - Move some constants around
+    ([0fbc157a](https://github.com/adrianlee44/lorax/commit/0fbc157a))
+  - Lorax default export
+    ([a59288a7](https://github.com/adrianlee44/lorax/commit/a59288a7))
+  - Update bin
+    ([80a4d107](https://github.com/adrianlee44/lorax/commit/80a4d107))
+  - ESM-ify lorax and update dependencies
+    ([5b8a1528](https://github.com/adrianlee44/lorax/commit/5b8a1528))
+  - Update bin to work with commander v7
+    ([07f7b2b7](https://github.com/adrianlee44/lorax/commit/07f7b2b7))
+- **package:** Update commander to 6.0.0
+  ([511dce7a](https://github.com/adrianlee44/lorax/commit/511dce7a))
+
+## Breaking Changes
+
+- **lorax:**
+  - Output file option changed from -F to -f
+    ([fd68ed14](https://github.com/adrianlee44/lorax/commit/fd68ed14))
+  - Old configuration will not work and need to be updated to v2
+    ([f84244b3](https://github.com/adrianlee44/lorax/commit/f84244b3))
+
+## Documentation
+
+- **README:** Update email address and prettierify
+  ([8eafe7c6](https://github.com/adrianlee44/lorax/commit/8eafe7c6))
+- **readme:**
+  - Update usage with updated instructions
+    ([982be74c](https://github.com/adrianlee44/lorax/commit/982be74c))
+  - Update readme on updated configuration
+    ([1327a028](https://github.com/adrianlee44/lorax/commit/1327a028))
+  - Switch coverage badge
+    ([1212bd32](https://github.com/adrianlee44/lorax/commit/1212bd32))
+
+## Tests
+
+- Remove mock-fs and write to temp directory
+  ([0e03fa6c](https://github.com/adrianlee44/lorax/commit/0e03fa6c))
+- Bump jest to v30
+  ([99783c14](https://github.com/adrianlee44/lorax/commit/99783c14))
+- **ava:**
+  - Update ava to 5.3.1
+    ([4a5fc0e7](https://github.com/adrianlee44/lorax/commit/4a5fc0e7))
+  - Remove experimental module flag
+    ([9bb0753f](https://github.com/adrianlee44/lorax/commit/9bb0753f))
+- **c8:**
+  - Add lcov reporter
+    ([af290910](https://github.com/adrianlee44/lorax/commit/af290910))
+  - Switch to use c8
+    ([06316100](https://github.com/adrianlee44/lorax/commit/06316100))
+- **git:** Update test names
+  ([f5b5efca](https://github.com/adrianlee44/lorax/commit/f5b5efca))
+- **lorax:**
+  - Fix test script
+    ([06dae0f3](https://github.com/adrianlee44/lorax/commit/06dae0f3))
+  - Migrate to jest
+    ([42a9f17f](https://github.com/adrianlee44/lorax/commit/42a9f17f))
+  - Use mock-fs instead of reading from FS
+    ([999f5852](https://github.com/adrianlee44/lorax/commit/999f5852))
+  - Fix some typing issues
+    ([e12ddcb5](https://github.com/adrianlee44/lorax/commit/e12ddcb5))
+  - Fix test and use tsimp
+    ([24d32589](https://github.com/adrianlee44/lorax/commit/24d32589))
+  - Convert test files to TS
+    ([556630bd](https://github.com/adrianlee44/lorax/commit/556630bd))
+  - Switch to use github action for CI testing (#12)
+    * test(lorax): Switch to use github action for CI testing
+
+    * test(travis): Remove travis config
+
+    * test(lorax): Drop v8 and add v15
+
+    * test(lorax): Move test coverage report to another step
+
+    * test(lorax): Increase checkout depth to 100
+
+    * test(lorax): Fix all commits and tags
+
+    * chore(package): Remove coveralls
+
+    * docs(README): Update badge
+    ([bc4d4f73](https://github.com/adrianlee44/lorax/commit/bc4d4f73))
+- **package:** Update testing packages to latest
+  ([032d8957](https://github.com/adrianlee44/lorax/commit/032d8957))
+- **travis:** Test NodeJS v14 on Travis CI
+  ([9f17c2f0](https://github.com/adrianlee44/lorax/commit/9f17c2f0))
+- **tsconfig:** Fix config
+  ([53b2f0d2](https://github.com/adrianlee44/lorax/commit/53b2f0d2))
+- **workflow:**
+  - Remove Node 20.x for now
+    ([e8cc1dde](https://github.com/adrianlee44/lorax/commit/e8cc1dde))
+  - Fix yaml
+    ([fe8b8aba](https://github.com/adrianlee44/lorax/commit/fe8b8aba))
+  - Run tests on all push
+    ([beee0bb1](https://github.com/adrianlee44/lorax/commit/beee0bb1))
+- **workflows:**
+  - Add Node v26
+    ([ab4d9136](https://github.com/adrianlee44/lorax/commit/ab4d9136))
+  - Change node version to 20, 22, 24
+    ([90e3b39a](https://github.com/adrianlee44/lorax/commit/90e3b39a))
+  - Test node 18.x and 20.x
+    ([7f3e7229](https://github.com/adrianlee44/lorax/commit/7f3e7229))
+
+
 # v3.0.0 (2020/4/26)
 ## Bug Fixes
 - **lorax:**
