@@ -3,7 +3,9 @@
   "version": "3.0.0",
   "description": "A node module which reads the git log and create a human readable changelog",
   "exports": "./lib/lorax.js",
-  "bin": "bin/lorax",
+  "bin": {
+    "lorax": "bin/lorax"
+  },
   "files": [
     "bin/lorax",
     "build/**/*"
@@ -25,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:adrianlee44/lorax.git"
+    "url": "git+https://github.com/adrianlee44/lorax.git"
   },
   "keywords": [
     "log",
